@@ -21,7 +21,6 @@ const seoSchema = z.object({
   noindex: z.boolean().default(false).optional(),
   ogImage: mediaSchema.optional(),
   twitterCard: z.enum(['summary', 'summary_large_image']).optional(),
-  jsonLd: z.array(z.record(z.unknown())).optional(),
 });
 
 const linkSchema = z.object({
@@ -43,6 +42,7 @@ const heroBlockSchema = z.object({
   type: z.literal('hero'),
   eyebrow: z.string().min(1).optional(),
   headline: z.string().min(1),
+  rainbowWord: z.string().min(1).optional(),
   subheadline: z.string().min(1).optional(),
   image: mediaSchema.optional(),
   actions: z.array(linkSchema).optional(),

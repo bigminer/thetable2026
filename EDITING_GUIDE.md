@@ -22,7 +22,7 @@ Use the markdown templates under `obsidian/templates/` when creating or updating
 - `title` and `url` are required.
 - Add `description` when the page needs search copy.
 - Put page sections in `blocks` using typed blocks from the approved schema.
-- Use `seo` when you need canonical, social preview, or JSON-LD metadata.
+- Use `seo` when you need canonical, social preview, or noindex metadata.
 
 ## Messages
 
@@ -38,26 +38,6 @@ Use the markdown templates under `obsidian/templates/` when creating or updating
 - Add `photo` as a structured media object when available.
 - Use `draft: true` while preparing an unpublished profile.
 - Start from `obsidian/templates/staff.md` and save the entry as `src/content/staff/<slug>.md`.
-
-## Obsidian Git Sync
-
-After editing a staff profile, commit only the changed content file:
-
-```bash
-git add src/content/staff/<slug>.md
-git commit -m "Update staff profile"
-git push
-```
-
-If the build fails, read the validator output and fix the named frontmatter field before pushing again.
-
-Run the local build before pushing so schema errors are caught locally:
-
-```bash
-npm run build
-```
-
-After `git push`, Cloudflare Pages will build the committed site changes during the configured deployment workflow.
 
 ## Events
 

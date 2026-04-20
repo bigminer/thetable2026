@@ -9,6 +9,7 @@ blocks:
   - type: hero
     eyebrow: "The Table Church"
     headline: "Come Join Us"
+    rainbowWord: "Join"
     subheadline: "Service Each Sunday @ 5PM"
     image:
       src: /media/home/join-us.png

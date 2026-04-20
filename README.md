@@ -1,40 +1,42 @@
-# TableFresh
+# Tablefresh
 
-Static Astro migration target for `thetabletx`.
+This repository contains the rebuilt website for The Table Church.
 
-For agent work or context-cleared sessions, start with:
+It is an Astro-based, static site that uses markdown content collections as the primary CMS. Non-technical contributors can author and edit content through Obsidian templates, then save the resulting files into `src/content`.
 
-1. `handoff.md` — current task and recovery notes.
-2. `RESOURCE_INDEX.md` — discovery map for source artifacts, contracts, scripts, and verification.
-3. `AGENTS.md` — stable guardrails and workflow.
-4. `plan.yaml` — authoritative task state and acceptance criteria.
+## Content Workflow
 
-## Common Commands
+- `obsidian/templates` contains the starter files for pages, messages, staff, and events.
+- Content is stored in markdown frontmatter and rendered by Astro.
+- Planning Center is used as an external data source for events, with a local fixture fallback so the site can be worked on offline.
+- The goal is to keep the site editable and verifiable locally for as long as possible.
+
+## Local Development
+
+1. Install dependencies:
 
 ```bash
-npm run plan:lint
-npm run verify:manifest
-npm run agent:next
-npm run media:extract:dry-run
+npm install
+```
+
+2. Start the local dev server:
+
+```bash
+npm run dev
+```
+
+3. Build the site for verification:
+
+```bash
 npm run build
 ```
 
-## Source Model
+The dev server will usually be available at `http://localhost:4321`.
 
-The original WordPress content is database-backed. This repository uses copied local references and migrated static content instead of depending on the WordPress database at runtime:
+## Project Notes
 
-- `migration-data/source-reference/site-manifest-latest/` contains the local source manifest snapshot.
-- `migration-data/source-reference/assets/` contains local source-reference copies of migrated assets.
-- `src/content/` contains migrated Markdown content.
-- `public/media/` contains site-facing migrated media.
-- `migration-data/asset-copy-manifest.json` maps each migrated asset from original source URL to source-reference copy and destination copy.
+- Static assets live in `public/`.
+- Site content lives in `src/content/`.
+- Integration helpers live in `src/lib/`.
+- Page and layout code lives in `src/pages/`, `src/components/`, and `src/layouts/`.
 
-Media retrieval is intentionally referenced-only:
-
-```bash
-npm run media:extract:dry-run # report active and source-only WordPress upload URLs
-npm run media:check           # fail on unmanaged active media
-npm run media:extract         # copy active unmanaged media and rewrite references
-```
-
-Source-only URLs from WordPress snapshots are not copied automatically; they become migration scope only when active Astro content uses them.

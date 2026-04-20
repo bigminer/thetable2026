@@ -4,7 +4,6 @@ export const GET: APIRoute = () => {
   const body = [
     'User-agent: *',
     'Allow: /',
-    'Disallow: /debug/',
     'Sitemap: https://thetabletx.com/sitemap.xml',
     '',
   ].join('\n');

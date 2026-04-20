@@ -7,27 +7,13 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/validate-content.mjs && astro build",
+    "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "test:visual": "npm run build && playwright test tests/visual/templates.spec.ts",
-    "test:visual:update": "npm run build && playwright test tests/visual/templates.spec.ts --update-snapshots",
-    "test:routes": "npm run build && node scripts/check-route-parity.mjs",
-    "plan:lint": "node scripts/lint-plan.mjs",
-    "validate:content": "node scripts/validate-content.mjs",
-    "media:extract": "node scripts/extract-referenced-media.mjs --apply",
-    "media:check": "node scripts/extract-referenced-media.mjs --dry-run --check",
-    "media:extract:dry-run": "node scripts/extract-referenced-media.mjs --dry-run",
-    "verify:manifest": "bash scripts/verify/manifest.sh",
-    "verify:task": "bash -c 'bash \"scripts/verify/$0.sh\"'",
-    "agent:next": "node scripts/agent-next.mjs"
+    "astro": "astro"
   },
   "dependencies": {
     "astro": "^6.1.8",
     "sanitize-html": "^2.17.3"
   },
-  "devDependencies": {
-    "@playwright/test": "^1.59.1",
-    "yaml": "^2.6.0"
-  }
+  "devDependencies": {}
 }

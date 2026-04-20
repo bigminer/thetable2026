@@ -83,6 +83,7 @@ function imageProps(image: Media) {
 <div class="content-blocks">
   {renderedBlocks.map((block) => {
     const isFullWidth = block.type === 'hero' && block.image;
+    const heroHeadline = block.type === 'hero' ? String(block.headline ?? '') : '';
 
     switch (block.type) {
       case 'markdown':
@@ -108,7 +109,18 @@ function imageProps(image: Media) {
             <div class="hero-spectrum-bar" />
             <div class="content-block__inner">
               {block.eyebrow && <p class="eyebrow">{String(block.eyebrow)}</p>}
-              <h1>{String(block.headline ?? '')}</h1>
+              <h1>
+                {block.rainbowWord && heroHeadline.includes(block.rainbowWord)
+                  ? heroHeadline.split(block.rainbowWord).map((part, index, parts) => (
+                      <>
+                        {part}
+                        {index < parts.length - 1 && (
+                          <span class="rainbow-word">{block.rainbowWord}</span>
+                        )}
+                      </>
+                    ))
+                  : heroHeadline}
+              </h1>
               {block.subheadline && <p class="lede">{String(block.subheadline)}</p>}
               {Array.isArray(block.actions) && block.actions.length > 0 && (
                 <div class="actions">
@@ -151,6 +163,22 @@ function imageProps(image: Media) {
                   <img class="content-block__image" {...imageProps(block.image as Media)} loading="lazy" decoding="async" />
                 </figure>
               )}
+            </div>
+          </section>
+        );
+      case 'quote':
+        return (
+          <section class="content-block content-block--quote">
+            <div class="content-block__inner">
+              <blockquote class="quote-block">
+                <p>{String(block.quote ?? '')}</p>
+                {(block.attribution || block.role) && (
+                  <footer class="quote-block__footer">
+                    {block.attribution && <span class="quote-block__attribution">{String(block.attribution)}</span>}
+                    {block.role && <span class="quote-block__role">{String(block.role)}</span>}
+                  </footer>
+                )}
+              </blockquote>
             </div>
           </section>
         );
@@ -332,6 +360,20 @@ function imageProps(image: Media) {
             </div>
           </section>
         );
+      case 'image_grid':
+        return (
+          <section class="content-block content-block--image-grid">
+            <div class="content-block__inner">
+              <div class="image-grid">
+                {(block.images ?? []).map((image: Media) => (
+                  <figure class="image-grid__item">
+                    <img class="content-block__image" {...imageProps(image)} loading="lazy" decoding="async" />
+                  </figure>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
       case 'form': {
         const form = forms[block.route];
         return (
@@ -478,6 +520,39 @@ function imageProps(image: Media) {
     gap: 0.75rem;
   }
 
+  .image-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .image-grid__item {
+    margin: 0;
+  }
+
+  .quote-block {
+    margin: 0;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-left: 4px solid var(--accent-2);
+    background: rgba(0, 0, 0, 0.03);
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .quote-block p {
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    line-height: 1.75;
+    font-style: italic;
+  }
+
+  .quote-block__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.75;
+  }
+
   .content-block__inner--heading-only {
     padding-bottom: 0;
   }
@@ -502,6 +577,15 @@ function imageProps(image: Media) {
     letter-spacing: -0.04em;
     text-transform: uppercase;
     color: #f0ece4;
+  }
+
+  .content-block--hero .rainbow-word {
+    background: var(--spectrum);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    display: inline-block;
   }
 
   .content-block--hero .eyebrow,
