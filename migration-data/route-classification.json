@@ -1,0 +1,1222 @@
+[
+  {
+    "url": "https://thetabletx.com/",
+    "classification": "keep",
+    "rationale": "The homepage stays at the canonical public URL."
+  },
+  {
+    "url": "https://thetabletx.com/?mailpoet_page=captcha",
+    "classification": "technical",
+    "rationale": "MailPoet utility endpoint with no public-site counterpart."
+  },
+  {
+    "url": "https://thetabletx.com/?mailpoet_page=subscriptions",
+    "classification": "technical",
+    "rationale": "MailPoet utility endpoint with no public-site counterpart."
+  },
+  {
+    "url": "https://thetabletx.com/author/mhill/",
+    "classification": "technical",
+    "rationale": "Legacy author archive with no public-site counterpart."
+  },
+  {
+    "url": "https://thetabletx.com/author/thetabletx/",
+    "classification": "technical",
+    "rationale": "Legacy author archive with no public-site counterpart."
+  },
+  {
+    "url": "https://thetabletx.com/blog/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/community-meal/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/contact-us/",
+    "classification": "needs-integration",
+    "rationale": "This public page is driven by an external workflow or form integration."
+  },
+  {
+    "url": "https://thetabletx.com/events/category/community-events/",
+    "classification": "needs-integration",
+    "rationale": "Event archive route will be rebuilt from Planning Center or Church Center data."
+  },
+  {
+    "url": "https://thetabletx.com/events/category/fellowship/",
+    "classification": "needs-integration",
+    "rationale": "Event archive route will be rebuilt from Planning Center or Church Center data."
+  },
+  {
+    "url": "https://thetabletx.com/events/category/services/",
+    "classification": "needs-integration",
+    "rationale": "Event archive route will be rebuilt from Planning Center or Church Center data."
+  },
+  {
+    "url": "https://thetabletx.com/features/",
+    "classification": "needs-content",
+    "rationale": "This public page exists today but needs structured content before it can be rendered cleanly."
+  },
+  {
+    "url": "https://thetabletx.com/full-hero/",
+    "classification": "needs-content",
+    "rationale": "This public page exists today but needs structured content before it can be rendered cleanly."
+  },
+  {
+    "url": "https://thetabletx.com/get-involved/",
+    "classification": "needs-integration",
+    "rationale": "This public page is driven by an external workflow or form integration."
+  },
+  {
+    "url": "https://thetabletx.com/giving/",
+    "classification": "needs-integration",
+    "rationale": "This public page is driven by an external workflow or form integration."
+  },
+  {
+    "url": "https://thetabletx.com/kids-youth/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/leadership/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/staff/",
+    "classification": "keep",
+    "rationale": "This public staff directory stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/lgbt-affirming-church/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/meetups/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/merch/",
+    "classification": "needs-content",
+    "rationale": "This public page exists today but needs structured content before it can be rendered cleanly."
+  },
+  {
+    "url": "https://thetabletx.com/new-here/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/our-story/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/our-vision/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/a-new-kind-of-evangelism/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/a-new-pentecost/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/a-strange-figure/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/a-surprising-prayer/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/advent-guest-speaker-jesse-watts/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/against-the-grain-baptism-sunday/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/alone/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/ambition-james-313-18/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/an-action-oriented-faith/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/an-ever-widening-grace/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/anna-potter-life-be-lifin/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/are-boundaries-bad/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/ascending-participating/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/baptism-freedom/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/baptism-sunday-2024/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/bound-loosed/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/breathe/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/bruised/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/caterpillars-butterflies/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/charles-kiser-burned-out-by-religion/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/christ-the-substitute/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/colonialism-fishing-for-people-luke-51-11/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/communal/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/comtemplative-mind-compassionate-action/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/confession/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/cracks-and-fissures/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/deformed-and-reformed/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/deniece-mason-what-is-this/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/desire-attachment/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/donkeys-seers-and-spirituality-gone-wrong/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/dont-miss-the-glory-christmas-eve-message/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/dr-aaron-brownbrook-the-sign-of-jonah-a-hysterical-look-in-the-mirror/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/drawn-re-formed/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/drawn/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/easter-2024/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/easter-service-your-life-is-not-a-tragedy/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/enchanted-series-discussion/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/escaping-isolation-recovering-the-communal/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/everything-happens-for-a-reason/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/faith-epidurals-and-midwives/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/feel-the-burn-luke-37-18/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/finding-room-in-the-ordinary-luke-26-7/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/flame-of-love/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/forgive-forget/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/get-moving-matthew-724-27-james-119-22/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/getting-lower/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/god-has-a-wonderful-plan-for-your-life/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/greg-steele-rest-for-our-souls/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/growing-in-belovedness/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/guest-speaker-cheryl-russell/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/guest-speaker-gwendolyn-lau/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/guest-speaker-laurie-provin-2/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/guest-speaker-laurie-provin/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/guest-speaker-rev-deniece-mason/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/guest-speaker-sally-gary/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/hide-or-seek/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/holy-shift-consumerism/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/holy-shift-entertainment/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/holy-shift-hustle-culture/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/holy-shift-selfie-culture/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/holy-shift-the-virtual/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/holy-things-in-unholy-places/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/how-to-fight/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/how-to-live/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/how-to-pray/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/inclusive/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/is-scripture-a-straight-line-or-a-circle-ephesians-31-6/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/jesus-sexual-minorities/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/knowing-god-knowing-self-knowing-others/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/learning-to-surf/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/learnings-from-the-book-unclean/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/let-go-and-let-god/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/love-the-sinner-hate-the-sin/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/mercy-sacrafice/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/money-shadows/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/moving-on-from-the-clobber-passages/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/mysterious-bodies/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/new-wine/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/no-needy-among-them/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/overcoming-fear-isaiah-4110/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/palm-sunday-becoming-water/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/palm-sunday-christ-is-borne/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/paradox-silence-psalm-191-4/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/pastor-holly-bandel-stay-in-love-with-god/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/perceive-it-isaiah-4316-21/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/pickles-batman-a-gray-hering-marital-debate-2/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/pickles-batman-a-gray-hering-marital-debate/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/playing-politics/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/power-imitation-john-1836/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/re-enchanting-sex/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/redeeming-end-times-theology/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/rediscovering-the-beautiful/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/reenchantment-truth-the-superhuman/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/repent/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/resisting-end-times-speculative-craziness/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/rethinking-sin/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/rev-deniece-mason-the-god-who-sees/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/rev-pepa-paniagua-being-still/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/rooted-how-to-read/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/rooted/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/ruts-kings-and-prophetic-imagination-matthew-31-12/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/sameness/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/scripture-more-than-a-book-luke-2425-27/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/seeing-beyond-the-secular-christian-nationalism/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/seeing-in-the-dark-psalm-25/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/sick-society-secret-joy-luke-617-26/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/silence-the-two-minds/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/smile-its-advent/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/sticks-stones-panel-discussion/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/story-sunday-2024/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/story-sunday-january-4th-2026/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/story-sunday-january-5th-2025/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/story-sunday-the-tables-5th-anniversary/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/story-sunday/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/tables-and-lights-mark-1417-22-24/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/terrible-horrible-no-good-very-bad-fruit/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-battlefield-of-the-mind-2-corinthians-103-5/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-cross-and-the-powers/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-cross-is-what-god-does/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-descent/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-fog-of-life-genesis-151-6/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-foolishness-of-the-cross/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-grace-of-lent-deuteronomy-261-11/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-heros-journey-naomi/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-lord-helps-those-who-help-themselves/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-overlooked-secret-to-wisdom/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-package-deal/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-parable-of-lazarus-and-the-rich-man/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-parable-of-the-good-samaritan/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-parable-of-the-leaven/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-parable-of-the-sower/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-parable-of-the-wedding-feast/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-parables-of-the-treasure-and-the-pearl/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-path/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-pit/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-reality-of-peace-2/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-reality-of-peace/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-walls-we-build-2-corinthians-516-21/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/the-wizarding-world-of-jesus-christ/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/thinking-drinking-luke-2125-36/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/thoughtful/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/tree-hugging-christians/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/unclean-panel-discussion/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/vulnerability-the-great-bear-attack/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/vulnerable/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/waiting/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/waking-up-luke-926-38/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/waking-up-to-words/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/well-9-29-2024/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/were-in-this-together/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/what-they-need/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/whats-with-the-whale/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/who-will-we-become/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/why-isnt-god-fixing-things-matthew-112-3/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/youth-led-sunday/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/youth-sunday-eden/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/youth-sunday-march-16th-2025/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/podcast/youth-sunday-march-2024/",
+    "classification": "keep",
+    "rationale": "Podcast detail route stays at the same public URL and will be backed by the messages collection."
+  },
+  {
+    "url": "https://thetabletx.com/privacy-policy/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/series/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/advent-2025/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/advent-at-the-table/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/advent2023/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/advent2024/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/cultivating-calm-staying-centered-in-difficult-times/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/eastertide/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/enchanted/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/epiphany-guided-to-the-light/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/epiphany/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/guest-speakers-at-the-table/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/holy-shift/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/james/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/jesus-and-politics/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/july-guest-speakers/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/lent-2025/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/lent-julian-norwich/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/lent/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/practicing-resurrection/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/rooted/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/sticks-and-stones/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/story-sunday/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/stranger-things/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/table-one-offs/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/the-bible-doesnt-say-that/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/the-end-its-just-a-new-beginning/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/the-good-book/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/the-parables-of-jesus/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/unclean/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/values/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/series/youth-led-sunday/",
+    "classification": "keep",
+    "rationale": "Series archive and detail routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/service-times-locations/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  },
+  {
+    "url": "https://thetabletx.com/sign-up-for-our-newsletter/",
+    "classification": "needs-integration",
+    "rationale": "This public page is driven by an external workflow or form integration."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/anna-potter/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/brett-tilford/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/charles-kiser/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/cheryl-russell/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/dr-aaron-brownbrook/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/eden-mcdonald/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/greg-steele/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/gwendolyn-lau/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/jesse-watts/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/laurie-provin/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/megan-christian-gray-hering/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/megan-gray-hering/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/panel/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/pastor-holly-bandel/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/pepa-paniagua/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/rev-deniece-mason/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/speakers/sally-gary/",
+    "classification": "keep",
+    "rationale": "Speaker archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff-group/leadership/",
+    "classification": "keep",
+    "rationale": "Staff group archive routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff/allison-wedan/",
+    "classification": "keep",
+    "rationale": "Staff profile routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff/brett-tilford/",
+    "classification": "keep",
+    "rationale": "Staff profile routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff/gary-miner/",
+    "classification": "keep",
+    "rationale": "Staff profile routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff/jesse-watts/",
+    "classification": "keep",
+    "rationale": "Staff profile routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff/kaitlyn-randall/",
+    "classification": "keep",
+    "rationale": "Staff profile routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff/maggie-tilford/",
+    "classification": "keep",
+    "rationale": "Staff profile routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff/megan-greyhering/",
+    "classification": "keep",
+    "rationale": "Staff profile routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff/mindie-runnels/",
+    "classification": "keep",
+    "rationale": "Staff profile routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/staff/scott-marlar/",
+    "classification": "keep",
+    "rationale": "Staff profile routes stay at the same public URL."
+  },
+  {
+    "url": "https://thetabletx.com/thank-you-page/",
+    "classification": "keep",
+    "rationale": "This public content page stays at the same URL in the static site."
+  }
+]

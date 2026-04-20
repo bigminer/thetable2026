@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { entrySlug } from '../../lib/entry-slug';
+
+const [seriesEntries, messages] = await Promise.all([
+  getCollection('series', ({ data }) => !data.draft),
+  getCollection('messages', ({ data }) => !data.draft),
+]);
+
+const messagesBySeries = new Map<string, typeof messages>();
+for (const series of seriesEntries) {
+  messagesBySeries.set(entrySlug(series), []);
+}
+for (const entry of messages) {
+  const series = entry.data.series;
+  if (!series) continue;
+  const bucket = messagesBySeries.get(entrySlug(series));
+  if (bucket) bucket.push(entry);
+}
+for (const bucket of messagesBySeries.values()) {
+  bucket.sort((left, right) => right.data.publishedAt.valueOf() - left.data.publishedAt.valueOf());
+}
+
+const sortedSeries = [...seriesEntries].sort((left, right) => {
+  const leftDate = left.data.startDate?.valueOf() ?? 0;
+  const rightDate = right.data.startDate?.valueOf() ?? 0;
+  return rightDate - leftDate;
+});
+---
+
+<BaseLayout
+  title="Series"
+  description="Message series archives grouped by collection."
+  canonicalPath="/series/"
+>
+  <main class="page stack">
+    <section class="hero stack">
+      <p class="eyebrow">Series</p>
+      <h1>Message series</h1>
+      <p class="lede">
+        Choose a series to listen through a message set, share with a friend, or revisit an older archive.
+      </p>
+    </section>
+
+    <section class="panel stack">
+      {sortedSeries.map((series) => {
+        const entries = messagesBySeries.get(series.slug) ?? [];
+
+        return (
+          <article class="series-card">
+            <div class="series-card__header">
+              {series.data.image && (
+                <img class="series-card__image" src={series.data.image.src} alt={series.data.image.alt} />
+              )}
+              <div class="stack">
+                <p class="eyebrow">{entries.length} message{entries.length === 1 ? '' : 's'}</p>
+                <h2>
+                  <a href={`/series/${entrySlug(series)}/`}>{series.data.title}</a>
+                </h2>
+                <p>{series.data.summary}</p>
+              </div>
+            </div>
+            <div class="series-card__episodes">
+              {entries.map((entry) => (
+                <a class="series-card__episode" href={`/podcast/${entrySlug(entry)}/`}>
+                  <span>{new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(entry.data.publishedAt)}</span>
+                  <strong>{entry.data.title}</strong>
+                </a>
+              ))}
+            </div>
+          </article>
+        );
+      })}
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .series-card + .series-card {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .series-card__header {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .series-card__image {
+    width: 100%;
+    max-width: 22rem;
+    border-radius: 8px;
+    display: block;
+  }
+
+  .series-card__episodes {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .series-card__episode {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--border);
+    text-decoration: none;
+  }
+
+  .series-card__episode span {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 48rem) {
+    .series-card__header {
+      grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

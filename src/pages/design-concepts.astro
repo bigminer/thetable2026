@@ -1,0 +1,1286 @@
+---
+// Preview page for three homepage design concepts (Prismatic / Garden / Spectrum).
+// Faithfully mirrors the Claude Design handoff prototype so the team can pick a direction.
+// Standalone: bypasses BaseLayout because the prototype owns its own nav/footer/switcher.
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The Table Church — Design Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Serif+Display:ital@0;1&family=Bebas+Neue&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Montserrat', sans-serif; background: #111; }
+
+/* ── Concept switcher ── */
+.switcher {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; background: #0a0a0a; border-bottom: 1px solid #222;
+  padding: 0 24px;
+}
+.switcher-label { color: #555; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin-right: 20px; font-family: 'Montserrat', sans-serif; }
+.sw-btn {
+  padding: 14px 28px; font-family: 'Montserrat', sans-serif; font-size: 11px;
+  font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  border: none; background: none; color: #555; cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all .2s;
+  position: relative; top: 1px;
+}
+.sw-btn:hover { color: #fff; }
+.sw-btn.active { color: #fff; border-bottom-color: #fff; }
+.sw-btn .dot {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  margin-right: 7px; vertical-align: middle; position: relative; top: -1px;
+}
+
+/* ── Concepts ── */
+.concept { display: none; }
+.concept.visible { display: block; }
+
+/* ════════════════════════════════════════════════
+   CONCEPT A — PRISMATIC
+   Dark cathedral. Rainbow as stained-glass light.
+   ════════════════════════════════════════════════ */
+.cA {
+  --bg: #0e0d0b;
+  --bg2: #141210;
+  --surface: #1a1815;
+  --ink: #f0ece4;
+  --muted: #8a8278;
+  --accent: #f0ece4;
+  --spectrum: linear-gradient(90deg, #e63946, #f4a261, #e9c46a, #52b788, #4361ee, #7b2d8b);
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  padding-top: 49px;
+}
+
+/* nav */
+.cA .nav {
+  position: sticky; top: 49px; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 56px;
+  background: rgba(14,13,11,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.cA .nav-logo { font-size: 13px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--ink); }
+.cA .nav-logo span { display: block; width: 32px; height: 2px; margin-top: 4px; background: var(--spectrum); border-radius: 2px; }
+.cA .nav-links { display: flex; gap: 36px; list-style: none; }
+.cA .nav-links a { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; transition: color .2s; }
+.cA .nav-links a:hover { color: var(--ink); }
+.cA .nav-cta { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--bg); background: var(--ink); padding: 10px 22px; text-decoration: none; transition: all .2s; }
+.cA .nav-cta:hover { background: #e9c46a; }
+
+/* hero */
+.cA .hero {
+  position: relative; min-height: 92vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 80px 56px 72px;
+  overflow: hidden;
+}
+.cA .hero-img {
+  position: absolute; inset: 0;
+  background: url('/design-concepts/join-us.png') center/cover no-repeat;
+  filter: brightness(.28) saturate(.6);
+}
+.cA .hero-spectrum {
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--spectrum);
+}
+.cA .hero-spectrum-glow {
+  position: absolute; top: 0; left: 0; right: 0; height: 180px;
+  background: linear-gradient(180deg, rgba(113,60,180,.18) 0%, transparent 100%);
+  pointer-events: none;
+}
+.cA .hero-content { position: relative; z-index: 2; max-width: 820px; }
+.cA .hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+.cA .hero-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(64px, 8vw, 120px); font-weight: 900; line-height: 1;
+  color: var(--ink); margin-bottom: 32px; letter-spacing: -.02em;
+}
+.cA .hero-title em { font-style: italic; }
+.cA .hero-sub { font-size: 16px; font-weight: 400; color: var(--muted); max-width: 480px; line-height: 1.7; margin-bottom: 48px; }
+.cA .hero-actions { display: flex; gap: 16px; align-items: center; }
+.cA .btn-primary { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; background: var(--ink); color: var(--bg); padding: 16px 32px; text-decoration: none; transition: all .2s; }
+.cA .btn-primary:hover { background: #e9c46a; }
+.cA .btn-ghost { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+.cA .btn-ghost:hover { color: var(--ink); }
+
+/* who we are */
+.cA .who {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  min-height: 60vh;
+}
+.cA .who-copy { padding: 96px 56px; display: flex; flex-direction: column; justify-content: center; }
+.cA .who-photo {
+  background: url('/design-concepts/values-pic.jpg') center/cover no-repeat;
+  filter: saturate(.7);
+}
+.cA .section-label { font-size: 10px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+.cA .section-label::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--muted); margin-right: 10px; vertical-align: middle; }
+.cA .section-heading {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(36px, 4vw, 56px); font-weight: 700; line-height: 1.1;
+  color: var(--ink); margin-bottom: 32px;
+}
+.cA .section-heading b { font-weight: 900; }
+.cA .section-body { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 460px; }
+.cA .values-list { margin-top: 40px; display: flex; flex-direction: column; gap: 0; }
+.cA .value-item { padding: 18px 0; border-top: 1px solid rgba(255,255,255,0.06); display: flex; align-items: baseline; gap: 16px; }
+.cA .value-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.06); }
+.cA .value-name { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); min-width: 120px; }
+.cA .value-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* you belong */
+.cA .belong { background: var(--surface); padding: 120px 56px; text-align: center; position: relative; overflow: hidden; }
+.cA .belong-spectrum { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--spectrum); }
+.cA .belong-quote {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(32px, 5vw, 72px); font-weight: 400; font-style: italic;
+  line-height: 1.2; color: var(--ink); max-width: 900px; margin: 0 auto 24px;
+}
+.cA .belong-quote b { font-weight: 900; font-style: italic; }
+.cA .belong-sub { font-size: 14px; color: var(--muted); max-width: 520px; margin: 0 auto; line-height: 1.8; }
+
+/* affirming */
+.cA .affirming {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  min-height: 56vh;
+}
+.cA .affirming-photo {
+  background: url('/design-concepts/affirming-hero.png') center/cover no-repeat;
+  filter: saturate(.65) brightness(.85);
+  position: relative;
+}
+.cA .affirming-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(14,13,11,1)); }
+.cA .affirming-copy { padding: 80px 56px 80px 64px; display: flex; flex-direction: column; justify-content: center; }
+.cA .affirming-list { margin-top: 32px; display: flex; flex-direction: column; gap: 14px; }
+.cA .affirming-item { font-size: 14px; color: var(--muted); line-height: 1.5; padding-left: 20px; position: relative; }
+.cA .affirming-item::before { content: ''; position: absolute; left: 0; top: 9px; width: 8px; height: 1px; background: var(--spectrum); }
+
+/* CTA */
+.cA .cta-band {
+  padding: 100px 56px; text-align: center;
+  background: var(--bg2);
+}
+.cA .cta-time { font-size: clamp(48px, 6vw, 88px); font-family: 'Playfair Display', serif; font-weight: 900; color: var(--ink); margin-bottom: 12px; }
+.cA .cta-date { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 40px; }
+
+/* footer */
+.cA .footer { padding: 56px; border-top: 1px solid rgba(255,255,255,.06); display: flex; justify-content: space-between; align-items: center; }
+.cA .footer-logo { font-size: 12px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.cA .footer-addr { font-size: 12px; color: var(--muted); line-height: 1.7; text-align: right; }
+
+
+/* ════════════════════════════════════════════════
+   CONCEPT B — GARDEN
+   Warm, organic, earthy. Cream + sage + terracotta.
+   Rainbow as gentle arc / botanical accent.
+   ════════════════════════════════════════════════ */
+.cB {
+  --bg: #faf6ef;
+  --bg2: #f2ebe0;
+  --surface: #ffffff;
+  --ink: #1e1a14;
+  --muted: #7a6f60;
+  --terra: #c45c3a;
+  --sage: #5a7a5e;
+  --gold: #c9912a;
+  --spectrum: linear-gradient(90deg, #e63946, #f4a261, #e9c46a, #52b788, #4361ee, #7b2d8b);
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  padding-top: 49px;
+}
+
+/* nav */
+.cB .nav {
+  position: sticky; top: 49px; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 56px;
+  background: var(--bg); border-bottom: 1px solid rgba(0,0,0,.07);
+}
+.cB .nav-logo { font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
+.cB .nav-logo .tagline { display: block; font-size: 9px; font-weight: 500; letter-spacing: .08em; color: var(--muted); text-transform: none; margin-top: 2px; }
+.cB .nav-links { display: flex; gap: 32px; list-style: none; }
+.cB .nav-links a { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; transition: color .2s; }
+.cB .nav-links a:hover { color: var(--terra); }
+.cB .nav-cta { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--surface); background: var(--terra); padding: 10px 22px; border-radius: 2px; text-decoration: none; transition: all .2s; }
+.cB .nav-cta:hover { background: var(--ink); }
+
+/* hero */
+.cB .hero {
+  position: relative; overflow: hidden;
+  min-height: 88vh; display: grid; grid-template-columns: 1fr 1fr;
+}
+.cB .hero-left {
+  padding: 96px 56px 96px 56px; display: flex; flex-direction: column;
+  justify-content: center; background: var(--bg); position: relative; z-index: 2;
+}
+.cB .hero-arc {
+  position: absolute; top: -40px; right: -120px; width: 280px; height: 280px;
+  border-radius: 50%; border: 3px solid transparent;
+  background: var(--spectrum) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out; mask-composite: exclude;
+  opacity: .7;
+}
+.cB .hero-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--terra); margin-bottom: 24px; }
+.cB .hero-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(52px, 6vw, 96px); font-weight: 400; line-height: .95;
+  color: var(--ink); margin-bottom: 36px;
+}
+.cB .hero-title em { font-style: italic; color: var(--terra); }
+.cB .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.8; max-width: 400px; margin-bottom: 48px; }
+.cB .hero-time-badge {
+  display: inline-flex; align-items: center; gap: 12px;
+  border: 1.5px solid rgba(0,0,0,.12); padding: 14px 24px; border-radius: 2px;
+  font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink);
+  margin-bottom: 24px;
+}
+.cB .hero-time-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sage); }
+.cB .hero-right {
+  position: relative; overflow: hidden;
+}
+.cB .hero-img {
+  position: absolute; inset: 0;
+  background: url('/design-concepts/join-us.png') center/cover no-repeat;
+}
+.cB .hero-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, var(--bg) 0%, transparent 25%);
+}
+.cB .hero-spectrum-strip {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+  background: var(--spectrum);
+}
+
+/* who */
+.cB .who { padding: 112px 56px; background: var(--bg2); }
+.cB .who-inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
+.cB .section-label { font-size: 10px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--terra); margin-bottom: 20px; }
+.cB .section-heading {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(36px, 4vw, 56px); font-weight: 400; line-height: 1.05;
+  color: var(--ink); margin-bottom: 28px;
+}
+.cB .section-body { font-size: 15px; color: var(--muted); line-height: 1.8; }
+.cB .values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 4px; }
+.cB .value-card {
+  background: var(--surface); padding: 32px 28px;
+  transition: background .2s;
+}
+.cB .value-card:hover { background: #fff9f2; }
+.cB .value-card:nth-child(5) { grid-column: 1 / -1; }
+.cB .value-num { font-size: 10px; font-weight: 800; letter-spacing: .12em; color: var(--terra); margin-bottom: 12px; opacity: .7; }
+.cB .value-name { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--ink); margin-bottom: 10px; }
+.cB .value-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* belong */
+.cB .belong {
+  padding: 0; display: grid; grid-template-columns: 1fr 1fr; min-height: 56vh;
+}
+.cB .belong-photo {
+  background: url('/design-concepts/family.png') center/cover no-repeat;
+  filter: saturate(.85);
+}
+.cB .belong-copy {
+  background: var(--ink); color: #f0ece4;
+  padding: 96px 64px; display: flex; flex-direction: column; justify-content: center;
+}
+.cB .belong-copy .section-label { color: var(--gold); }
+.cB .belong-quote {
+  font-family: 'DM Serif Display', serif; font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 400; line-height: 1.2; margin-bottom: 24px; color: #f0ece4;
+}
+.cB .belong-quote em { font-style: italic; color: var(--gold); }
+.cB .belong-body { font-size: 14px; color: rgba(240,236,228,.65); line-height: 1.8; max-width: 400px; }
+.cB .belong-spectrum { display: block; width: 100%; height: 3px; background: var(--spectrum); margin-top: 40px; border-radius: 2px; }
+
+/* affirming */
+.cB .affirming { padding: 112px 56px; background: var(--bg); }
+.cB .affirming-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+.cB .affirming-list { margin-top: 36px; display: flex; flex-direction: column; gap: 16px; }
+.cB .affirming-item {
+  font-size: 14px; color: var(--muted); line-height: 1.6;
+  padding: 16px 20px; background: var(--bg2); border-left: 3px solid transparent;
+  border-image: var(--spectrum) 1;
+}
+.cB .affirming-photo {
+  border-radius: 2px; overflow: hidden;
+  background: url('/design-concepts/affirming-hero.png') center/cover no-repeat;
+  aspect-ratio: 4/5;
+}
+
+/* CTA */
+.cB .cta-band {
+  background: var(--terra); color: #fff;
+  padding: 80px 56px; text-align: center;
+}
+.cB .cta-hed { font-family: 'DM Serif Display', serif; font-size: clamp(40px, 5vw, 72px); font-weight: 400; margin-bottom: 16px; }
+.cB .cta-hed em { font-style: italic; }
+.cB .cta-sub { font-size: 14px; opacity: .8; margin-bottom: 40px; line-height: 1.7; }
+.cB .cta-btn { display: inline-block; background: #fff; color: var(--terra); font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; padding: 16px 36px; text-decoration: none; transition: all .2s; }
+.cB .cta-btn:hover { background: var(--ink); color: #fff; }
+
+/* footer */
+.cB .footer { padding: 48px 56px; background: var(--ink); display: flex; justify-content: space-between; align-items: center; }
+.cB .footer-logo { font-size: 12px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+.cB .footer-addr { font-size: 12px; color: rgba(255,255,255,.35); line-height: 1.7; text-align: right; }
+
+
+/* ════════════════════════════════════════════════
+   CONCEPT C — SPECTRUM EDITORIAL
+   Clean white + heavy black type + rainbow as bold architectural element.
+   Modern magazine / progressive brand energy.
+   ════════════════════════════════════════════════ */
+.cC {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --ink: #111010;
+  --muted: #6b6762;
+  --spectrum: linear-gradient(90deg, #e63946 0%, #f4a261 20%, #e9c46a 40%, #52b788 60%, #4361ee 80%, #7b2d8b 100%);
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  padding-top: 49px;
+}
+
+/* nav */
+.cC .nav {
+  position: sticky; top: 49px; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 56px; height: 64px;
+  background: var(--surface); border-bottom: 1px solid #e8e8e8;
+}
+.cC .nav-spectrum { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--spectrum); }
+.cC .nav-logo { font-size: 15px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+.cC .nav-links { display: flex; gap: 36px; list-style: none; }
+.cC .nav-links a { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; transition: color .2s; }
+.cC .nav-links a:hover { color: var(--ink); }
+.cC .nav-cta { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--surface); background: var(--ink); padding: 10px 22px; text-decoration: none; transition: all .2s; }
+.cC .nav-cta:hover { background: #4361ee; }
+
+/* hero */
+.cC .hero { padding: 0; }
+.cC .hero-spectrum-bar { height: 10px; background: var(--spectrum); }
+.cC .hero-inner {
+  display: grid; grid-template-columns: 1fr 1fr; min-height: 84vh;
+}
+.cC .hero-left {
+  padding: 80px 56px; display: flex; flex-direction: column; justify-content: space-between;
+  border-right: 1px solid #e8e8e8;
+}
+.cC .hero-eyebrow {
+  font-size: 10px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--muted); display: flex; align-items: center; gap: 12px;
+}
+.cC .hero-eyebrow::after { content: ''; flex: 1; height: 1px; background: #e8e8e8; }
+.cC .hero-title {
+  font-size: clamp(72px, 9vw, 140px); font-weight: 900; line-height: .88;
+  letter-spacing: -.04em; color: var(--ink); text-transform: uppercase;
+}
+.cC .hero-title .rainbow-word {
+  background: var(--spectrum); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cC .hero-bottom { }
+.cC .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 380px; margin-bottom: 32px; }
+.cC .hero-actions { display: flex; gap: 16px; }
+.cC .btn-primary { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; background: var(--ink); color: #fff; padding: 15px 32px; text-decoration: none; transition: all .2s; }
+.cC .btn-primary:hover { background: #4361ee; }
+.cC .btn-ghost { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; border: 1px solid #e8e8e8; padding: 14px 28px; transition: all .2s; }
+.cC .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+.cC .hero-right {
+  position: relative; overflow: hidden;
+}
+.cC .hero-img-wrap {
+  position: absolute; inset: 0;
+  background: url('/design-concepts/join-us.png') center/cover no-repeat;
+}
+.cC .hero-caption {
+  position: absolute; bottom: 32px; left: 32px; right: 32px;
+  background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+  padding: 20px 24px; border-left: 4px solid transparent;
+  border-image: var(--spectrum) 1;
+}
+.cC .hero-caption p { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.5; }
+
+/* who */
+.cC .who { padding: 120px 56px; }
+.cC .who-header { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid #e8e8e8; padding-bottom: 24px; margin-bottom: 64px; }
+.cC .section-label { font-size: 10px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.cC .who-big-text {
+  font-size: clamp(40px, 5vw, 80px); font-weight: 900; letter-spacing: -.03em;
+  text-transform: uppercase; line-height: 1; color: var(--ink);
+}
+.cC .who-big-text .rainbow-word {
+  background: var(--spectrum); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.cC .who-body-row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-bottom: 80px; }
+.cC .who-body-copy { font-size: 15px; color: var(--muted); line-height: 1.8; }
+.cC .values-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #e8e8e8; }
+.cC .val-block { background: var(--surface); padding: 36px 28px; }
+.cC .val-block:hover { background: #f5f5f5; }
+.cC .val-num { font-size: 10px; font-weight: 800; letter-spacing: .12em; color: var(--muted); margin-bottom: 24px; }
+.cC .val-name { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: -.01em; color: var(--ink); margin-bottom: 12px; }
+.cC .val-bar { width: 100%; height: 3px; background: var(--spectrum); margin-bottom: 16px; }
+.cC .val-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+/* belong */
+.cC .belong {
+  background: var(--ink); color: #fff; padding: 0;
+  display: grid; grid-template-columns: 1fr 1fr; min-height: 60vh;
+}
+.cC .belong-spectrum-col { background: var(--spectrum); width: 100%; }
+.cC .belong-copy { padding: 96px 64px; display: flex; flex-direction: column; justify-content: center; }
+.cC .belong-quote {
+  font-size: clamp(32px, 4.5vw, 64px); font-weight: 900; letter-spacing: -.03em;
+  text-transform: uppercase; line-height: 1; color: #fff; margin-bottom: 32px;
+}
+.cC .belong-body { font-size: 15px; color: rgba(255,255,255,.6); line-height: 1.8; max-width: 420px; }
+
+/* affirming */
+.cC .affirming { padding: 0; }
+.cC .affirming-inner { display: grid; grid-template-columns: 1fr 1fr; }
+.cC .affirming-photo {
+  background: url('/design-concepts/affirming-hero.png') center/cover no-repeat;
+  min-height: 56vh;
+}
+.cC .affirming-copy { padding: 80px 64px; display: flex; flex-direction: column; justify-content: center; background: var(--bg); }
+.cC .affirming-headline { font-size: clamp(28px, 3.5vw, 48px); font-weight: 900; text-transform: uppercase; letter-spacing: -.02em; line-height: 1.05; color: var(--ink); margin-bottom: 32px; }
+.cC .affirming-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.cC .affirm-chip { background: var(--surface); padding: 14px 16px; font-size: 12px; font-weight: 700; color: var(--ink); border-top: 2px solid transparent; border-image: var(--spectrum) 1; }
+
+/* CTA */
+.cC .cta-band { padding: 0; }
+.cC .cta-spectrum { height: 6px; background: var(--spectrum); }
+.cC .cta-inner { padding: 100px 56px; text-align: center; background: var(--surface); }
+.cC .cta-hed {
+  font-size: clamp(48px, 7vw, 100px); font-weight: 900; letter-spacing: -.04em;
+  text-transform: uppercase; line-height: .9; color: var(--ink); margin-bottom: 32px;
+}
+.cC .cta-hed .rainbow-word { background: var(--spectrum); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.cC .cta-sub { font-size: 15px; color: var(--muted); margin-bottom: 40px; line-height: 1.7; }
+.cC .cta-btn { display: inline-block; background: var(--ink); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; padding: 18px 40px; text-decoration: none; transition: all .2s; }
+.cC .cta-btn:hover { background: #4361ee; }
+
+/* footer */
+.cC .footer { padding: 40px 56px; background: var(--ink); display: flex; justify-content: space-between; align-items: center; }
+.cC .footer-logo { font-size: 12px; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.35); }
+.cC .footer-addr { font-size: 12px; color: rgba(255,255,255,.3); line-height: 1.7; text-align: right; }
+.cC .footer-spectrum { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--spectrum); }
+
+
+/* ════════════════════════════════════════════════
+   CONCEPT D — CATHEDRAL (A + C fusion)
+   Dark cathedral palette + Playfair italic tenderness,
+   with architectural rainbow boldness: 10px spectrum bar,
+   rainbow-word gradient text, 5-up values row with
+   rainbow underbars, editorial belong split.
+   ════════════════════════════════════════════════ */
+.cD {
+  --bg: #0e0d0b;
+  --bg2: #141210;
+  --surface: #1a1815;
+  --surface2: #211e1a;
+  --ink: #f0ece4;
+  --muted: #8a8278;
+  --line: rgba(255,255,255,.08);
+  --spectrum: linear-gradient(90deg, #e63946, #f4a261, #e9c46a, #52b788, #4361ee, #7b2d8b);
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  padding-top: 49px;
+}
+
+/* nav */
+.cD .nav {
+  position: sticky; top: 49px; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 56px;
+  background: rgba(14,13,11,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.cD .nav-spectrum { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--spectrum); }
+.cD .nav-logo { font-size: 13px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--ink); }
+.cD .nav-links { display: flex; gap: 36px; list-style: none; }
+.cD .nav-links a { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; transition: color .2s; }
+.cD .nav-links a:hover { color: var(--ink); }
+.cD .nav-cta { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--bg); background: var(--ink); padding: 10px 22px; text-decoration: none; transition: all .2s; }
+.cD .nav-cta:hover { background: #e9c46a; }
+
+/* hero — A mood with C architecture */
+.cD .hero {
+  position: relative; min-height: 92vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 80px 56px 72px;
+  overflow: hidden;
+}
+.cD .hero-img {
+  position: absolute; inset: 0;
+  background: url('/design-concepts/join-us.png') center/cover no-repeat;
+  filter: brightness(.28) saturate(.6);
+}
+.cD .hero-spectrum-bar { position: absolute; top: 0; left: 0; right: 0; height: 10px; background: var(--spectrum); }
+.cD .hero-spectrum-glow {
+  position: absolute; top: 0; left: 0; right: 0; height: 220px;
+  background: linear-gradient(180deg, rgba(123,45,139,.22) 0%, transparent 100%);
+  pointer-events: none;
+}
+.cD .hero-content { position: relative; z-index: 2; max-width: 900px; }
+.cD .hero-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 28px;
+  display: flex; align-items: center; gap: 14px;
+}
+.cD .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--spectrum); }
+.cD .hero-title {
+  font-size: clamp(64px, 8.5vw, 132px); font-weight: 900; line-height: .88;
+  color: var(--ink); margin-bottom: 32px; letter-spacing: -.04em;
+  text-transform: uppercase;
+}
+.cD .hero-title em { font-style: normal; }
+.cD .hero-title .rainbow-word {
+  background: var(--spectrum); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; color: transparent;
+}
+.cD .hero-sub { font-size: 16px; color: var(--muted); max-width: 480px; line-height: 1.75; margin-bottom: 48px; }
+.cD .hero-actions { display: flex; gap: 20px; align-items: center; }
+.cD .btn-primary { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; background: var(--ink); color: var(--bg); padding: 16px 32px; text-decoration: none; transition: all .2s; }
+.cD .btn-primary:hover { background: #e9c46a; }
+.cD .btn-ghost { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; border: 1px solid var(--line); padding: 15px 26px; transition: all .2s; }
+.cD .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+/* who — C editorial framing in dark */
+.cD .who { padding: 120px 56px; background: var(--bg); }
+.cD .who-header { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 24px; margin-bottom: 64px; gap: 32px; flex-wrap: wrap; }
+.cD .section-label { font-size: 10px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.cD .who-big-text {
+  font-size: clamp(40px, 5vw, 80px); font-weight: 900; letter-spacing: -.03em;
+  line-height: 1; color: var(--ink); text-transform: uppercase;
+}
+.cD .who-big-text em { font-style: normal; }
+.cD .who-big-text .rainbow-word {
+  background: var(--spectrum); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; color: transparent;
+}
+.cD .who-body-row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-bottom: 72px; }
+.cD .who-body-copy { font-size: 15px; color: var(--muted); line-height: 1.85; }
+.cD .values-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); }
+.cD .val-block { background: var(--bg2); padding: 36px 28px; transition: background .2s; }
+.cD .val-block:hover { background: var(--surface2); }
+.cD .val-num { font-size: 10px; font-weight: 800; letter-spacing: .12em; color: var(--muted); margin-bottom: 24px; }
+.cD .val-name {
+  font-size: 18px; font-weight: 900; letter-spacing: -.01em;
+  text-transform: uppercase; color: var(--ink); margin-bottom: 14px;
+}
+.cD .val-bar { width: 40px; height: 2px; background: var(--spectrum); margin-bottom: 16px; }
+.cD .val-desc { font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+
+/* belong — C split architecture, A italic tenderness */
+.cD .belong {
+  background: var(--surface); padding: 0;
+  display: grid; grid-template-columns: 1fr 1.6fr; min-height: 64vh;
+}
+.cD .belong-spectrum-col { background: var(--spectrum); width: 100%; min-height: 320px; }
+.cD .belong-copy { padding: 100px 72px; display: flex; flex-direction: column; justify-content: center; }
+.cD .belong-label { font-size: 10px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; }
+.cD .belong-quote {
+  font-size: clamp(36px, 4.5vw, 68px); font-weight: 900;
+  line-height: .95; letter-spacing: -.03em; text-transform: uppercase;
+  color: var(--ink); margin-bottom: 28px; max-width: 720px;
+}
+.cD .belong-quote b { font-weight: 900; }
+.cD .belong-body { font-size: 14.5px; color: var(--muted); line-height: 1.85; max-width: 480px; }
+
+/* affirming — A photo/copy split with C chip grid */
+.cD .affirming {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  min-height: 64vh;
+}
+.cD .affirming-photo {
+  background: url('/design-concepts/affirming-hero.png') center/cover no-repeat;
+  filter: saturate(.7) brightness(.8);
+  position: relative;
+}
+.cD .affirming-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 55%, rgba(14,13,11,1)); }
+.cD .affirming-copy { padding: 100px 64px; display: flex; flex-direction: column; justify-content: center; background: var(--bg); }
+.cD .affirming-headline {
+  font-size: clamp(34px, 4vw, 56px); font-weight: 900; line-height: 1.0;
+  text-transform: uppercase; color: var(--ink); margin-bottom: 16px; letter-spacing: -.02em;
+}
+.cD .affirming-headline em { font-style: normal; }
+.cD .affirming-sub { font-size: 14.5px; color: var(--muted); line-height: 1.8; max-width: 420px; margin-bottom: 32px; }
+.cD .affirming-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.cD .affirm-chip {
+  background: var(--bg2); padding: 18px 20px; font-size: 12.5px; font-weight: 600;
+  color: var(--ink); letter-spacing: .01em; line-height: 1.4;
+  border-top: 2px solid transparent; border-image: var(--spectrum) 1;
+}
+
+/* CTA — A Playfair time, C bar */
+.cD .cta-band { padding: 0; background: var(--bg2); }
+.cD .cta-spectrum { height: 6px; background: var(--spectrum); }
+.cD .cta-inner { padding: 110px 56px; text-align: center; }
+.cD .cta-time {
+  font-size: clamp(48px, 6.5vw, 96px); font-weight: 900;
+  text-transform: uppercase; color: var(--ink); margin-bottom: 14px; letter-spacing: -.04em; line-height: .9;
+}
+.cD .cta-time em { font-style: normal; }
+.cD .cta-date { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 44px; }
+
+/* footer */
+.cD .footer { padding: 48px 56px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; position: relative; }
+.cD .footer-spectrum { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--spectrum); opacity: .5; }
+.cD .footer-logo { font-size: 12px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.cD .footer-addr { font-size: 12px; color: var(--muted); line-height: 1.7; text-align: right; }
+
+
+/* ── Concept D light-mode overrides ── */
+.cD.light-mode {
+  --bg: #fafaf8;
+  --bg2: #f2efe9;
+  --surface: #ffffff;
+  --surface2: #f0ece4;
+  --ink: #1a1712;
+  --muted: #7a7068;
+  --line: rgba(0,0,0,.09);
+}
+.cD.light-mode .hero-img { filter: brightness(.45) saturate(.7); }
+.cD.light-mode .nav { background: rgba(250,250,248,0.94); }
+.cD.light-mode .affirming-photo { filter: saturate(.85) brightness(.95); }
+.cD.light-mode .affirming-photo::after { background: linear-gradient(90deg, transparent 55%, var(--bg)); }
+.cD.light-mode #theme-toggle { border-color: rgba(0,0,0,.18); }
+.cD.light-mode .val-block { background: var(--bg2); }
+.cD.light-mode .val-block:hover { background: var(--surface2); }
+.cD.light-mode .affirm-chip { background: var(--bg2); }
+.cD.light-mode .cta-inner { background: var(--bg); }
+.cD.light-mode .footer { border-top-color: var(--line); }
+
+/* ── Tweaks Panel ── */
+#tweaks-panel {
+  display: none; position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: #fff; border: 1px solid #e8e8e8; box-shadow: 0 8px 32px rgba(0,0,0,.12);
+  padding: 20px 24px; min-width: 220px; font-family: 'Montserrat', sans-serif;
+}
+#tweaks-panel.open { display: block; }
+#tweaks-panel h3 { font-size: 10px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 16px; color: #111; }
+.tweak-group { margin-bottom: 16px; }
+.tweak-group label { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #888; display: block; margin-bottom: 8px; }
+.tweak-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.tweak-pill {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em; padding: 5px 10px;
+  border: 1px solid #e8e8e8; cursor: pointer; transition: all .15s; color: #555;
+  background: #fafafa;
+}
+.tweak-pill:hover { border-color: #111; color: #111; }
+.tweak-pill.active { background: #111; color: #fff; border-color: #111; }
+</style>
+</head>
+<body>
+
+<!-- Concept Switcher -->
+<div class="switcher">
+  <span class="switcher-label">Concept</span>
+  <button class="sw-btn active" data-concept="A">
+    <span class="dot" style="background:#7b2d8b"></span>Prismatic
+  </button>
+  <button class="sw-btn" data-concept="B">
+    <span class="dot" style="background:#c45c3a"></span>Garden
+  </button>
+  <button class="sw-btn" data-concept="C">
+    <span class="dot" style="background:linear-gradient(90deg,#e63946,#4361ee)"></span>Spectrum
+  </button>
+  <button class="sw-btn" data-concept="D">
+    <span class="dot" style="background:linear-gradient(90deg,#7b2d8b,#e63946,#f4a261,#4361ee)"></span>Cathedral
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════
+     CONCEPT A — PRISMATIC
+     ═══════════════════════════════════ -->
+<div class="concept cA visible" id="concept-A">
+
+  <nav class="nav">
+    <div class="nav-logo">The Table<span></span></div>
+    <ul class="nav-links">
+      <li><a href="#">New Here</a></li>
+      <li><a href="#">Our Story</a></li>
+      <li><a href="#">Messages</a></li>
+      <li><a href="#">Get Involved</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Join Us</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-img"></div>
+    <div class="hero-spectrum"></div>
+    <div class="hero-spectrum-glow"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">The Table Church · Sachse, TX</p>
+      <h1 class="hero-title">Come<br><em>Join Us.</em></h1>
+      <p class="hero-sub">An LGBTQ-affirming church committed to embodying a welcoming, inclusive, and beautiful expression of Christian faith.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Sunday @ 5PM</a>
+        <a href="#" class="btn-ghost">Our Story →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="who">
+    <div class="who-copy">
+      <p class="section-label">Who We Are</p>
+      <h2 class="section-heading"><b>WHO</b> WE ARE</h2>
+      <p class="section-body">At the core of our mission to cultivate a welcoming community, five key pillars guide us.</p>
+      <div class="values-list">
+        <div class="value-item"><span class="value-name">Thoughtful</span><span class="value-desc">Every action reflects deep respect for each other's journeys.</span></div>
+        <div class="value-item"><span class="value-name">Inclusive</span><span class="value-desc">We welcome all identities and backgrounds with open arms.</span></div>
+        <div class="value-item"><span class="value-name">Eclectic</span><span class="value-desc">Diverse voices and ideas enrich our community.</span></div>
+        <div class="value-item"><span class="value-name">Communal</span><span class="value-desc">Shared experiences bind us closer and uplift our spirit.</span></div>
+        <div class="value-item"><span class="value-name">Vulnerable</span><span class="value-desc">Authentic connections through open-hearted sharing.</span></div>
+      </div>
+    </div>
+    <div class="who-photo"></div>
+  </section>
+
+  <section class="belong">
+    <div class="belong-spectrum"></div>
+    <p class="section-label" style="color:#8a8278;font-size:10px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:28px;">You Belong</p>
+    <blockquote class="belong-quote">
+      "You are a child of God.<br><b>YOU are a child of God.</b>"
+    </blockquote>
+    <p class="belong-sub">This is true on your best day, and it's true on your worst day. You are loved, you are worthy, and you are accepted, just as you are.</p>
+  </section>
+
+  <section class="affirming">
+    <div class="affirming-photo"></div>
+    <div class="affirming-copy">
+      <p class="section-label" style="color:#8a8278;font-size:10px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;margin-bottom:20px;">LGBTQ+ Affirming</p>
+      <h2 class="section-heading" style="font-family:'Playfair Display',serif;font-size:clamp(32px,3.5vw,48px);color:#f0ece4;margin-bottom:16px;"><b>WE</b> CELEBRATE<br><em style="font-style:italic">Every Story.</em></h2>
+      <p class="section-body" style="max-width:400px;">We are an LGBTQ-affirming community. We believe God's love is unconditional and for everyone — without exception.</p>
+      <div class="affirming-list">
+        <div class="affirming-item">We use your preferred pronouns and chosen name.</div>
+        <div class="affirming-item">We fully affirm LGBTQ+ relationships and marriages.</div>
+        <div class="affirming-item">We welcome LGBTQ+ people in all roles of leadership.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <p class="cta-time">Sundays @ 5PM</p>
+    <p class="cta-date">First United Methodist Church of Sachse · 1520 Blackburn Rd</p>
+    <a href="#" class="btn-primary" style="margin-top:0">Plan Your Visit</a>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-logo">The Table Church</span>
+    <address class="footer-addr" style="font-style:normal">
+      1520 Blackburn Rd, Sachse TX 75048<br>
+      (469) 222-3617
+    </address>
+  </footer>
+
+</div><!-- /concept A -->
+
+
+<!-- ═══════════════════════════════════
+     CONCEPT B — GARDEN
+     ═══════════════════════════════════ -->
+<div class="concept cB" id="concept-B">
+
+  <nav class="nav">
+    <div class="nav-logo">The Table
+      <span class="tagline">An affirming Christian community</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">New Here</a></li>
+      <li><a href="#">Our Story</a></li>
+      <li><a href="#">Messages</a></li>
+      <li><a href="#">Get Involved</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Join Us Sunday</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-arc"></div>
+      <p class="hero-eyebrow">Sachse, TX · Est. 2019</p>
+      <h1 class="hero-title">Come<br><em>Join</em><br>Us.</h1>
+      <p class="hero-sub">A welcoming, inclusive, and beautiful expression of Christian faith — affirming all people, exactly as they are.</p>
+      <div>
+        <div class="hero-time-badge"><span class="hero-time-dot"></span>Sundays at 5PM</div>
+        <p style="font-size:12px;color:var(--muted);margin-top:8px;">First United Methodist Church of Sachse</p>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img"></div>
+      <div class="hero-img-overlay"></div>
+      <div class="hero-spectrum-strip"></div>
+    </div>
+  </section>
+
+  <section class="who">
+    <div class="who-inner">
+      <div>
+        <p class="section-label">Who We Are</p>
+        <h2 class="section-heading"><b>WHO</b><br>WE ARE</h2>
+        <p class="section-body">At the core of our mission, five key pillars guide us in creating an empowering space for everyone.</p>
+      </div>
+      <div class="values-grid">
+        <div class="value-card">
+          <p class="value-num">01</p>
+          <h3 class="value-name">Thoughtful</h3>
+          <p class="value-desc">Every action reflects deep respect for each other's journeys.</p>
+        </div>
+        <div class="value-card">
+          <p class="value-num">02</p>
+          <h3 class="value-name">Inclusive</h3>
+          <p class="value-desc">We welcome all identities with open arms, no exceptions.</p>
+        </div>
+        <div class="value-card">
+          <p class="value-num">03</p>
+          <h3 class="value-name">Eclectic</h3>
+          <p class="value-desc">Diverse voices and perspectives enrich our community.</p>
+        </div>
+        <div class="value-card">
+          <p class="value-num">04</p>
+          <h3 class="value-name">Communal</h3>
+          <p class="value-desc">Shared experiences bind us and uplift our collective spirit.</p>
+        </div>
+        <div class="value-card">
+          <p class="value-num">05</p>
+          <h3 class="value-name">Vulnerable</h3>
+          <p class="value-desc">Authentic connection through open-hearted sharing and trust.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="belong">
+    <div class="belong-photo"></div>
+    <div class="belong-copy">
+      <p class="section-label">You Belong Here</p>
+      <blockquote class="belong-quote">
+        "You are a child of God.<br><em>YOU are a child of God.</em>"
+      </blockquote>
+      <p class="belong-body">This is true on your best day, and it's true on your worst day. You are loved, you are worthy, and you are accepted, just as you are.</p>
+      <span class="belong-spectrum"></span>
+    </div>
+  </section>
+
+  <section class="affirming">
+    <div class="affirming-inner">
+      <div>
+        <p class="section-label">LGBTQ+ Affirming</p>
+        <h2 class="section-heading"><b>WE</b> CELEBRATE<br>Every Story.</h2>
+        <p class="section-body">We are a fully affirming community. We believe God's love is unconditional — for everyone, without exception.</p>
+        <div class="affirming-list">
+          <div class="affirming-item">We use your preferred pronouns and chosen name.</div>
+          <div class="affirming-item">We fully affirm LGBTQ+ relationships and marriages.</div>
+          <div class="affirming-item">LGBTQ+ people serve in all roles of leadership.</div>
+        </div>
+      </div>
+      <div class="affirming-photo"></div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <h2 class="cta-hed">Join Us<br><em>As You Are.</em></h2>
+    <p class="cta-sub">No dress code. No prerequisites. No fine print. Just you, and a community that wants to know you.</p>
+    <a href="#" class="cta-btn">Plan Your Visit</a>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-logo">The Table Church</span>
+    <address class="footer-addr" style="font-style:normal">
+      1520 Blackburn Rd, Sachse TX 75048<br>
+      Sundays at 5:00 PM
+    </address>
+  </footer>
+
+</div><!-- /concept B -->
+
+
+<!-- ═══════════════════════════════════
+     CONCEPT C — SPECTRUM EDITORIAL
+     ═══════════════════════════════════ -->
+<div class="concept cC" id="concept-C">
+
+  <nav class="nav" style="position:relative">
+    <div class="nav-spectrum"></div>
+    <div class="nav-logo">The Table</div>
+    <ul class="nav-links">
+      <li><a href="#">New Here</a></li>
+      <li><a href="#">Our Story</a></li>
+      <li><a href="#">Messages</a></li>
+      <li><a href="#">Get Involved</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Join Sunday</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-spectrum-bar"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <p class="hero-eyebrow">The Table Church · Sachse TX</p>
+        <h1 class="hero-title">
+          Come<br>
+          <span class="rainbow-word">Join</span><br>
+          Us.
+        </h1>
+        <div class="hero-bottom">
+          <p class="hero-sub">An LGBTQ-affirming church committed to embodying a welcoming, inclusive, and beautiful expression of Christian faith.</p>
+          <div class="hero-actions">
+            <a href="#" class="btn-primary">Sundays @ 5PM</a>
+            <a href="#" class="btn-ghost">Our Story →</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-img-wrap"></div>
+        <div class="hero-caption">
+          <p>Every Sunday at 5PM · First United Methodist Church of Sachse · All are welcome.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="who">
+    <div class="who-header">
+      <p class="section-label">01 — Who We Are</p>
+      <div class="who-big-text"><span class="rainbow-word">FIVE</span> VALUES</div>
+    </div>
+    <div class="who-body-row">
+      <p class="who-body-copy">At the core of our mission to cultivate a welcoming community, five key pillars guide everything we do — from Sunday service to how we treat one another in ordinary moments.</p>
+      <p class="who-body-copy">We exist to shift a generation from reactionary to visionary through the person and work of Jesus. We believe the church can be a place of radical welcome.</p>
+    </div>
+    <div class="values-row">
+      <div class="val-block">
+        <p class="val-num">01</p>
+        <h3 class="val-name">Thoughtful</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">Deep respect and understanding for each other's journeys.</p>
+      </div>
+      <div class="val-block">
+        <p class="val-num">02</p>
+        <h3 class="val-name">Inclusive</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">All identities and backgrounds welcomed without exception.</p>
+      </div>
+      <div class="val-block">
+        <p class="val-num">03</p>
+        <h3 class="val-name">Eclectic</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">Diverse perspectives enrich our community with beauty.</p>
+      </div>
+      <div class="val-block">
+        <p class="val-num">04</p>
+        <h3 class="val-name">Communal</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">Present to one another in depth relationship and care.</p>
+      </div>
+      <div class="val-block">
+        <p class="val-num">05</p>
+        <h3 class="val-name">Vulnerable</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">The linchpin — it takes vulnerability to live the rest.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="belong">
+    <div class="belong-spectrum-col"></div>
+    <div class="belong-copy">
+      <h2 class="belong-quote">
+        YOU<br>BELONG<br>HERE.
+      </h2>
+      <p class="belong-body">You are a child of God — on your best day and on your worst. You are loved, you are worthy, you are accepted, exactly as you are. No asterisks.</p>
+    </div>
+  </section>
+
+  <section class="affirming">
+    <div class="affirming-inner">
+      <div class="affirming-photo"></div>
+      <div class="affirming-copy">
+        <h2 class="affirming-headline">WE CELEBRATE<br>EVERY STORY.</h2>
+        <div class="affirming-grid">
+          <div class="affirm-chip">Preferred pronouns honored</div>
+          <div class="affirm-chip">LGBTQ+ marriages affirmed</div>
+          <div class="affirm-chip">LGBTQ+ in all leadership</div>
+          <div class="affirm-chip">No exceptions. No fine print.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="cta-spectrum"></div>
+    <div class="cta-inner">
+      <h2 class="cta-hed">
+        <span class="rainbow-word">COME</span><br>AS YOU ARE.
+      </h2>
+      <p class="cta-sub">Every Sunday at 5PM · 1520 Blackburn Rd, Sachse TX · All are welcome.</p>
+      <a href="#" class="cta-btn">Plan Your Visit</a>
+    </div>
+  </section>
+
+  <footer class="footer" style="position:relative">
+    <span class="footer-logo">The Table Church</span>
+    <address class="footer-addr" style="font-style:normal">
+      1520 Blackburn Rd, Sachse TX 75048<br>
+      (469) 222-3617
+    </address>
+  </footer>
+
+</div><!-- /concept C -->
+
+
+<!-- ═══════════════════════════════════
+     CONCEPT D — CATHEDRAL (A + C fusion)
+     Dark cathedral palette · Playfair italic + architectural rainbow
+     ═══════════════════════════════════ -->
+<div class="concept cD" id="concept-D">
+
+  <nav class="nav" style="position:relative">
+    <div class="nav-spectrum"></div>
+    <div class="nav-logo">The Table</div>
+    <ul class="nav-links">
+      <li><a href="#">New Here</a></li>
+      <li><a href="#">Our Story</a></li>
+      <li><a href="#">Messages</a></li>
+      <li><a href="#">Get Involved</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button id="theme-toggle" aria-label="Toggle light/dark mode" style="
+        appearance:none; border:1px solid rgba(255,255,255,.18); background:transparent;
+        color:inherit; padding:8px 14px; cursor:pointer; font-family:inherit;
+        font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+        transition:all .2s; white-space:nowrap;
+      ">☀ Light</button>
+      <a href="#" class="nav-cta">Join Us</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-img"></div>
+    <div class="hero-spectrum-bar"></div>
+    <div class="hero-spectrum-glow"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">The Table Church · Sachse, TX</p>
+      <h1 class="hero-title">
+        Come<br>
+        <span class="rainbow-word">Join</span><br>
+        <em>Us.</em>
+      </h1>
+      <p class="hero-sub">An LGBTQ-affirming church committed to embodying a welcoming, inclusive, and beautiful expression of Christian faith.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Sunday @ 5PM</a>
+        <a href="#" class="btn-ghost">Our Story →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="who">
+    <div class="who-header">
+      <p class="section-label">01 — Who We Are</p>
+      <div class="who-big-text"><span class="rainbow-word">Five</span> <em>Values</em></div>
+    </div>
+    <div class="who-body-row">
+      <p class="who-body-copy">At the core of our mission to cultivate a welcoming community, five key pillars guide everything we do — from Sunday service to how we treat one another in ordinary moments.</p>
+      <p class="who-body-copy">We exist to shift a generation from reactionary to visionary through the person and work of Jesus. We believe the church can be a place of radical welcome.</p>
+    </div>
+    <div class="values-row">
+      <div class="val-block">
+        <p class="val-num">01</p>
+        <h3 class="val-name">Thoughtful</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">Deep respect and understanding for each other's journeys.</p>
+      </div>
+      <div class="val-block">
+        <p class="val-num">02</p>
+        <h3 class="val-name">Inclusive</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">All identities and backgrounds welcomed without exception.</p>
+      </div>
+      <div class="val-block">
+        <p class="val-num">03</p>
+        <h3 class="val-name">Eclectic</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">Diverse perspectives enrich our community with beauty.</p>
+      </div>
+      <div class="val-block">
+        <p class="val-num">04</p>
+        <h3 class="val-name">Communal</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">Present to one another in depth relationship and care.</p>
+      </div>
+      <div class="val-block">
+        <p class="val-num">05</p>
+        <h3 class="val-name">Vulnerable</h3>
+        <div class="val-bar"></div>
+        <p class="val-desc">The linchpin — it takes vulnerability to live the rest.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="belong">
+    <div class="belong-spectrum-col"></div>
+    <div class="belong-copy">
+      <p class="belong-label">You Belong Here</p>
+      <blockquote class="belong-quote">
+        "You are a child of God.<br><b>YOU are a child of God.</b>"
+      </blockquote>
+      <p class="belong-body">This is true on your best day, and it's true on your worst. You are loved, you are worthy, and you are accepted — exactly as you are. No asterisks.</p>
+    </div>
+  </section>
+
+  <section class="affirming">
+    <div class="affirming-photo"></div>
+    <div class="affirming-copy">
+      <h2 class="affirming-headline">We Celebrate<br><em>Every Story.</em></h2>
+      <p class="affirming-sub">We are a fully affirming community. We believe God's love is unconditional — for everyone, without exception.</p>
+      <div class="affirming-grid">
+        <div class="affirm-chip">Preferred pronouns honored</div>
+        <div class="affirm-chip">LGBTQ+ marriages affirmed</div>
+        <div class="affirm-chip">LGBTQ+ in all leadership</div>
+        <div class="affirm-chip">No exceptions. No fine print.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="cta-spectrum"></div>
+    <div class="cta-inner">
+      <p class="cta-time">Sundays @ <em>5PM</em></p>
+      <p class="cta-date">First United Methodist Church of Sachse · 1520 Blackburn Rd</p>
+      <a href="#" class="btn-primary">Plan Your Visit</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-spectrum"></div>
+    <span class="footer-logo">The Table Church</span>
+    <address class="footer-addr" style="font-style:normal">
+      1520 Blackburn Rd, Sachse TX 75048<br>
+      (469) 222-3617
+    </address>
+  </footer>
+
+</div><!-- /concept D -->
+
+
+<!-- Tweaks Panel -->
+<div id="tweaks-panel">
+  <h3>Tweaks</h3>
+  <div class="tweak-group">
+    <label>Concept</label>
+    <div class="tweak-pills">
+      <div class="tweak-pill active" data-tweak-concept="A">Prismatic</div>
+      <div class="tweak-pill" data-tweak-concept="B">Garden</div>
+      <div class="tweak-pill" data-tweak-concept="C">Spectrum</div>
+      <div class="tweak-pill" data-tweak-concept="D">Cathedral</div>
+    </div>
+  </div>
+  <div class="tweak-group" id="tweak-spectrum-weight-group">
+    <label>Rainbow Intensity</label>
+    <div class="tweak-pills">
+      <div class="tweak-pill" data-tweak-intensity="subtle">Subtle</div>
+      <div class="tweak-pill active" data-tweak-intensity="normal">Normal</div>
+      <div class="tweak-pill" data-tweak-intensity="bold">Bold</div>
+    </div>
+  </div>
+</div>
+
+
+<script is:inline>
+const TWEAK_DEFAULTS = { concept: "A", intensity: "normal", theme: "dark" };
+let state = { ...TWEAK_DEFAULTS };
+try { const s = localStorage.getItem('table-concepts'); if (s) state = { ...state, ...JSON.parse(s) }; } catch(e) {}
+
+function showConcept(id) {
+  document.querySelectorAll('.concept').forEach(el => el.classList.remove('visible'));
+  document.getElementById('concept-' + id).classList.add('visible');
+  document.querySelectorAll('.sw-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.concept === id);
+  });
+  document.querySelectorAll('[data-tweak-concept]').forEach(p => {
+    p.classList.toggle('active', p.dataset.tweakConcept === id);
+  });
+  state.concept = id;
+  save();
+}
+
+function setSpectrumIntensity(level) {
+  const map = {
+    subtle: 'linear-gradient(90deg, rgba(230,57,70,.45), rgba(244,162,97,.45), rgba(233,196,106,.45), rgba(82,183,136,.45), rgba(67,97,238,.45), rgba(123,45,139,.45))',
+    normal: 'linear-gradient(90deg, #e63946, #f4a261, #e9c46a, #52b788, #4361ee, #7b2d8b)',
+    bold:   'linear-gradient(90deg, #e63946 0%, #f4a261 16%, #e9c46a 33%, #52b788 50%, #4361ee 75%, #7b2d8b 100%)'
+  };
+  const v = map[level] || map.normal;
+  document.querySelectorAll('.cA, .cB, .cC, .cD').forEach(el => el.style.setProperty('--spectrum', v));
+  document.querySelectorAll('[data-tweak-intensity]').forEach(p => {
+    p.classList.toggle('active', p.dataset.tweakIntensity === level);
+  });
+  state.intensity = level;
+  save();
+}
+
+function setTheme(theme) {
+  const conceptD = document.getElementById('concept-D');
+  const btn = document.getElementById('theme-toggle');
+  if (theme === 'light') {
+    conceptD.classList.add('light-mode');
+    if (btn) btn.textContent = '☾ Dark';
+  } else {
+    conceptD.classList.remove('light-mode');
+    if (btn) btn.textContent = '☀ Light';
+  }
+  state.theme = theme;
+  save();
+}
+
+function toggleTheme() {
+  setTheme(state.theme === 'light' ? 'dark' : 'light');
+}
+
+function save() {
+  try { localStorage.setItem('table-concepts', JSON.stringify(state)); } catch(e) {}
+}
+
+document.querySelectorAll('.sw-btn').forEach(btn => {
+  btn.addEventListener('click', () => showConcept(btn.dataset.concept));
+});
+document.querySelectorAll('[data-tweak-concept]').forEach(p => {
+  p.addEventListener('click', () => showConcept(p.dataset.tweakConcept));
+});
+document.querySelectorAll('[data-tweak-intensity]').forEach(p => {
+  p.addEventListener('click', () => setSpectrumIntensity(p.dataset.tweakIntensity));
+});
+
+const themeBtn = document.getElementById('theme-toggle');
+if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+
+// Tweaks panel toggle — press "T" to open/close
+document.addEventListener('keydown', e => {
+  if (e.key === 't' || e.key === 'T') {
+    document.getElementById('tweaks-panel').classList.toggle('open');
+  }
+});
+
+// Restore state
+showConcept(state.concept || 'A');
+if (state.intensity && state.intensity !== 'normal') setSpectrumIntensity(state.intensity);
+if (state.theme === 'light') setTheme('light');
+</script>
+</body>
+</html>

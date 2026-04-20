@@ -1,0 +1,74 @@
+---
+const forms = [
+  {
+    title: 'Contact Us',
+    mode: 'embed',
+    destination: 'Planning Center or Church Center',
+    note: 'Inline completion when the workflow needs it.',
+  },
+  {
+    title: 'Newsletter Signup',
+    mode: 'link-first',
+    destination: 'Planning Center form',
+    note: 'Link out when the destination is clearer on mobile.',
+  },
+  {
+    title: 'General Contact',
+    mode: 'fallback',
+    destination: 'Google Apps Script',
+    note: 'Only used when no Planning Center workflow fits.',
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Planning Center forms sample</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 32px;
+        background: #f5f7fb;
+        color: #1f1f1f;
+      }
+      main {
+        max-width: 900px;
+      }
+      h1 {
+        margin: 0 0 20px;
+        font-size: 2rem;
+      }
+      .form {
+        border-top: 1px solid #d7d2c8;
+        padding: 16px 0;
+      }
+      .meta {
+        margin: 0 0 6px;
+        color: #5f5a52;
+      }
+      .title {
+        margin: 0 0 4px;
+        font-size: 1.125rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Planning Center forms sample</h1>
+      {forms.map((form) => (
+        <section class="form">
+          <p class="meta">{form.mode} · {form.destination}</p>
+          <h2 class="title">{form.title}</h2>
+          <p class="meta">{form.note}</p>
+        </section>
+      ))}
+    </main>
+  </body>
+</html>

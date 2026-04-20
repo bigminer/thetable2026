@@ -1,0 +1,131 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { entrySlug } from '../../lib/entry-slug';
+
+export async function getStaticPaths() {
+  const staffEntries = await getCollection('staff', ({ data }) => !data.draft);
+
+  return staffEntries.map((staff) => ({
+    params: { slug: entrySlug(staff) },
+    props: { staff },
+  }));
+}
+
+const { staff } = Astro.props;
+const allGroups = await getCollection('staff-groups', ({ data }) => !data.draft);
+const groups = (staff.data.groups ?? [])
+  .map((group) => (group.data ? group : allGroups.find((entry) => entrySlug(entry) === entrySlug(group))))
+  .filter((group): group is (typeof allGroups)[number] => Boolean(group));
+---
+
+<BaseLayout
+  title={staff.data.name}
+  description={staff.data.bio}
+  canonicalPath={`/staff/${entrySlug(staff)}/`}
+>
+  <main class="page stack">
+    <section class="staff-hero">
+      {staff.data.photo && <img class="staff-hero__image" src={staff.data.photo.src} alt={staff.data.photo.alt} />}
+      <div class="staff-hero__content stack">
+        <p class="eyebrow">Staff</p>
+        <h1>{staff.data.name}</h1>
+        <p class="lede">{staff.data.role}</p>
+        <p>{staff.data.bio}</p>
+      </div>
+    </section>
+
+    <section class="grid grid--2">
+      <article class="panel stack">
+        <p class="eyebrow">Profile</p>
+        <h2>{staff.data.name}</h2>
+        <dl class="staff-meta">
+          <div>
+            <dt>Role</dt>
+            <dd>{staff.data.role}</dd>
+          </div>
+          {staff.data.email && (
+            <div>
+              <dt>Email</dt>
+              <dd>
+                <a href={`mailto:${staff.data.email}`}>{staff.data.email}</a>
+              </dd>
+            </div>
+          )}
+          {staff.data.phone && (
+            <div>
+              <dt>Phone</dt>
+              <dd>{staff.data.phone}</dd>
+            </div>
+          )}
+        </dl>
+      </article>
+
+      <aside class="panel stack">
+        <p class="eyebrow">Groups</p>
+        <h2>Directory placement</h2>
+        {groups.length > 0 ? (
+          <div class="group-pills">
+            {groups.map((group) => (
+              <span class="group-pill">{group.data.title}</span>
+            ))}
+          </div>
+        ) : (
+          <p>No staff group assigned yet.</p>
+        )}
+      </aside>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .staff-hero {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .staff-hero__image {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+  }
+
+  .staff-meta {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .staff-meta dt {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .staff-meta dd {
+    margin: 0.25rem 0 0;
+  }
+
+  .group-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .group-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0 0.75rem;
+    border-radius: 8px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+  }
+
+  @media (min-width: 48rem) {
+    .staff-hero {
+      grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+</style>

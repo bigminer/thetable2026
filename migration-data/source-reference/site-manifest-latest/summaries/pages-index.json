@@ -1,0 +1,233 @@
+[
+  {
+    "id": 1763,
+    "slug": "thank-you-page",
+    "link": "https://thetabletx.com/thank-you-page/",
+    "title": "Thank You Page",
+    "status": "publish",
+    "date": "2024-10-30T12:04:30",
+    "modified": "2025-02-03T09:28:58",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1737,
+    "slug": "homepage-updates-draft",
+    "link": "https://thetabletx.com/",
+    "title": "Home Page Updates",
+    "status": "publish",
+    "date": "2024-09-26T19:11:16",
+    "modified": "2026-04-09T12:58:34",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1651,
+    "slug": "lgbt-affirming-church",
+    "link": "https://thetabletx.com/lgbt-affirming-church/",
+    "title": "LGBT Affirming Church",
+    "status": "publish",
+    "date": "2024-03-20T15:47:19",
+    "modified": "2024-12-27T08:07:01",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1362,
+    "slug": "merch",
+    "link": "https://thetabletx.com/merch/",
+    "title": "merch",
+    "status": "publish",
+    "date": "2022-09-30T22:04:20",
+    "modified": "2022-09-30T22:04:20",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1168,
+    "slug": "new-here",
+    "link": "https://thetabletx.com/new-here/",
+    "title": "New Here?",
+    "status": "publish",
+    "date": "2020-03-08T20:53:21",
+    "modified": "2024-01-30T09:02:34",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1163,
+    "slug": "community-meal",
+    "link": "https://thetabletx.com/community-meal/",
+    "title": "Community Meals",
+    "status": "publish",
+    "date": "2020-03-08T20:27:13",
+    "modified": "2022-10-13T12:14:08",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1100,
+    "slug": "our-vision",
+    "link": "https://thetabletx.com/our-vision/",
+    "title": "Our Vision &#038; Values",
+    "status": "publish",
+    "date": "2019-11-01T16:26:29",
+    "modified": "2026-04-09T13:10:28",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1099,
+    "slug": "our-story",
+    "link": "https://thetabletx.com/our-story/",
+    "title": "Our Story",
+    "status": "publish",
+    "date": "2019-11-01T16:25:55",
+    "modified": "2024-01-26T10:09:47",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1072,
+    "slug": "sign-up-for-our-newsletter",
+    "link": "https://thetabletx.com/sign-up-for-our-newsletter/",
+    "title": "Sign Up for Our Newsletter",
+    "status": "publish",
+    "date": "2019-11-01T16:13:34",
+    "modified": "2020-04-17T10:19:36",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1071,
+    "slug": "get-involved",
+    "link": "https://thetabletx.com/get-involved/",
+    "title": "Get Involved",
+    "status": "publish",
+    "date": "2019-11-01T16:13:21",
+    "modified": "2020-04-10T10:05:51",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1067,
+    "slug": "kids-youth",
+    "link": "https://thetabletx.com/kids-youth/",
+    "title": "Kids &#038; Youth",
+    "status": "publish",
+    "date": "2019-11-01T16:12:28",
+    "modified": "2024-06-27T15:05:17",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1065,
+    "slug": "meetups",
+    "link": "https://thetabletx.com/meetups/",
+    "title": "MeetUps",
+    "status": "publish",
+    "date": "2019-11-01T16:12:08",
+    "modified": "2025-09-24T11:05:20",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1064,
+    "slug": "service-times-locations",
+    "link": "https://thetabletx.com/service-times-locations/",
+    "title": "Service Time &#038; Location",
+    "status": "publish",
+    "date": "2019-11-01T16:11:54",
+    "modified": "2024-01-30T08:57:55",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1062,
+    "slug": "giving",
+    "link": "https://thetabletx.com/giving/",
+    "title": "Giving",
+    "status": "publish",
+    "date": "2019-11-01T16:11:13",
+    "modified": "2022-10-04T23:50:19",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 3,
+    "slug": "privacy-policy",
+    "link": "https://thetabletx.com/privacy-policy/",
+    "title": "Privacy Policy",
+    "status": "publish",
+    "date": "2019-05-08T01:38:14",
+    "modified": "2023-04-26T15:23:40",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 692,
+    "slug": "contact-us",
+    "link": "https://thetabletx.com/contact-us/",
+    "title": "Contact Us",
+    "status": "publish",
+    "date": "2018-03-02T09:45:47",
+    "modified": "2023-04-26T17:06:23",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 65,
+    "slug": "full-hero",
+    "link": "https://thetabletx.com/full-hero/",
+    "title": "Full Hero",
+    "status": "publish",
+    "date": "2014-04-23T09:41:26",
+    "modified": "2024-12-16T13:39:51",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 12,
+    "slug": "features",
+    "link": "https://thetabletx.com/features/",
+    "title": "Features",
+    "status": "publish",
+    "date": "2014-04-18T21:54:51",
+    "modified": "2014-04-18T21:54:51",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 11,
+    "slug": "blog",
+    "link": "https://thetabletx.com/blog/",
+    "title": "Weekly Devotional &#8211; 1 Corinthians 1:1-2",
+    "status": "publish",
+    "date": "2014-04-18T21:54:42",
+    "modified": "2023-02-23T13:08:06",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1029,
+    "slug": "leadership",
+    "link": "https://thetabletx.com/leadership/",
+    "title": "Leadership",
+    "status": "publish",
+    "date": "2014-04-18T21:53:57",
+    "modified": "2020-04-10T10:08:21",
+    "parent": 0,
+    "menu_order": 0
+  },
+  {
+    "id": 1028,
+    "slug": "series",
+    "link": "https://thetabletx.com/series/",
+    "title": "Series",
+    "status": "publish",
+    "date": "2014-04-18T21:53:46",
+    "modified": "2022-09-29T00:20:50",
+    "parent": 0,
+    "menu_order": 0
+  }
+]

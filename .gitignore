@@ -22,3 +22,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Obsidian app config (local only)
+.obsidian/
+
+# Playwright test output
+test-results/
+playwright-report/

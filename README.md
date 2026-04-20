@@ -1,43 +1,40 @@
-# Astro Starter Kit: Minimal
+# TableFresh
 
-```sh
-npm create astro@latest -- --template minimal
+Static Astro migration target for `thetabletx`.
+
+For agent work or context-cleared sessions, start with:
+
+1. `handoff.md` — current task and recovery notes.
+2. `RESOURCE_INDEX.md` — discovery map for source artifacts, contracts, scripts, and verification.
+3. `AGENTS.md` — stable guardrails and workflow.
+4. `plan.yaml` — authoritative task state and acceptance criteria.
+
+## Common Commands
+
+```bash
+npm run plan:lint
+npm run verify:manifest
+npm run agent:next
+npm run media:extract:dry-run
+npm run build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Source Model
 
-## 🚀 Project Structure
+The original WordPress content is database-backed. This repository uses copied local references and migrated static content instead of depending on the WordPress database at runtime:
 
-Inside of your Astro project, you'll see the following folders and files:
+- `migration-data/source-reference/site-manifest-latest/` contains the local source manifest snapshot.
+- `migration-data/source-reference/assets/` contains local source-reference copies of migrated assets.
+- `src/content/` contains migrated Markdown content.
+- `public/media/` contains site-facing migrated media.
+- `migration-data/asset-copy-manifest.json` maps each migrated asset from original source URL to source-reference copy and destination copy.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+Media retrieval is intentionally referenced-only:
+
+```bash
+npm run media:extract:dry-run # report active and source-only WordPress upload URLs
+npm run media:check           # fail on unmanaged active media
+npm run media:extract         # copy active unmanaged media and rewrite references
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Source-only URLs from WordPress snapshots are not copied automatically; they become migration scope only when active Astro content uses them.

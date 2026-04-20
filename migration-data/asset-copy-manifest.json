@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "policy": "Every migrated asset must have a local sourceReferencePath and a public destinationPath. Content must reference destinationPath, not WordPress upload URLs.",
+  "assets": [
+    {
+      "id": "home-join-us",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/09/TheTable-0044-scaled.jpg-1.png",
+      "sourceReferencePath": "migration-data/source-reference/assets/home/join-us.png",
+      "destinationPath": "public/media/home/join-us.png",
+      "publicPath": "/media/home/join-us.png"
+    },
+    {
+      "id": "home-family",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/09/Jennifer-and-Stacy-family-1.png",
+      "sourceReferencePath": "migration-data/source-reference/assets/home/family.png",
+      "destinationPath": "public/media/home/family.png",
+      "publicPath": "/media/home/family.png"
+    },
+    {
+      "id": "home-communion",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/09/theTable_values-pic2.jpeg-1.png",
+      "sourceReferencePath": "migration-data/source-reference/assets/home/communion.png",
+      "destinationPath": "public/media/home/communion.png",
+      "publicPath": "/media/home/communion.png"
+    },
+    {
+      "id": "home-get-involved",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/09/the-table-caleb-singer.png",
+      "sourceReferencePath": "migration-data/source-reference/assets/home/get-involved.png",
+      "destinationPath": "public/media/home/get-involved.png",
+      "publicPath": "/media/home/get-involved.png"
+    },
+    {
+      "id": "home-vision-logo",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/03/The-Table-Affirming-Logo-sq-300x300.png",
+      "sourceReferencePath": "migration-data/source-reference/assets/home/vision-logo.png",
+      "destinationPath": "public/media/home/vision-logo.png",
+      "publicPath": "/media/home/vision-logo.png"
+    },
+    {
+      "id": "lgbt-hero",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/03/The-Table-Affirming-Hero-e1710999564241.png",
+      "sourceReferencePath": "migration-data/source-reference/assets/lgbt/affirming-hero.png",
+      "destinationPath": "public/media/lgbt/affirming-hero.png",
+      "publicPath": "/media/lgbt/affirming-hero.png"
+    },
+    {
+      "id": "lgbt-worship",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/03/thetableeaster-192-300x200.jpg",
+      "sourceReferencePath": "migration-data/source-reference/assets/lgbt/thetableeaster-192-300x200.jpg",
+      "destinationPath": "public/media/lgbt/thetableeaster-192-300x200.jpg",
+      "publicPath": "/media/lgbt/thetableeaster-192-300x200.jpg"
+    },
+    {
+      "id": "lgbt-open-affirming",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/03/summerrama-197-e1710987891456-300x300.jpg",
+      "sourceReferencePath": "migration-data/source-reference/assets/lgbt/summerrama-197-300x300.jpg",
+      "destinationPath": "public/media/lgbt/summerrama-197-300x300.jpg",
+      "publicPath": "/media/lgbt/summerrama-197-300x300.jpg"
+    },
+    {
+      "id": "lgbt-family",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/03/summerrama2023-414-300x183.jpg",
+      "sourceReferencePath": "migration-data/source-reference/assets/lgbt/summerrama2023-414-300x183.jpg",
+      "destinationPath": "public/media/lgbt/summerrama2023-414-300x183.jpg",
+      "publicPath": "/media/lgbt/summerrama2023-414-300x183.jpg"
+    },
+    {
+      "id": "lgbt-peace",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/03/summerrama-204.jpg",
+      "sourceReferencePath": "migration-data/source-reference/assets/lgbt/summerrama-204.jpg",
+      "destinationPath": "public/media/lgbt/summerrama-204.jpg",
+      "publicPath": "/media/lgbt/summerrama-204.jpg"
+    },
+    {
+      "id": "lgbt-values",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2021/11/theTable_values-pic2.jpeg",
+      "sourceReferencePath": "migration-data/source-reference/assets/lgbt/theTable_values-pic2.jpeg",
+      "destinationPath": "public/media/lgbt/theTable_values-pic2.jpeg",
+      "publicPath": "/media/lgbt/theTable_values-pic2.jpeg"
+    },
+    {
+      "id": "lgbt-gathering",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2019/11/TheTable-0044-scaled.jpg",
+      "sourceReferencePath": "migration-data/source-reference/assets/lgbt/TheTable-0044-scaled.jpg",
+      "destinationPath": "public/media/lgbt/TheTable-0044-scaled.jpg",
+      "publicPath": "/media/lgbt/TheTable-0044-scaled.jpg"
+    },
+    {
+      "id": "lgbt-logo",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2024/03/The-Table-Affirming-Logo-sq-300x300.png",
+      "sourceReferencePath": "migration-data/source-reference/assets/lgbt/The-Table-Affirming-Logo-sq-300x300.png",
+      "destinationPath": "public/media/lgbt/The-Table-Affirming-Logo-sq-300x300.png",
+      "publicPath": "/media/lgbt/The-Table-Affirming-Logo-sq-300x300.png"
+    },
+    {
+      "id": "our-story-brett-maggie",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2020/04/Brett-and-Maggie-Tilford-300x200.jpg",
+      "sourceReferencePath": "migration-data/source-reference/assets/our-story/brett-maggie-tilford.jpg",
+      "destinationPath": "public/media/our-story/brett-maggie-tilford.jpg",
+      "publicPath": "/media/our-story/brett-maggie-tilford.jpg"
+    },
+    {
+      "id": "series-values",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2021/11/theTable_values-pic2.jpeg",
+      "sourceReferencePath": "migration-data/source-reference/assets/series/thetable-values-pic2.jpeg",
+      "destinationPath": "public/media/series/thetable-values-pic2.jpeg",
+      "publicPath": "/media/series/thetable-values-pic2.jpeg"
+    },
+    {
+      "id": "staff-brett-maggie",
+      "sourceUrl": "https://thetabletx.com/wp-content/uploads/2020/04/Brett-and-Maggie-Tilford-300x200.jpg",
+      "sourceReferencePath": "migration-data/source-reference/assets/staff/brett-and-maggie-tilford.jpg",
+      "destinationPath": "public/media/staff/brett-and-maggie-tilford.jpg",
+      "publicPath": "/media/staff/brett-and-maggie-tilford.jpg"
+    }
+  ]
+}

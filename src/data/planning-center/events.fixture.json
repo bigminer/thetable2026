@@ -1,0 +1,51 @@
+{
+  "snapshotNote": "last-known-good Planning Center events fixture",
+  "scheduledRebuild": "scheduled rebuild on deploy or cron",
+  "categories": [
+    {
+      "slug": "services",
+      "title": "Services",
+      "description": "Weekend worship gatherings."
+    },
+    {
+      "slug": "fellowship",
+      "title": "Fellowship",
+      "description": "Shared meals and community rhythms."
+    },
+    {
+      "slug": "community-events",
+      "title": "Community Events",
+      "description": "Church-wide gatherings and special events."
+    }
+  ],
+  "events": [
+    {
+      "slug": "sunday-gathering",
+      "title": "Sunday Gathering",
+      "startsAt": "2026-04-20T17:00:00-05:00",
+      "endsAt": "2026-04-20T18:15:00-05:00",
+      "location": "The Table Church",
+      "categorySlug": "services",
+      "summary": "Weekly worship gathering for the church family.",
+      "url": "https://planningcenter.com/events/sunday-gathering"
+    },
+    {
+      "slug": "community-meal",
+      "title": "Community Meal",
+      "startsAt": "2026-04-23T18:30:00-05:00",
+      "location": "Hat Creek Burgers",
+      "categorySlug": "fellowship",
+      "summary": "A shared dinner for friends and neighbors.",
+      "url": "https://planningcenter.com/events/community-meal"
+    },
+    {
+      "slug": "youth-night",
+      "title": "Youth Night",
+      "startsAt": "2026-04-25T19:00:00-05:00",
+      "location": "The Table Church",
+      "categorySlug": "community-events",
+      "summary": "A church-wide night for students and volunteers.",
+      "url": "https://planningcenter.com/events/youth-night"
+    }
+  ]
+}

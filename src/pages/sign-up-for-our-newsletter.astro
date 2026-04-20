@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { forms } from '../data/forms';
+
+const form = forms['sign-up-for-our-newsletter'];
+---
+
+<BaseLayout
+  title={form.title}
+  description={form.note}
+  canonicalPath="/sign-up-for-our-newsletter/"
+>
+  <main class="page stack">
+    <section class="hero stack">
+      <img class="hero__mark" src="/favicon.svg" alt="" width="48" height="48" />
+      <p class="eyebrow">Newsletter</p>
+      <h1>{form.title}</h1>
+      <p class="lede">{form.note}</p>
+      <div class="actions">
+        <a class="button button--primary" href={form.primaryHref}>
+          {form.primaryLabel}
+        </a>
+        {form.secondaryHref && (
+          <a class="button button--secondary" href={form.secondaryHref}>
+            {form.secondaryLabel}
+          </a>
+        )}
+      </div>
+    </section>
+  </main>
+</BaseLayout>

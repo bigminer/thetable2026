@@ -1,0 +1,1218 @@
+generated_from: migration-data/route-classification.json
+host: https://thetabletx.com
+routes:
+  - source: /
+    classification: keep
+    expected:
+      type: local_path
+      path: /
+  - source: /?mailpoet_page=captcha
+    classification: technical
+    expected:
+      type: not_public_content
+      status: 404
+  - source: /?mailpoet_page=subscriptions
+    classification: technical
+    expected:
+      type: not_public_content
+      status: 404
+  - source: /author/mhill/
+    classification: technical
+    expected:
+      type: not_public_content
+      status: 404
+  - source: /author/thetabletx/
+    classification: technical
+    expected:
+      type: not_public_content
+      status: 404
+  - source: /blog/
+    classification: keep
+    expected:
+      type: local_path
+      path: /blog/
+  - source: /community-meal/
+    classification: keep
+    expected:
+      type: local_path
+      path: /community-meal/
+  - source: /contact-us/
+    classification: needs-integration
+    expected:
+      type: local_path
+      path: /contact-us/
+  - source: /events/category/community-events/
+    classification: needs-integration
+    expected:
+      type: local_path
+      path: /events/category/community-events/
+  - source: /events/category/fellowship/
+    classification: needs-integration
+    expected:
+      type: local_path
+      path: /events/category/fellowship/
+  - source: /events/category/services/
+    classification: needs-integration
+    expected:
+      type: local_path
+      path: /events/category/services/
+  - source: /features/
+    classification: needs-content
+    expected:
+      type: local_path
+      path: /features/
+  - source: /full-hero/
+    classification: needs-content
+    expected:
+      type: local_path
+      path: /full-hero/
+  - source: /get-involved/
+    classification: needs-integration
+    expected:
+      type: local_path
+      path: /get-involved/
+  - source: /giving/
+    classification: needs-integration
+    expected:
+      type: local_path
+      path: /giving/
+  - source: /kids-youth/
+    classification: keep
+    expected:
+      type: local_path
+      path: /kids-youth/
+  - source: /leadership/
+    classification: keep
+    expected:
+      type: local_path
+      path: /leadership/
+  - source: /lgbt-affirming-church/
+    classification: keep
+    expected:
+      type: local_path
+      path: /lgbt-affirming-church/
+  - source: /meetups/
+    classification: keep
+    expected:
+      type: local_path
+      path: /meetups/
+  - source: /merch/
+    classification: needs-content
+    expected:
+      type: local_path
+      path: /merch/
+  - source: /new-here/
+    classification: keep
+    expected:
+      type: local_path
+      path: /new-here/
+  - source: /our-story/
+    classification: keep
+    expected:
+      type: local_path
+      path: /our-story/
+  - source: /our-vision/
+    classification: keep
+    expected:
+      type: local_path
+      path: /our-vision/
+  - source: /podcast/a-new-kind-of-evangelism/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/a-new-kind-of-evangelism/
+  - source: /podcast/a-new-pentecost/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/a-new-pentecost/
+  - source: /podcast/a-strange-figure/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/a-strange-figure/
+  - source: /podcast/a-surprising-prayer/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/a-surprising-prayer/
+  - source: /podcast/advent-guest-speaker-jesse-watts/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/advent-guest-speaker-jesse-watts/
+  - source: /podcast/against-the-grain-baptism-sunday/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/against-the-grain-baptism-sunday/
+  - source: /podcast/alone/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/alone/
+  - source: /podcast/ambition-james-313-18/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/ambition-james-313-18/
+  - source: /podcast/an-action-oriented-faith/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/an-action-oriented-faith/
+  - source: /podcast/an-ever-widening-grace/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/an-ever-widening-grace/
+  - source: /podcast/anna-potter-life-be-lifin/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/anna-potter-life-be-lifin/
+  - source: /podcast/are-boundaries-bad/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/are-boundaries-bad/
+  - source: /podcast/ascending-participating/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/ascending-participating/
+  - source: /podcast/baptism-freedom/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/baptism-freedom/
+  - source: /podcast/baptism-sunday-2024/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/baptism-sunday-2024/
+  - source: /podcast/bound-loosed/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/bound-loosed/
+  - source: /podcast/breathe/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/breathe/
+  - source: /podcast/bruised/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/bruised/
+  - source: /podcast/caterpillars-butterflies/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/caterpillars-butterflies/
+  - source: /podcast/charles-kiser-burned-out-by-religion/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/charles-kiser-burned-out-by-religion/
+  - source: /podcast/christ-the-substitute/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/christ-the-substitute/
+  - source: /podcast/colonialism-fishing-for-people-luke-51-11/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/colonialism-fishing-for-people-luke-51-11/
+  - source: /podcast/communal/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/communal/
+  - source: /podcast/comtemplative-mind-compassionate-action/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/comtemplative-mind-compassionate-action/
+  - source: /podcast/confession/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/confession/
+  - source: /podcast/cracks-and-fissures/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/cracks-and-fissures/
+  - source: /podcast/deformed-and-reformed/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/deformed-and-reformed/
+  - source: /podcast/deniece-mason-what-is-this/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/deniece-mason-what-is-this/
+  - source: /podcast/desire-attachment/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/desire-attachment/
+  - source: /podcast/donkeys-seers-and-spirituality-gone-wrong/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/donkeys-seers-and-spirituality-gone-wrong/
+  - source: /podcast/dont-miss-the-glory-christmas-eve-message/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/dont-miss-the-glory-christmas-eve-message/
+  - source: /podcast/dr-aaron-brownbrook-the-sign-of-jonah-a-hysterical-look-in-the-mirror/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/dr-aaron-brownbrook-the-sign-of-jonah-a-hysterical-look-in-the-mirror/
+  - source: /podcast/drawn-re-formed/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/drawn-re-formed/
+  - source: /podcast/drawn/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/drawn/
+  - source: /podcast/easter-2024/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/easter-2024/
+  - source: /podcast/easter-service-your-life-is-not-a-tragedy/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/easter-service-your-life-is-not-a-tragedy/
+  - source: /podcast/enchanted-series-discussion/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/enchanted-series-discussion/
+  - source: /podcast/escaping-isolation-recovering-the-communal/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/escaping-isolation-recovering-the-communal/
+  - source: /podcast/everything-happens-for-a-reason/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/everything-happens-for-a-reason/
+  - source: /podcast/faith-epidurals-and-midwives/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/faith-epidurals-and-midwives/
+  - source: /podcast/feel-the-burn-luke-37-18/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/feel-the-burn-luke-37-18/
+  - source: /podcast/finding-room-in-the-ordinary-luke-26-7/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/finding-room-in-the-ordinary-luke-26-7/
+  - source: /podcast/flame-of-love/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/flame-of-love/
+  - source: /podcast/forgive-forget/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/forgive-forget/
+  - source: /podcast/get-moving-matthew-724-27-james-119-22/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/get-moving-matthew-724-27-james-119-22/
+  - source: /podcast/getting-lower/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/getting-lower/
+  - source: /podcast/god-has-a-wonderful-plan-for-your-life/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/god-has-a-wonderful-plan-for-your-life/
+  - source: /podcast/greg-steele-rest-for-our-souls/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/greg-steele-rest-for-our-souls/
+  - source: /podcast/growing-in-belovedness/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/growing-in-belovedness/
+  - source: /podcast/guest-speaker-cheryl-russell/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/guest-speaker-cheryl-russell/
+  - source: /podcast/guest-speaker-gwendolyn-lau/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/guest-speaker-gwendolyn-lau/
+  - source: /podcast/guest-speaker-laurie-provin-2/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/guest-speaker-laurie-provin-2/
+  - source: /podcast/guest-speaker-laurie-provin/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/guest-speaker-laurie-provin/
+  - source: /podcast/guest-speaker-rev-deniece-mason/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/guest-speaker-rev-deniece-mason/
+  - source: /podcast/guest-speaker-sally-gary/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/guest-speaker-sally-gary/
+  - source: /podcast/hide-or-seek/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/hide-or-seek/
+  - source: /podcast/holy-shift-consumerism/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/holy-shift-consumerism/
+  - source: /podcast/holy-shift-entertainment/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/holy-shift-entertainment/
+  - source: /podcast/holy-shift-hustle-culture/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/holy-shift-hustle-culture/
+  - source: /podcast/holy-shift-selfie-culture/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/holy-shift-selfie-culture/
+  - source: /podcast/holy-shift-the-virtual/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/holy-shift-the-virtual/
+  - source: /podcast/holy-things-in-unholy-places/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/holy-things-in-unholy-places/
+  - source: /podcast/how-to-fight/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/how-to-fight/
+  - source: /podcast/how-to-live/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/how-to-live/
+  - source: /podcast/how-to-pray/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/how-to-pray/
+  - source: /podcast/inclusive/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/inclusive/
+  - source: /podcast/is-scripture-a-straight-line-or-a-circle-ephesians-31-6/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/is-scripture-a-straight-line-or-a-circle-ephesians-31-6/
+  - source: /podcast/jesus-sexual-minorities/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/jesus-sexual-minorities/
+  - source: /podcast/knowing-god-knowing-self-knowing-others/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/knowing-god-knowing-self-knowing-others/
+  - source: /podcast/learning-to-surf/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/learning-to-surf/
+  - source: /podcast/learnings-from-the-book-unclean/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/learnings-from-the-book-unclean/
+  - source: /podcast/let-go-and-let-god/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/let-go-and-let-god/
+  - source: /podcast/love-the-sinner-hate-the-sin/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/love-the-sinner-hate-the-sin/
+  - source: /podcast/mercy-sacrafice/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/mercy-sacrafice/
+  - source: /podcast/money-shadows/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/money-shadows/
+  - source: /podcast/moving-on-from-the-clobber-passages/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/moving-on-from-the-clobber-passages/
+  - source: /podcast/mysterious-bodies/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/mysterious-bodies/
+  - source: /podcast/new-wine/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/new-wine/
+  - source: /podcast/no-needy-among-them/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/no-needy-among-them/
+  - source: /podcast/overcoming-fear-isaiah-4110/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/overcoming-fear-isaiah-4110/
+  - source: /podcast/palm-sunday-becoming-water/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/palm-sunday-becoming-water/
+  - source: /podcast/palm-sunday-christ-is-borne/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/palm-sunday-christ-is-borne/
+  - source: /podcast/paradox-silence-psalm-191-4/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/paradox-silence-psalm-191-4/
+  - source: /podcast/pastor-holly-bandel-stay-in-love-with-god/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/pastor-holly-bandel-stay-in-love-with-god/
+  - source: /podcast/perceive-it-isaiah-4316-21/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/perceive-it-isaiah-4316-21/
+  - source: /podcast/pickles-batman-a-gray-hering-marital-debate-2/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/pickles-batman-a-gray-hering-marital-debate-2/
+  - source: /podcast/pickles-batman-a-gray-hering-marital-debate/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/pickles-batman-a-gray-hering-marital-debate/
+  - source: /podcast/playing-politics/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/playing-politics/
+  - source: /podcast/power-imitation-john-1836/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/power-imitation-john-1836/
+  - source: /podcast/re-enchanting-sex/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/re-enchanting-sex/
+  - source: /podcast/redeeming-end-times-theology/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/redeeming-end-times-theology/
+  - source: /podcast/rediscovering-the-beautiful/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/rediscovering-the-beautiful/
+  - source: /podcast/reenchantment-truth-the-superhuman/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/reenchantment-truth-the-superhuman/
+  - source: /podcast/repent/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/repent/
+  - source: /podcast/resisting-end-times-speculative-craziness/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/resisting-end-times-speculative-craziness/
+  - source: /podcast/rethinking-sin/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/rethinking-sin/
+  - source: /podcast/rev-deniece-mason-the-god-who-sees/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/rev-deniece-mason-the-god-who-sees/
+  - source: /podcast/rev-pepa-paniagua-being-still/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/rev-pepa-paniagua-being-still/
+  - source: /podcast/rooted-how-to-read/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/rooted-how-to-read/
+  - source: /podcast/rooted/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/rooted/
+  - source: /podcast/ruts-kings-and-prophetic-imagination-matthew-31-12/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/ruts-kings-and-prophetic-imagination-matthew-31-12/
+  - source: /podcast/sameness/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/sameness/
+  - source: /podcast/scripture-more-than-a-book-luke-2425-27/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/scripture-more-than-a-book-luke-2425-27/
+  - source: /podcast/seeing-beyond-the-secular-christian-nationalism/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/seeing-beyond-the-secular-christian-nationalism/
+  - source: /podcast/seeing-in-the-dark-psalm-25/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/seeing-in-the-dark-psalm-25/
+  - source: /podcast/sick-society-secret-joy-luke-617-26/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/sick-society-secret-joy-luke-617-26/
+  - source: /podcast/silence-the-two-minds/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/silence-the-two-minds/
+  - source: /podcast/smile-its-advent/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/smile-its-advent/
+  - source: /podcast/sticks-stones-panel-discussion/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/sticks-stones-panel-discussion/
+  - source: /podcast/story-sunday-2024/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/story-sunday-2024/
+  - source: /podcast/story-sunday-january-4th-2026/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/story-sunday-january-4th-2026/
+  - source: /podcast/story-sunday-january-5th-2025/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/story-sunday-january-5th-2025/
+  - source: /podcast/story-sunday-the-tables-5th-anniversary/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/story-sunday-the-tables-5th-anniversary/
+  - source: /podcast/story-sunday/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/story-sunday/
+  - source: /podcast/tables-and-lights-mark-1417-22-24/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/tables-and-lights-mark-1417-22-24/
+  - source: /podcast/terrible-horrible-no-good-very-bad-fruit/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/terrible-horrible-no-good-very-bad-fruit/
+  - source: /podcast/the-battlefield-of-the-mind-2-corinthians-103-5/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-battlefield-of-the-mind-2-corinthians-103-5/
+  - source: /podcast/the-cross-and-the-powers/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-cross-and-the-powers/
+  - source: /podcast/the-cross-is-what-god-does/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-cross-is-what-god-does/
+  - source: /podcast/the-descent/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-descent/
+  - source: /podcast/the-fog-of-life-genesis-151-6/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-fog-of-life-genesis-151-6/
+  - source: /podcast/the-foolishness-of-the-cross/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-foolishness-of-the-cross/
+  - source: /podcast/the-grace-of-lent-deuteronomy-261-11/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-grace-of-lent-deuteronomy-261-11/
+  - source: /podcast/the-heros-journey-naomi/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-heros-journey-naomi/
+  - source: /podcast/the-lord-helps-those-who-help-themselves/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-lord-helps-those-who-help-themselves/
+  - source: /podcast/the-overlooked-secret-to-wisdom/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-overlooked-secret-to-wisdom/
+  - source: /podcast/the-package-deal/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-package-deal/
+  - source: /podcast/the-parable-of-lazarus-and-the-rich-man/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-parable-of-lazarus-and-the-rich-man/
+  - source: /podcast/the-parable-of-the-good-samaritan/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-parable-of-the-good-samaritan/
+  - source: /podcast/the-parable-of-the-leaven/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-parable-of-the-leaven/
+  - source: /podcast/the-parable-of-the-sower/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-parable-of-the-sower/
+  - source: /podcast/the-parable-of-the-wedding-feast/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-parable-of-the-wedding-feast/
+  - source: /podcast/the-parables-of-the-treasure-and-the-pearl/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-parables-of-the-treasure-and-the-pearl/
+  - source: /podcast/the-path/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-path/
+  - source: /podcast/the-pit/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-pit/
+  - source: /podcast/the-reality-of-peace-2/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-reality-of-peace-2/
+  - source: /podcast/the-reality-of-peace/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-reality-of-peace/
+  - source: /podcast/the-walls-we-build-2-corinthians-516-21/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-walls-we-build-2-corinthians-516-21/
+  - source: /podcast/the-wizarding-world-of-jesus-christ/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/the-wizarding-world-of-jesus-christ/
+  - source: /podcast/thinking-drinking-luke-2125-36/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/thinking-drinking-luke-2125-36/
+  - source: /podcast/thoughtful/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/thoughtful/
+  - source: /podcast/tree-hugging-christians/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/tree-hugging-christians/
+  - source: /podcast/unclean-panel-discussion/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/unclean-panel-discussion/
+  - source: /podcast/vulnerability-the-great-bear-attack/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/vulnerability-the-great-bear-attack/
+  - source: /podcast/vulnerable/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/vulnerable/
+  - source: /podcast/waiting/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/waiting/
+  - source: /podcast/waking-up-luke-926-38/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/waking-up-luke-926-38/
+  - source: /podcast/waking-up-to-words/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/waking-up-to-words/
+  - source: /podcast/well-9-29-2024/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/well-9-29-2024/
+  - source: /podcast/were-in-this-together/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/were-in-this-together/
+  - source: /podcast/what-they-need/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/what-they-need/
+  - source: /podcast/whats-with-the-whale/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/whats-with-the-whale/
+  - source: /podcast/who-will-we-become/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/who-will-we-become/
+  - source: /podcast/why-isnt-god-fixing-things-matthew-112-3/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/why-isnt-god-fixing-things-matthew-112-3/
+  - source: /podcast/youth-led-sunday/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/youth-led-sunday/
+  - source: /podcast/youth-sunday-eden/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/youth-sunday-eden/
+  - source: /podcast/youth-sunday-march-16th-2025/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/youth-sunday-march-16th-2025/
+  - source: /podcast/youth-sunday-march-2024/
+    classification: keep
+    expected:
+      type: local_path
+      path: /podcast/youth-sunday-march-2024/
+  - source: /privacy-policy/
+    classification: keep
+    expected:
+      type: local_path
+      path: /privacy-policy/
+  - source: /series/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/
+  - source: /series/advent-2025/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/advent-2025/
+  - source: /series/advent-at-the-table/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/advent-at-the-table/
+  - source: /series/advent2023/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/advent2023/
+  - source: /series/advent2024/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/advent2024/
+  - source: /series/cultivating-calm-staying-centered-in-difficult-times/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/cultivating-calm-staying-centered-in-difficult-times/
+  - source: /series/eastertide/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/eastertide/
+  - source: /series/enchanted/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/enchanted/
+  - source: /series/epiphany-guided-to-the-light/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/epiphany-guided-to-the-light/
+  - source: /series/epiphany/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/epiphany/
+  - source: /series/guest-speakers-at-the-table/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/guest-speakers-at-the-table/
+  - source: /series/holy-shift/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/holy-shift/
+  - source: /series/james/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/james/
+  - source: /series/jesus-and-politics/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/jesus-and-politics/
+  - source: /series/july-guest-speakers/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/july-guest-speakers/
+  - source: /series/lent-2025/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/lent-2025/
+  - source: /series/lent-julian-norwich/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/lent-julian-norwich/
+  - source: /series/lent/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/lent/
+  - source: /series/practicing-resurrection/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/practicing-resurrection/
+  - source: /series/rooted/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/rooted/
+  - source: /series/sticks-and-stones/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/sticks-and-stones/
+  - source: /series/story-sunday/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/story-sunday/
+  - source: /series/stranger-things/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/stranger-things/
+  - source: /series/table-one-offs/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/table-one-offs/
+  - source: /series/the-bible-doesnt-say-that/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/the-bible-doesnt-say-that/
+  - source: /series/the-end-its-just-a-new-beginning/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/the-end-its-just-a-new-beginning/
+  - source: /series/the-good-book/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/the-good-book/
+  - source: /series/the-parables-of-jesus/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/the-parables-of-jesus/
+  - source: /series/unclean/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/unclean/
+  - source: /series/values/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/values/
+  - source: /series/youth-led-sunday/
+    classification: keep
+    expected:
+      type: local_path
+      path: /series/youth-led-sunday/
+  - source: /service-times-locations/
+    classification: keep
+    expected:
+      type: local_path
+      path: /service-times-locations/
+  - source: /sign-up-for-our-newsletter/
+    classification: needs-integration
+    expected:
+      type: local_path
+      path: /sign-up-for-our-newsletter/
+  - source: /speakers/anna-potter/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/anna-potter/
+  - source: /speakers/brett-tilford/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/brett-tilford/
+  - source: /speakers/charles-kiser/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/charles-kiser/
+  - source: /speakers/cheryl-russell/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/cheryl-russell/
+  - source: /speakers/dr-aaron-brownbrook/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/dr-aaron-brownbrook/
+  - source: /speakers/eden-mcdonald/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/eden-mcdonald/
+  - source: /speakers/greg-steele/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/greg-steele/
+  - source: /speakers/gwendolyn-lau/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/gwendolyn-lau/
+  - source: /speakers/jesse-watts/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/jesse-watts/
+  - source: /speakers/laurie-provin/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/laurie-provin/
+  - source: /speakers/megan-christian-gray-hering/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/megan-christian-gray-hering/
+  - source: /speakers/megan-gray-hering/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/megan-gray-hering/
+  - source: /speakers/panel/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/panel/
+  - source: /speakers/pastor-holly-bandel/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/pastor-holly-bandel/
+  - source: /speakers/pepa-paniagua/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/pepa-paniagua/
+  - source: /speakers/rev-deniece-mason/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/rev-deniece-mason/
+  - source: /speakers/sally-gary/
+    classification: keep
+    expected:
+      type: local_path
+      path: /speakers/sally-gary/
+  - source: /staff-group/leadership/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff-group/leadership/
+  - source: /staff/allison-wedan/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff/allison-wedan/
+  - source: /staff/brett-tilford/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff/brett-tilford/
+  - source: /staff/gary-miner/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff/gary-miner/
+  - source: /staff/jesse-watts/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff/jesse-watts/
+  - source: /staff/kaitlyn-randall/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff/kaitlyn-randall/
+  - source: /staff/maggie-tilford/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff/maggie-tilford/
+  - source: /staff/megan-greyhering/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff/megan-greyhering/
+  - source: /staff/mindie-runnels/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff/mindie-runnels/
+  - source: /staff/scott-marlar/
+    classification: keep
+    expected:
+      type: local_path
+      path: /staff/scott-marlar/
+  - source: /thank-you-page/
+    classification: keep
+    expected:
+      type: local_path
+      path: /thank-you-page/

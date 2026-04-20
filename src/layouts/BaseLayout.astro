@@ -1,0 +1,540 @@
+---
+import { footerNavigation, mainNavigation } from '../data/navigation';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonicalPath?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonicalPath = '/',
+  noindex = false,
+} = Astro.props as Props;
+
+const canonicalUrl = new URL(canonicalPath, Astro.site ?? 'https://thetabletx.com').href;
+const currentPath = Astro.url.pathname;
+
+const isCurrentNavItem = (item: { href: string; children?: { href: string }[] }) =>
+  item.href === currentPath || item.children?.some((child) => child.href === currentPath);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap">
+    <script is:inline>
+      (function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})();
+    </script>
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="description" content={description ?? 'The Table Church'} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:url" content={canonicalUrl} />
+    {description && <meta property="og:description" content={description} />}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="robots" content={noindex ? 'noindex,nofollow' : 'index,follow'} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <style is:global>
+      :root {
+        color-scheme: dark;
+        --page-bg: #0e0d0b;
+        --bg2: #141210;
+        --surface: #1a1815;
+        --surface2: #211e1a;
+        --surface-soft: #1a1815;
+        --ink: #f0ece4;
+        --muted: #8a8278;
+        --border: rgba(255,255,255,0.08);
+        --border-light: rgba(255,255,255,0.05);
+        --line: rgba(255,255,255,0.08);
+        --accent: #f0ece4;
+        --accent-hover: #e63946;
+        --accent-ink: #0e0d0b;
+        --spectrum: linear-gradient(90deg, #e63946, #f4a261, #e9c46a, #52b788, #4361ee, #7b2d8b);
+        --page-max: 1500px;
+        --page-gutter: clamp(1.25rem, 5vw, 2.5rem);
+        --page-gap: clamp(1.25rem, 3vw, 2.5rem);
+        font-family: 'Montserrat', Lucida, Verdana, sans-serif;
+        font-size: 14px;
+      }
+
+      [data-theme="light"] {
+        color-scheme: light;
+        --page-bg: #fafaf8;
+        --bg2: #f2efe9;
+        --surface: #ffffff;
+        --surface2: #f0ece4;
+        --surface-soft: #f2efe9;
+        --ink: #1a1712;
+        --muted: #7a7068;
+        --border: rgba(0,0,0,0.09);
+        --border-light: rgba(0,0,0,0.05);
+        --line: rgba(0,0,0,0.09);
+        --accent: #1a1712;
+        --accent-hover: #e63946;
+        --accent-ink: #ffffff;
+      }
+
+      html {
+        background: var(--page-bg);
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--page-bg);
+        color: var(--ink);
+        line-height: 1.6;
+      }
+
+      .site-header {
+        background: var(--page-bg);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        position: relative;
+      }
+
+      .site-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 2px;
+        background: var(--spectrum);
+      }
+
+      .site-footer {
+        background: var(--bg2);
+        margin-top: clamp(2rem, 5vw, 3rem);
+        position: relative;
+      }
+
+      .site-footer::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: var(--spectrum);
+      }
+
+      .site-shell {
+        max-width: var(--page-max);
+        margin: 0 auto;
+        padding: 1rem var(--page-gutter);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 800;
+        letter-spacing: 0;
+        white-space: nowrap;
+      }
+
+      .site-nav ul {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem 1rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex-wrap: wrap;
+      }
+
+      .site-nav li {
+        position: relative;
+      }
+
+      .site-nav__item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .site-nav__toggle {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        font: inherit;
+        color: var(--ink);
+        cursor: pointer;
+        display: inline-flex;
+        min-height: 2.25rem;
+        align-items: center;
+        gap: 0.35rem;
+        font-weight: 600;
+      }
+
+      .site-nav__item--current > .site-nav__toggle {
+        color: var(--accent);
+      }
+
+      .site-nav__caret {
+        font-size: 0.8em;
+        line-height: 1;
+      }
+
+      .site-nav a {
+        display: inline-flex;
+        min-height: 2.25rem;
+        align-items: center;
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .site-nav a[aria-current='page'] {
+        color: var(--accent);
+      }
+
+      .site-nav__submenu {
+        display: grid;
+        gap: 0.25rem;
+        margin: 0;
+        padding: 0.5rem 0 0;
+        list-style: none;
+      }
+
+      .site-nav__submenu[hidden] {
+        display: none;
+      }
+
+      .site-nav__submenu a {
+        min-height: 2rem;
+        font-weight: 500;
+        color: var(--muted);
+      }
+
+      .site-footer__inner {
+        align-items: flex-start;
+      }
+
+      .site-footer__title {
+        font-weight: 700;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      p {
+        margin: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        line-height: 1.0;
+        letter-spacing: -0.03em;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      a {
+        color: var(--accent);
+        transition: color 300ms ease-in-out;
+      }
+
+      a:hover {
+        color: var(--accent-hover);
+      }
+
+      .page {
+        margin: 0 auto;
+      }
+
+      .stack > * + * {
+        margin-top: var(--stack-gap, var(--page-gap));
+      }
+
+      .hero,
+      .panel {
+        background: var(--surface);
+      }
+
+      .hero {
+        display: grid;
+        gap: var(--page-gap);
+        padding: clamp(2rem, 6vw, 4rem) 0;
+      }
+
+      .hero__mark {
+        display: block;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 8px;
+      }
+
+      .eyebrow {
+        font-size: 0.875rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
+      .lede {
+        max-width: 42rem;
+        color: var(--muted);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .button--primary {
+        background: var(--ink);
+        color: var(--page-bg);
+        border-radius: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+      }
+
+      .button--primary:hover {
+        background: var(--accent-hover);
+        color: #ffffff;
+      }
+
+      .button--secondary {
+        background: transparent;
+        color: var(--ink);
+        border-color: var(--border);
+        border-radius: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: background 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+      }
+
+      .button--secondary:hover {
+        background: var(--accent-hover);
+        color: #ffffff;
+        border-color: var(--accent-hover);
+      }
+
+      .panel {
+        padding: clamp(1.25rem, 3vw, 2rem);
+      }
+
+      .grid {
+        display: grid;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      @media (min-width: 48rem) {
+        .site-shell {
+          flex-wrap: nowrap;
+        }
+
+        .site-nav__submenu {
+          position: absolute;
+          top: calc(100% + 0.5rem);
+          left: 0;
+          min-width: 200px;
+          padding: 10px 0;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 0;
+          box-shadow: none;
+          z-index: 1;
+        }
+
+        .site-nav__submenu a {
+          padding: 5px 20px;
+          color: var(--ink);
+        }
+
+        .site-nav__submenu a:hover {
+          color: var(--accent-hover);
+          background: transparent;
+        }
+
+        .grid--2 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .theme-toggle {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        font: inherit;
+        font-size: 1rem;
+        width: 2.25rem;
+        height: 2.25rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0;
+        transition: color 0.2s, border-color 0.2s;
+        padding: 0;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+
+      .theme-toggle:hover {
+        color: var(--ink);
+        border-color: var(--ink);
+      }
+
+      @media (max-width: 47.999rem) {
+        .site-shell {
+          align-items: flex-start;
+        }
+
+        .site-nav ul {
+          align-items: flex-start;
+        }
+
+        .site-nav__submenu {
+          display: grid;
+          padding-left: 1rem;
+          border-left: 1px solid var(--border);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-shell">
+        <a class="brand" href="/">The Table Church</a>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle light/dark mode">◑</button>
+        <nav class="site-nav" aria-label="Main navigation">
+          <ul>
+            {mainNavigation.map((item) => (
+              <li class={item.children ? `site-nav__item${isCurrentNavItem(item) ? ' site-nav__item--current' : ''}` : undefined}>
+                {item.children ? (
+                  <button
+                    type="button"
+                    class="site-nav__toggle"
+                    aria-expanded={isCurrentNavItem(item) ? 'true' : 'false'}
+                    data-nav-toggle
+                  >
+                    <span>{item.label}</span>
+                    <span class="site-nav__caret" aria-hidden="true">▾</span>
+                  </button>
+                ) : (
+                  <a href={item.href} aria-current={isCurrentNavItem(item) ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                )}
+                {item.children && (
+                  <ul class="site-nav__submenu" hidden={!isCurrentNavItem(item)}>
+                    {item.children.map((child) => (
+                      <li>
+                        <a href={child.href} aria-current={child.href === currentPath ? 'page' : undefined}>
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <slot />
+    <footer class="site-footer">
+      <div class="site-shell site-footer__inner">
+        <p class="site-footer__title">The Table Church</p>
+        <nav class="site-nav" aria-label="Footer navigation">
+          <ul>
+            {footerNavigation.map((item) => (
+              <li>
+                <a href={item.href} target="_blank" rel="noreferrer">
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </footer>
+    <script is:inline>
+      const nav = document.querySelector('.site-nav');
+
+      if (nav) {
+        const buttons = Array.from(nav.querySelectorAll('[data-nav-toggle]'));
+
+        const closeAll = (except = null) => {
+          buttons.forEach((button) => {
+            if (button === except) return;
+            button.setAttribute('aria-expanded', 'false');
+            const submenu = button.parentElement?.querySelector('.site-nav__submenu');
+            if (submenu) submenu.hidden = true;
+          });
+        };
+
+        buttons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const submenu = button.parentElement?.querySelector('.site-nav__submenu');
+            if (!submenu) return;
+            const isOpen = button.getAttribute('aria-expanded') === 'true';
+            closeAll(button);
+            const nextOpen = !isOpen;
+            button.setAttribute('aria-expanded', nextOpen ? 'true' : 'false');
+            submenu.hidden = !nextOpen;
+          });
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!nav.contains(event.target)) closeAll();
+        });
+      }
+
+      const themeToggle = document.querySelector('[data-theme-toggle]');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+          if (isLight) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.removeItem('theme');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

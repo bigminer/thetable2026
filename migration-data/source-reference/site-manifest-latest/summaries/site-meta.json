@@ -1,0 +1,11 @@
+{
+  "name": "The Table Church",
+  "description": "We are a church community that values thoughtfulness in how we approach faith, life, and people around us.",
+  "url": "https://thetabletx.com",
+  "home": "https://thetabletx.com",
+  "timezone_string": "America/Chicago",
+  "gmt_offset": -5,
+  "show_on_front": "page",
+  "page_on_front": 1737,
+  "page_for_posts": 0
+}

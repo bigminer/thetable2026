@@ -1,0 +1,172 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { entrySlug } from '../../lib/entry-slug';
+
+export async function getStaticPaths() {
+  const messages = await getCollection('messages', ({ data }) => !data.draft);
+
+  return messages.map((message) => ({
+    params: { slug: entrySlug(message) },
+    props: { message },
+  }));
+}
+
+const { message } = Astro.props;
+const seriesRef = message.data.series;
+const [seriesEntries, speakerEntries, allMessages] = await Promise.all([
+  getCollection('series', ({ data }) => !data.draft),
+  getCollection('speakers', ({ data }) => !data.draft),
+  getCollection('messages', ({ data }) => !data.draft),
+]);
+const series = seriesRef
+  ? seriesRef.data
+    ? seriesRef
+    : seriesEntries.find((entry) => entrySlug(entry) === entrySlug(seriesRef)) ?? null
+  : null;
+const speakers = await Promise.all(
+  (message.data.speakers ?? []).map(async (speaker) =>
+    speaker.data ? speaker : speakerEntries.find((entry) => entrySlug(entry) === entrySlug(speaker)),
+  ),
+);
+const speakerNames = speakers
+  .map((speaker) => speaker.data?.name ?? speaker.name ?? entrySlug(speaker))
+  .join(' · ');
+const relatedMessages = series
+  ? allMessages
+      .filter((entry) => entrySlug(entry) !== entrySlug(message) && entrySlug(entry.data.series ?? { id: '' }) === entrySlug(series))
+      .sort((left, right) => right.data.publishedAt.valueOf() - left.data.publishedAt.valueOf())
+  : [];
+
+const publishedAt = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+}).format(message.data.publishedAt);
+---
+
+<BaseLayout
+  title={message.data.title}
+  description={message.data.summary}
+  canonicalPath={`/podcast/${entrySlug(message)}/`}
+>
+  <main class="page stack">
+    <section class={`podcast-hero ${series?.data.image ? 'podcast-hero--with-image' : ''}`}>
+      {series?.data?.image && (
+        <img class="podcast-hero__image" src={series.data.image.src} alt={series.data.image.alt} />
+      )}
+      <div class="podcast-hero__content stack">
+        <p class="eyebrow">Podcast</p>
+        <h1>{message.data.title}</h1>
+        <p class="lede">{message.data.summary}</p>
+        <p class="podcast-meta">
+          <span>{publishedAt}</span>
+          {speakerNames && <span>{speakerNames}</span>}
+          {series && <span>{series.data?.title ?? entrySlug(series)}</span>}
+        </p>
+      </div>
+    </section>
+
+    <section class="grid grid--2">
+      <article class="panel stack">
+        <p class="eyebrow">Message</p>
+        <h2>{message.data.title}</h2>
+        <p>{message.data.summary}</p>
+        {message.data.audioUrl && (
+          <iframe
+            class="podcast-embed"
+            src={message.data.audioUrl}
+            title={`${message.data.title} audio player`}
+            loading="lazy"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          />
+        )}
+      </article>
+
+      <aside class="panel stack">
+        <p class="eyebrow">Series</p>
+        <h2>{series?.data?.title ?? 'Related series'}</h2>
+        {series?.data?.summary && <p>{series.data.summary}</p>}
+        {series && (
+          <a class="button button--secondary" href={`/series/${entrySlug(series)}/`}>
+            View series
+          </a>
+        )}
+        <div class="stack">
+          <h3>More in this series</h3>
+          {relatedMessages.length > 0 ? (
+            <ul class="episode-list">
+              {relatedMessages.map((entry) => (
+                <li class="episode-list__item">
+                  <a href={`/podcast/${entrySlug(entry)}/`}>{entry.data.title}</a>
+                  <span>
+                    {new Intl.DateTimeFormat('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    }).format(entry.data.publishedAt)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No additional episodes are published in this collection yet.</p>
+          )}
+        </div>
+      </aside>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .podcast-hero {
+    display: grid;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .podcast-hero--with-image {
+    grid-template-columns: minmax(0, 1.1fr);
+  }
+
+  .podcast-hero__image {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+  }
+
+  .podcast-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .podcast-embed {
+    width: 100%;
+    min-height: 8rem;
+    border: 0;
+    border-radius: 8px;
+  }
+
+  .episode-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .episode-list__item {
+    display: grid;
+    gap: 0.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .episode-list__item span {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+</style>

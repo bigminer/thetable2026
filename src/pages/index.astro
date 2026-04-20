@@ -1,17 +1,25 @@
 ---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentBlocks from '../components/ContentBlocks.astro';
 
+const home = await getEntry('pages', 'home.md');
+
+if (!home) {
+  throw new Error('Home page content entry is missing.');
+}
+
+const seo = home.data.seo ?? {};
+const { blocks } = home.data;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title={seo.title ?? home.data.title}
+  description={seo.description ?? home.data.description ?? 'The Table Church'}
+  canonicalPath={home.data.url}
+  noindex={seo.noindex}
+>
+  <main class="page page--content">
+    <ContentBlocks blocks={blocks} />
+  </main>
+</BaseLayout>

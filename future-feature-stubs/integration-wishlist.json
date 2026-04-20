@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "scope": "deferred_growth_features",
+  "items": [
+    {
+      "id": "youtube_latest_messages",
+      "status": "deferred",
+      "priority": "medium",
+      "summary": "Auto-surface latest sermons/messages from YouTube channel.",
+      "candidate_approach": "Scheduled fetch to local JSON manifest consumed by Astro."
+    },
+    {
+      "id": "facebook_updates",
+      "status": "deferred",
+      "priority": "low",
+      "summary": "Surface Facebook updates without manual duplication.",
+      "candidate_approach": "Link-first approach with optional stable embed block."
+    },
+    {
+      "id": "podcast_pipeline_automation",
+      "status": "deferred",
+      "priority": "medium",
+      "summary": "Streamline publication from sermon workflow into podcast surfaces.",
+      "candidate_approach": "Normalize metadata and automate feed-compatible outputs."
+    },
+    {
+      "id": "google_slides_sync",
+      "status": "deferred",
+      "priority": "medium",
+      "summary": "Integrate Google Slides metadata for events and sermon decks.",
+      "candidate_approach": "Sync selected Drive/Slides metadata into site content models."
+    },
+    {
+      "id": "cross_channel_publish_orchestration",
+      "status": "candidate",
+      "priority": "low",
+      "summary": "Single publish action across website, YouTube, podcast, and social references.",
+      "candidate_approach": "Lightweight orchestration job with channel adapters."
+    }
+  ],
+  "notes": [
+    "Not in current migration scope.",
+    "Do not treat as launch blockers unless explicitly approved."
+  ]
+}

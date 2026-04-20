@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const routes = [
+  { href: '/debug/planning-center/events/', label: 'Planning Center events sample' },
+  { href: '/debug/planning-center/forms/', label: 'Planning Center forms sample' },
+];
+---
+
+<BaseLayout title="Planning Center samples" description="Branch for internal Planning Center samples." canonicalPath="/debug/planning-center/" noindex={true}>
+  <main class="page stack">
+    <section class="panel stack">
+      <p class="eyebrow">Debug samples</p>
+      <h1>Planning Center samples</h1>
+      <p class="lede">A quick way to check the event and form sample surfaces.</p>
+      <ul class="grid">
+        {routes.map((route) => (
+          <li>
+            <a class="button button--secondary" href={route.href}>{route.label}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+</BaseLayout>

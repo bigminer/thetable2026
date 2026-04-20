@@ -1,0 +1,2 @@
+wp-content/themes/kerygma/style.css:'ElegantIcons'
+wp-content/themes/kerygma/style.css:Monaco, Menlo, Consolas, "Courier New", monospace

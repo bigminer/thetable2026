@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Giving"
+  description="Give through Church Center."
+  canonicalPath="/giving/"
+>
+  <main class="page stack">
+    <section class="hero stack">
+      <img class="hero__mark" src="/favicon.svg" alt="" width="48" height="48" />
+      <p class="eyebrow">Giving</p>
+      <h1>Give through Church Center</h1>
+      <p class="lede">
+        The giving route stays on the public site and hands off to Church Center for the
+        actual transaction flow.
+      </p>
+      <div class="actions">
+        <a class="button button--primary" href="https://thetabletx.churchcenter.com/giving?open-in-church-center-modal=true">
+          Open Church Center Giving
+        </a>
+        <a class="button button--secondary" href="https://thetabletx.churchcenter.com">
+          Open Church Center
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

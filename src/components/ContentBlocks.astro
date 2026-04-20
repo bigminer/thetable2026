@@ -1,0 +1,802 @@
+---
+import { forms } from '../data/forms';
+import { renderMarkdown } from '../lib/render-markdown';
+
+type Media = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  credit?: string;
+  rights?: string;
+};
+
+type Link = {
+  label: string;
+  href: string;
+  description?: string;
+};
+
+type ContentBlock = {
+  type: string;
+  [key: string]: any;
+};
+
+type RenderedMarkdownBlock = {
+  type: 'markdown';
+  body: string;
+  renderedHtml: string;
+};
+
+type RenderedBlock = ContentBlock | RenderedMarkdownBlock;
+
+interface Props {
+  blocks: ContentBlock[];
+}
+
+const { blocks } = Astro.props as Props;
+
+const renderedBlocks: RenderedBlock[] = await Promise.all(
+  blocks.map(async (block) => {
+    if (block.type !== 'markdown') {
+      return block;
+    }
+
+    return {
+      ...block,
+      renderedHtml: await renderMarkdown(block.body),
+    };
+  }),
+);
+
+function youtubeEmbedUrl(url: string) {
+  const parsed = new URL(url);
+
+  if (parsed.hostname === 'youtu.be') {
+    return `https://www.youtube.com/embed${parsed.pathname}`;
+  }
+
+  if (parsed.hostname.includes('youtube.com')) {
+    if (parsed.pathname.startsWith('/embed/')) {
+      return url;
+    }
+
+    const id = parsed.searchParams.get('v');
+    if (id) {
+      return `https://www.youtube.com/embed/${id}`;
+    }
+  }
+
+  return url;
+}
+
+function imageProps(image: Media) {
+  return {
+    src: image.src,
+    alt: image.alt,
+    width: image.width,
+    height: image.height,
+  };
+}
+---
+
+<div class="content-blocks">
+  {renderedBlocks.map((block) => {
+    const isFullWidth = block.type === 'hero' && block.image;
+
+    switch (block.type) {
+      case 'markdown':
+        return (
+          <section class="content-block content-block--markdown">
+            <div class="content-block__inner" set:html={block.renderedHtml} />
+          </section>
+        );
+      case 'text':
+        return (
+          <section class="content-block content-block--text">
+            <div class="content-block__inner">
+              <p class="content-block__text">{String(block.body ?? '')}</p>
+            </div>
+          </section>
+        );
+      case 'hero':
+        return (
+          <section
+            class={`content-block content-block--hero ${block.image ? 'content-block--has-image' : ''}`}
+            style={block.image ? `background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${block.image.src});` : ''}
+          >
+            <div class="hero-spectrum-bar" />
+            <div class="content-block__inner">
+              {block.eyebrow && <p class="eyebrow">{String(block.eyebrow)}</p>}
+              <h1>{String(block.headline ?? '')}</h1>
+              {block.subheadline && <p class="lede">{String(block.subheadline)}</p>}
+              {Array.isArray(block.actions) && block.actions.length > 0 && (
+                <div class="actions">
+                  {block.actions.map((action: Link) => (
+                    <a
+                      class={`button ${block.actions.length > 1 ? 'button--secondary' : 'button--primary'}`}
+                      href={action.href}
+                    >
+                      {action.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        );
+      case 'statement':
+        return (
+          <section
+            class={`content-block content-block--statement ${block.image ? 'content-block--split' : ''}`}
+          >
+            <div class="content-block__inner">
+              {block.image && String(block.imagePosition ?? 'left') === 'left' && (
+                <figure class="content-block__figure">
+                  <img class="content-block__image" {...imageProps(block.image as Media)} loading="lazy" decoding="async" />
+                </figure>
+              )}
+              <div class="content-block__content">
+                {block.heading && <h2>{String(block.heading)}</h2>}
+                {block.lead && <p class="content-block__lede">{String(block.lead)}</p>}
+                {block.emphasis && (
+                  <p class="content-block__emphasis">
+                    <strong>{String(block.emphasis)}</strong>
+                  </p>
+                )}
+                {block.body && <p>{String(block.body)}</p>}
+              </div>
+              {block.image && String(block.imagePosition ?? 'left') === 'right' && (
+                <figure class="content-block__figure">
+                  <img class="content-block__image" {...imageProps(block.image as Media)} loading="lazy" decoding="async" />
+                </figure>
+              )}
+            </div>
+          </section>
+        );
+      case 'value_list':
+        return (
+          <section class="content-block content-block--value-list">
+            {block.heading && (
+              <div class="content-block__inner content-block__inner--heading-only">
+                <h2>{String(block.heading)}</h2>
+                {block.intro && <p class="content-block__lede">{String(block.intro)}</p>}
+              </div>
+            )}
+            <div class="value-list">
+              {(block.items ?? []).map((item: { title: string; description: string }, i: number) => (
+                <article class="value-list__item">
+                  <span class="value-list__num">{String(i + 1).padStart(2, '0')}</span>
+                  <div class="value-list__bar" />
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        );
+      case 'belong_split':
+        return (
+          <section class="content-block content-block--belong-split">
+            <div class="belong-spectrum-col" aria-hidden="true" />
+            <div class="belong-content">
+              <p class="belong-quote">{String(block.quote ?? '')}</p>
+              {block.subquote && <p class="belong-subquote">{String(block.subquote)}</p>}
+              {block.body && <p class="content-block__lede">{String(block.body)}</p>}
+            </div>
+          </section>
+        );
+      case 'affirming_chips':
+        return (
+          <section class="content-block content-block--affirming-chips">
+            <div class="content-block__inner">
+              {block.heading && <h2>{String(block.heading)}</h2>}
+              <div class="affirm-grid">
+                {(block.chips ?? []).map((chip: string) => (
+                  <div class="affirm-chip">{chip}</div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      case 'video':
+        return (
+          <section class="content-block content-block--video">
+            <div class="content-block__inner">
+              {block.heading && <h2>{String(block.heading)}</h2>}
+              <div class="content-block__video">
+                <iframe
+                  src={youtubeEmbedUrl(String(block.url))}
+                  title={block.heading ? String(block.heading) : 'Video'}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                />
+              </div>
+              {block.caption && <p class="content-block__caption">{String(block.caption)}</p>}
+            </div>
+          </section>
+        );
+      case 'cta':
+        return (
+          <section class={`content-block content-block--cta ${block.image ? 'content-block--split' : ''}`}>
+            <div class="content-block__inner">
+              {block.image && String(block.imagePosition ?? 'left') === 'left' && (
+                <figure class="content-block__figure">
+                  <img class="content-block__image" {...imageProps(block.image as Media)} loading="lazy" decoding="async" />
+                </figure>
+              )}
+              <div class="content-block__content">
+                <h2>{String(block.heading)}</h2>
+                {block.body && <p class="content-block__lede">{String(block.body)}</p>}
+                <div class="actions">
+                  {(block.links ?? []).map((link: Link, index: number) => (
+                    <a class={`button ${index === 0 ? 'button--primary' : 'button--secondary'}`} href={link.href}>
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+              {block.image && String(block.imagePosition ?? 'left') === 'right' && (
+                <figure class="content-block__figure">
+                  <img class="content-block__image" {...imageProps(block.image as Media)} loading="lazy" decoding="async" />
+                </figure>
+              )}
+            </div>
+          </section>
+        );
+      case 'cta_list':
+        return (
+          <section class={`content-block content-block--cta-list ${block.image ? 'content-block--split' : ''}`}>
+            <div class="content-block__inner">
+              {block.image && String(block.imagePosition ?? 'left') === 'left' && (
+                <figure class="content-block__figure">
+                  <img class="content-block__image" {...imageProps(block.image as Media)} loading="lazy" decoding="async" />
+                </figure>
+              )}
+              <div class="content-block__content">
+                <h2>{String(block.heading)}</h2>
+                {block.intro && <p class="content-block__lede">{String(block.intro)}</p>}
+                <ul class="cta-list">
+                  {(block.items ?? []).map((item: { label: string; href?: string; description?: string }) => (
+                    <li class="cta-list__item">
+                      {item.href ? (
+                        <a class="cta-list__link" href={item.href}>
+                          <span class="cta-list__label">{item.label}</span>
+                          {item.description && <span class="cta-list__description">{item.description}</span>}
+                        </a>
+                      ) : (
+                        <div class="cta-list__link cta-list__link--static">
+                          <span class="cta-list__label">{item.label}</span>
+                          {item.description && <span class="cta-list__description">{item.description}</span>}
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {block.image && String(block.imagePosition ?? 'left') === 'right' && (
+                <figure class="content-block__figure">
+                  <img class="content-block__image" {...imageProps(block.image as Media)} loading="lazy" decoding="async" />
+                </figure>
+              )}
+            </div>
+          </section>
+        );
+      case 'location':
+        return (
+          <section class={`content-block content-block--location ${block.image ? 'content-block--split' : ''}`}>
+            <div class="content-block__inner">
+              {block.image && String(block.imagePosition ?? 'left') === 'left' && (
+                <figure class="content-block__figure">
+                  <img class="content-block__image" {...imageProps(block.image as Media)} loading="lazy" decoding="async" />
+                </figure>
+              )}
+              <div class="content-block__content">
+                <h2>{String(block.heading)}</h2>
+                {block.intro && <p class="content-block__lede">{String(block.intro)}</p>}
+                <address class="location">
+                  {block.addressLines?.map((line: string) => <span>{line}</span>)}
+                  <span>{String(block.phone)}</span>
+                  <span>{String(block.serviceTime)}</span>
+                </address>
+                {block.note && <p>{String(block.note)}</p>}
+                <div class="actions">
+                  {Array.isArray(block.links) &&
+                    block.links.map((link: Link, index: number) => (
+                      <a class={`button ${index === 0 ? 'button--primary' : 'button--secondary'}`} href={link.href}>
+                        {link.label}
+                      </a>
+                    ))}
+                  {block.mapUrl && (
+                    <a class="button button--secondary" href={String(block.mapUrl)}>
+                      {String(block.mapLabel ?? 'See map')}
+                    </a>
+                  )}
+                </div>
+              </div>
+              {block.image && String(block.imagePosition ?? 'left') === 'right' && (
+                <figure class="content-block__figure">
+                  <img class="content-block__image" {...imageProps(block.image as Media)} loading="lazy" decoding="async" />
+                </figure>
+              )}
+              <div class="content-block__map">
+                <iframe
+                  src={String(block.mapUrl)}
+                  title={String(block.heading)}
+                  loading="lazy"
+                  allowfullscreen
+                  referrerpolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            </div>
+          </section>
+        );
+      case 'form': {
+        const form = forms[block.route];
+        return (
+          <section class="content-block content-block--form">
+            <div class="content-block__inner">
+              <div class="content-block__content">
+                <h2>{String(block.heading)}</h2>
+                {block.intro && <p class="content-block__lede">{String(block.intro)}</p>}
+                <p class="content-block__meta">{form.note}</p>
+              </div>
+              <form class="contact-form" action={form.primaryHref} method="post" enctype="text/plain">
+                <div class="contact-form__grid">
+                  <label>
+                    <span>First Name</span>
+                    <input type="text" name="firstName" autocomplete="given-name" required />
+                  </label>
+                  <label>
+                    <span>Last Name</span>
+                    <input type="text" name="lastName" autocomplete="family-name" required />
+                  </label>
+                  <label class="contact-form__field--full">
+                    <span>Email</span>
+                    <input type="email" name="email" autocomplete="email" required />
+                  </label>
+                  <label>
+                    <span>Phone</span>
+                    <input type="tel" name="phone" autocomplete="tel" />
+                  </label>
+                  <label class="contact-form__field--full">
+                    <span>Message</span>
+                    <textarea name="message" rows="5" required />
+                  </label>
+                </div>
+                <div class="actions">
+                  <button class="button button--primary" type="submit">
+                    {block.submitLabel ?? form.primaryLabel}
+                  </button>
+                  {form.secondaryHref && (
+                    <a class="button button--secondary" href={form.secondaryHref}>
+                      {form.secondaryLabel}
+                    </a>
+                  )}
+                </div>
+              </form>
+            </div>
+          </section>
+        );
+      }
+      case 'raw_html':
+        return (
+          <div
+            class="raw-html-embed"
+            data-source-url={String(block.source?.url ?? '')}
+            data-source-reason={String(block.source?.reason ?? '')}
+            set:html={String(block.html ?? '')}
+          />
+        );
+      case 'image':
+        return (
+          <figure class="content-block content-block--image">
+            <div class="content-block__inner">
+              <img class="content-block__image" src={String(block.src ?? '')} alt={String(block.alt ?? '')} loading="lazy" decoding="async" />
+              {block.caption && <figcaption class="content-block__caption">{String(block.caption)}</figcaption>}
+            </div>
+          </figure>
+        );
+      default:
+        return null;
+    }
+  })}
+</div>
+
+<style>
+  .content-blocks {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .content-block {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .raw-html-embed {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .content-block--hero {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+    color: #f0ece4;
+    position: relative;
+  }
+
+  .hero-spectrum-bar {
+    height: 10px;
+    background: var(--spectrum);
+    flex-shrink: 0;
+  }
+
+  .content-block--hero .content-block__inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .content-block--has-image {
+    padding: 0;
+  }
+
+  .content-block__inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 4rem) var(--page-gutter);
+    width: 100%;
+    box-sizing: border-box;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .content-block--hero .content-block__inner {
+    gap: 0.75rem;
+  }
+
+  .content-block--split .content-block__inner {
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .content-block--value-list .content-block__inner,
+  .content-block--cta-list .content-block__inner,
+  .content-block--form .content-block__inner {
+    gap: 1.25rem;
+  }
+
+  .content-block__content {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .content-block__inner--heading-only {
+    padding-bottom: 0;
+  }
+
+  .content-block h1,
+  .content-block h2,
+  .content-block h3,
+  .content-block p {
+    margin: 0;
+  }
+
+  .content-block h1,
+  .content-block h2,
+  .content-block h3 {
+    line-height: 1.1;
+  }
+
+  .content-block--hero h1 {
+    font-size: clamp(3rem, 9vw, 8rem);
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: #f0ece4;
+  }
+
+  .content-block--hero .eyebrow,
+  .content-block--hero .lede {
+    color: rgba(240,236,228,0.7);
+  }
+
+  .content-block__text,
+  .content-block__lede,
+  .content-block__meta {
+    color: var(--muted);
+  }
+
+  .content-block__emphasis {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .content-block__figure {
+    margin: 0;
+  }
+
+  .content-block__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .content-block__video,
+  .content-block__map {
+    overflow: hidden;
+  }
+
+  .content-block__video iframe,
+  .content-block__map iframe {
+    display: block;
+    width: 100%;
+    min-height: 18rem;
+    border: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .value-list {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+  }
+
+  .value-list__item {
+    padding: 2rem 1.5rem;
+    background: var(--bg2, var(--surface-soft));
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .value-list__num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .value-list__bar {
+    width: 40px;
+    height: 2px;
+    background: var(--spectrum);
+    margin-bottom: 0.5rem;
+  }
+
+  .value-list__item h3 {
+    font-size: 1rem;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .content-block--belong-split {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    min-height: 60vh;
+  }
+
+  .belong-spectrum-col {
+    background: var(--spectrum);
+  }
+
+  .belong-content {
+    background: var(--surface, var(--surface-soft));
+    padding: clamp(2rem, 6vw, 5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .belong-quote {
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .belong-subquote {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .content-block--affirming-chips .content-block__inner {
+    gap: 1.5rem;
+  }
+
+  .affirm-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--line);
+  }
+
+  .affirm-chip {
+    background: var(--bg2, var(--surface-soft));
+    padding: 1.25rem 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    border-top: 2px solid transparent;
+    border-image: var(--spectrum) 1;
+  }
+
+  .cta-list {
+    display: grid;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cta-list__link {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.95rem 1rem;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .cta-list__link--static {
+    color: var(--ink);
+  }
+
+  .cta-list__label {
+    font-weight: 700;
+  }
+
+  .cta-list__description {
+    color: var(--muted);
+  }
+
+  .location {
+    display: grid;
+    gap: 0.25rem;
+    font-style: normal;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .contact-form__grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-form label {
+    display: grid;
+    gap: 0.35rem;
+    font-weight: 600;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.85rem 0.95rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+  }
+
+  .contact-form textarea {
+    resize: vertical;
+  }
+
+  .contact-form__field--full {
+    grid-column: 1 / -1;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid transparent;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.8rem;
+  }
+
+  .button--primary {
+    background: var(--ink);
+    color: var(--page-bg);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .button--primary:hover {
+    background: var(--accent-hover);
+    color: #ffffff;
+  }
+
+  .button--secondary {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--border);
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+
+  .button--secondary:hover {
+    background: var(--accent-hover);
+    color: #ffffff;
+    border-color: var(--accent-hover);
+  }
+
+  .eyebrow {
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .content-block__caption {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 48rem) {
+    .content-block--split {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    }
+
+    .content-block--split.content-block--cta,
+    .content-block--split.content-block--cta-list,
+    .content-block--split.content-block--statement,
+    .content-block--split.content-block--location {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .value-list {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 47.999rem) {
+    .content-block--belong-split {
+      grid-template-columns: 1fr;
+    }
+
+    .belong-spectrum-col {
+      min-height: 80px;
+    }
+
+    .affirm-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

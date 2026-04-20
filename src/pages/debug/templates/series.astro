@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Series template"
+  description="A representative series detail page."
+  canonicalPath="/debug/templates/series/"
+  noindex={true}
+>
+  <main class="page stack">
+    <section class="hero stack">
+      <img class="hero__mark" src="/favicon.svg" alt="" width="48" height="48" />
+      <p class="eyebrow">Series</p>
+      <h1>Welcome to The Table</h1>
+      <p class="lede">Kickoff series for the new season.</p>
+      <div class="actions">
+        <a class="button button--primary" href="/debug/templates/detail/">Standard page</a>
+        <a class="button button--secondary" href="/sitemap.xml">Sitemap</a>
+      </div>
+    </section>
+
+    <section class="grid grid--2">
+      <article class="panel stack">
+        <p class="eyebrow">Series summary</p>
+        <h2>Kickoff season</h2>
+        <p>
+          A short series description with a familiar title, compact summary, and steady
+          spacing on every viewport.
+        </p>
+      </article>
+
+      <aside class="panel stack">
+        <p class="eyebrow">Dates</p>
+        <h2>January 12 to February 23</h2>
+        <p>Seven weeks of teaching and discussion.</p>
+      </aside>
+    </section>
+  </main>
+</BaseLayout>

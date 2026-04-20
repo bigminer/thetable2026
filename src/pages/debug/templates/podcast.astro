@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Podcast template"
+  description="A representative message detail page."
+  canonicalPath="/debug/templates/podcast/"
+  noindex={true}
+>
+  <main class="page stack">
+    <section class="hero stack">
+      <img class="hero__mark" src="/favicon.svg" alt="" width="48" height="48" />
+      <p class="eyebrow">Podcast</p>
+      <h1>The Invitation</h1>
+      <p class="lede">A message on invitation and belonging.</p>
+      <div class="actions">
+        <a class="button button--primary" href="/debug/templates/staff/">Staff template</a>
+        <a class="button button--secondary" href="/debug/planning-center/">Planning Center samples</a>
+      </div>
+    </section>
+
+    <section class="grid grid--2">
+      <article class="panel stack">
+        <p class="eyebrow">Episode summary</p>
+        <h2>One clear message title</h2>
+        <p>
+          The layout keeps the episode metadata and the summary aligned so the page stays
+          readable on both mobile and desktop.
+        </p>
+      </article>
+
+      <aside class="panel stack">
+        <p class="eyebrow">Metadata</p>
+        <h2>February 1, 2026</h2>
+        <p>Speaker: Jane Doe</p>
+      </aside>
+    </section>
+  </main>
+</BaseLayout>

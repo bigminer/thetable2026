@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatPlanningCenterEvent, loadPlanningCenterFeed } from '../../lib/planning-center/events';
+
+const feed = await loadPlanningCenterFeed();
+const events = [...feed.events].sort((left, right) => left.startsAt.localeCompare(right.startsAt));
+const categoryBySlug = new Map(feed.categories.map((category) => [category.slug, category]));
+---
+
+<BaseLayout
+  title="Events"
+  description="Planning Center-backed events and category archives."
+  canonicalPath="/events/"
+>
+  <main class="page stack">
+    <section class="hero stack">
+      <img class="hero__mark" src="/favicon.svg" alt="" width="48" height="48" />
+      <p class="eyebrow">Events</p>
+      <h1>Planning Center events</h1>
+      <p class="lede">
+        This route uses the last-known-good event snapshot and can refresh on a scheduled rebuild.
+      </p>
+      <div class="actions">
+        {feed.categories.map((category) => (
+          <a class="button button--secondary" href={`/events/category/${category.slug}/`}>
+            {category.title}
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="panel stack">
+      <p class="eyebrow">Upcoming</p>
+      <div class="stack">
+        {events.map((event) => {
+          const { dateLabel, timeLabel } = formatPlanningCenterEvent(event.startsAt);
+          const category = categoryBySlug.get(event.categorySlug);
+
+          return (
+            <article class="event-card">
+              <p class="event-card__meta">
+                {dateLabel} · {timeLabel} · {category?.title ?? event.categoryTitle} · {event.location}
+              </p>
+              <h2 class="event-card__title">{event.title}</h2>
+              <p class="event-card__summary">{event.summary}</p>
+              <div class="event-card__actions">
+                <a class="button button--secondary" href={event.url}>
+                  Open event
+                </a>
+                <a class="button button--secondary" href={`/events/category/${event.categorySlug}/`}>
+                  View category
+                </a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .event-card {
+    padding: 1rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .event-card:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .event-card__meta {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .event-card__title {
+    margin-top: 0.25rem;
+    font-size: 1.125rem;
+  }
+
+  .event-card__summary {
+    margin-top: 0.5rem;
+    color: var(--muted);
+  }
+
+  .event-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+</style>
