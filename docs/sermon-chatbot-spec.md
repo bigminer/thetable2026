@@ -13,7 +13,7 @@ This specification emerged from a working session on 2026-04-22 between Saga (an
 
 The original GitHub issue asked for AI-generated sermon summaries and a topic index. Through the session the concept narrowed into something smaller and more useful: a chatbot that answers questions using Brett's own words, paired with a browsable pull-quote feed. What follows is that product, fully specified.
 
-**Consent status — Brett.** Brett has given concept-level approval for the chatbot per a phone conversation between Gary and Brett (2026-04-21). Specifics about verbatim policy (filler, restarts, grammar preservation) and editorial review cadence are still to be finalized before launch. This spec should not be treated as Brett-reviewed in its current form.
+**Consent status — Brett.** Brett has given concept-level approval for the chatbot per a conversation between Gary and Brett. Specifics about verbatim policy (filler, restarts, grammar preservation) and editorial review cadence are still to be finalized before launch. This spec should not be treated as Brett-reviewed in its current form.
 
 ---
 

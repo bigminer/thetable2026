@@ -9,11 +9,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "ask": "node --env-file=.env --import tsx scripts/ask.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
     "astro": "^6.1.8",
+    "openai": "^6.34.0",
     "sanitize-html": "^2.17.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "tsx": "^4.21.0"
+  }
 }

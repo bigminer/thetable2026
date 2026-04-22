@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# sermon-chatbot prototype scratch
+scripts/transcripts/embeddings.json
+
 # macOS-specific files
 .DS_Store
 
