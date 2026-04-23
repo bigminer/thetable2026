@@ -17,7 +17,7 @@ content_description: "Peter writes to Christian wives in non-Christian Roman hou
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:26:11"     # auto: "grace and peace" — verify
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_end: "00:55:32"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

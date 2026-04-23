@@ -17,7 +17,7 @@ content_description: "Brett argues that the New Testament contains both warnings
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:24:02"     # auto: "grace and peace" — verify
-content_end: "01:10:25"       # auto: "open table" — verify
+content_end: "01:10:25"       # auto: "communion" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

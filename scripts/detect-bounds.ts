@@ -90,6 +90,7 @@ function findPhraseTime(
   words: Word[],
   pattern: RegExp,
   afterSeconds: number,
+  direction: "first" | "last" = "first",
 ): number | null {
   // Concatenate words into one string, tracking char offset per word
   const wordOffsets: number[] = [];
@@ -105,6 +106,7 @@ function findPhraseTime(
   const flags = pattern.flags.includes("g") ? pattern.flags : pattern.flags + "g";
   const global = new RegExp(pattern.source, flags);
   let match: RegExpExecArray | null;
+  let lastValid: number | null = null;
   while ((match = global.exec(text)) !== null) {
     // Find which word this match starts in
     const charOffset = match.index;
@@ -117,10 +119,11 @@ function findPhraseTime(
     }
     const word = words[wordIdx];
     if (word && word.t >= afterSeconds) {
-      return word.t;
+      if (direction === "first") return word.t;
+      lastValid = word.t;
     }
   }
-  return null;
+  return lastValid;
 }
 
 function toHms(s: number): string {
@@ -151,7 +154,7 @@ type StubResult = {
   filename: string;
   startDetected: boolean;
   endDetected: boolean;
-  endType?: "specific" | "loose";
+  endPattern?: string;
   note?: string;
 };
 
@@ -191,26 +194,42 @@ async function processStub(filePath: string, filename: string): Promise<StubResu
 
   // Find end (needs a start — existing or just detected)
   let detectedEnd: number | null = null;
-  let endType: "specific" | "loose" | undefined;
+  let endPattern: string | undefined;
   if (currentEnd === null && (currentStart !== null || detectedStart !== null)) {
     const startSeconds = currentStart !== null ? parseHms(currentStart) : detectedStart!;
     const afterSeconds = startSeconds + MIN_SERMON_SECONDS;
 
     // Try multiple patterns in priority order: most specific to least.
-    // Brett's canonical: "we practice (what's called) an open table"
-    // Common alt: "open table" alone
-    // Older convention: "come to the table" / "gather to the table"
-    // Generic fallback: "communion"
-    const patterns: Array<{ re: RegExp; label: "specific" | "loose" }> = [
-      { re: /\bwe\s+practice\s+(what'?s?\s+called\s+)?an\s+open\s+table\b/i, label: "specific" },
-      { re: /\bopen\s+table\b/i, label: "loose" },
-      { re: /\b(come|gather)\s+to\s+the\s+table\b/i, label: "loose" },
-      { re: /\bcommunion\b/i, label: "loose" },
+    // Trinitarian benediction marks the literal end of the sermon, so use
+    // the LAST occurrence to avoid catching mid-sermon scripture quotes
+    // (Matthew 28:19, etc). Other patterns use the first occurrence.
+    const patterns: Array<{
+      re: RegExp;
+      label: string;
+      direction: "first" | "last";
+    }> = [
+      {
+        re: /\bin\s+the\s+name\s+of\s+the\s+father[\s\S]{0,40}holy\s+(spirit|ghost)/i,
+        label: `"in the name of the father...holy spirit"`,
+        direction: "last",
+      },
+      {
+        re: /\bwe\s+practice\s+(what'?s?\s+called\s+)?an\s+open\s+table\b/i,
+        label: `"we practice...open table"`,
+        direction: "first",
+      },
+      { re: /\bopen\s+table\b/i, label: `"open table"`, direction: "first" },
+      {
+        re: /\b(come|gather)\s+to\s+the\s+table\b/i,
+        label: `"come to the table"`,
+        direction: "first",
+      },
+      { re: /\bcommunion\b/i, label: `"communion"`, direction: "first" },
     ];
     for (const p of patterns) {
-      detectedEnd = findPhraseTime(words, p.re, afterSeconds);
+      detectedEnd = findPhraseTime(words, p.re, afterSeconds, p.direction);
       if (detectedEnd !== null) {
-        endType = p.label;
+        endPattern = p.label;
         break;
       }
     }
@@ -229,10 +248,9 @@ async function processStub(filePath: string, filename: string): Promise<StubResu
     );
   }
   if (detectedEnd !== null) {
-    const label = endType === "specific" ? `"we practice...open table"` : `"open table"`;
     updated = updated.replace(
       /^content_end:\s*null.*$/m,
-      `content_end: "${toHms(detectedEnd)}"       # auto: ${label} — verify`,
+      `content_end: "${toHms(detectedEnd)}"       # auto: ${endPattern} — verify`,
     );
   }
 
@@ -244,7 +262,7 @@ async function processStub(filePath: string, filename: string): Promise<StubResu
     filename,
     startDetected: detectedStart !== null,
     endDetected: detectedEnd !== null,
-    endType,
+    endPattern,
   };
 }
 

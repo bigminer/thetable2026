@@ -17,7 +17,7 @@ content_description: "Brett names three phases of spiritual transformation: leav
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:28:57"     # auto: "grace and peace" — verify
-content_end: "00:55:37"       # auto: "open table" — verify
+content_end: "00:54:35"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

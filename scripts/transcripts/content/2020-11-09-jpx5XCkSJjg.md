@@ -17,7 +17,7 @@ content_description: "Jesus is the highest revelation of God, but the Holy Spiri
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:26:10"     # auto: "grace and peace" — verify
-content_end: "00:41:26"       # auto: "open table" — verify
+content_end: "00:41:26"       # auto: "communion" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

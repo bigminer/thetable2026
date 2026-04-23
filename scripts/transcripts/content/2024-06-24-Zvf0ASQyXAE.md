@@ -17,7 +17,7 @@ content_description: "Brett argues that social media and smartphone use pull us 
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:28:40"     # auto: "grace and peace" — verify
-content_end: "00:55:08"       # auto: "we practice...open table" — verify
+content_end: "00:54:12"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

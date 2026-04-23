@@ -17,7 +17,7 @@ content_description: "Jesus's path to the cross teaches four phases of suffering
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:26:48"     # auto: "grace and peace" — verify
-content_end: "00:53:45"       # auto: "we practice...open table" — verify
+content_end: "00:52:53"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

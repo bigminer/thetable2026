@@ -17,7 +17,7 @@ content_description: "Naomi's story—a widow stripped of husband and sons—cha
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:26:30"     # auto: "grace and peace" — verify
-content_end: "00:52:40"       # auto: "we practice...open table" — verify
+content_end: "00:51:32"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

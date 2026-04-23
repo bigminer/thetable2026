@@ -17,7 +17,7 @@ content_description: "Brett argues that crowds suppress individual conscience an
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:26:20"     # auto: "grace and peace" — verify
-content_end: "00:52:51"       # auto: "we practice...open table" — verify
+content_end: "00:51:51"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

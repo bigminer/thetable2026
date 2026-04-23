@@ -17,7 +17,7 @@ content_description: "James 5:13-16 reframes healing as wholeness—body, spirit
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:26:12"     # auto: "grace and peace" — verify
-content_end: "00:54:31"       # auto: "we practice...open table" — verify
+content_end: "00:53:30"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

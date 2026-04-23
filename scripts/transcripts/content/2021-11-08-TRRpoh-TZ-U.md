@@ -17,7 +17,7 @@ content_description: "Peter's point isn't that prophecy proves the future works�
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:31:44"     # auto: "grace and peace" — verify
-content_end: "01:05:03"       # auto: "we practice...open table" — verify
+content_end: "01:06:27"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

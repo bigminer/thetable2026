@@ -17,7 +17,7 @@ content_description: "Peter calls Christians to rid themselves of malice, deceit
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:28:45"     # auto: "grace and peace" — verify
-content_end: "00:59:26"       # auto: "open table" — verify
+content_end: "00:58:27"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---
