@@ -64,7 +64,7 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
                 <span class={`badge badge-${s.content_type}`}>
                   {s.content_type === "table_talk" ? "Table Talk" : "Sermon"}
                 </span>
-                {s.series && (
+                {s.series && s.series !== "Table Talk" && (
                   <button
                     type="button"
                     class="badge badge-series"
@@ -237,10 +237,14 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
         }
         const data: ComposedResponse = await res.json();
 
-        // Surface series from the top chunks as filter shortcuts
+        // Surface series from the top chunks as filter shortcuts.
+        // Skip "Table Talk" — it's redundant with the content_type badge
+        // and not a real thematic series.
         const topSeries = new Set<string>();
         for (const chunk of data.chunks.slice(0, 3)) {
-          if (chunk.series) topSeries.add(chunk.series);
+          if (chunk.series && chunk.series !== "Table Talk") {
+            topSeries.add(chunk.series);
+          }
         }
         const seriesSuggestions = [...topSeries]
           .map((s) => {
