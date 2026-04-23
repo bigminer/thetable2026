@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadReviewedSermons } from "../lib/sermon-chatbot/corpus.ts";
+import { youtubeLink } from "../lib/sermon-chatbot/vtt.ts";
 
 export const prerender = false;
 
@@ -55,7 +56,7 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
           feed.map((s) => (
             <li class="card">
               <a
-                href={`https://www.youtube.com/watch?v=${s.youtube_id}`}
+                href={youtubeLink(s.youtube_id, s.content_start_seconds)}
                 target="_blank"
                 rel="noreferrer"
               >
