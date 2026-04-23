@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2023-07-24-aOfUzLbQ2dY.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Reality of Peace"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesse recounts how anxiety and burnout from teaching, car troubles, and his student's loss led to a panic attack that revealed his death grip on controlling life. Peace, he argues, isn't something you manufacture through willpower or secure through circumstances—it's a gift received through prayer practices like relinquishment that loosen your grip, allowing God's peace to guard your heart even amid real hardship."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2022-07-25-Ae7pByqLFJQ.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Guest Speaker Dr. Aaron Brown"          # cleaned-up display title; defaults to youtube_title
+content_description: "Dr. Aaron Brown examines racism as a neurological pattern stored in the amygdala rather than a character flaw, using brain studies to show how implicit bias operates automatically and how accountability and exposure to other races can reshape these automatic responses."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

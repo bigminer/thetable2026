@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2025-04-28-iptXZRlUmnA.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Disenchanted: Reclaiming Sacred Ground in a Disenchanted World"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett argues that declining religious engagement reflects a deeper cultural shift toward left-hemisphere dominance—analytical, abstract, mechanistic thinking that has displaced the right hemisphere's holistic, metaphorical, embodied ways of knowing. Worship and church community, he contends, are acts of resistance that re-enchant a disenchanted world and reconnect us to mystery beyond what language or reason alone can capture."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:28:56"     # auto: "grace and peace" — verify
+content_end: "01:01:50"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

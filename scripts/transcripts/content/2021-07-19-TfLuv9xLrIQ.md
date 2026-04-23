@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2021-07-19-TfLuv9xLrIQ.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Deconstruction & Doubt"          # cleaned-up display title; defaults to youtube_title
+content_description: "When the disciples worship Jesus after his resurrection, Matthew notes that some doubted—showing that doubt and faith can coexist, and that perfect evidence never eliminates all questions, even for Jesus's closest followers."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:30:27"     # auto: "grace and peace" — verify
+content_end: "00:58:12"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

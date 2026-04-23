@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2024-05-06-IBYULepIyyg.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Deformed and Reformed"          # cleaned-up display title; defaults to youtube_title
+content_description: "Peter's obedience to God's vision about eating unclean animals becomes his template for embracing Gentiles, revealing that Christian growth requires unlearning deformed assumptions—prejudices, wounds, codependencies—not just adding new knowledge. The capacity to tolerate hard truth about ourselves determines whether we grow into wisdom or remain infants regardless of age."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:33:18"     # auto: "grace and peace" — verify
+content_end: "01:01:28"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

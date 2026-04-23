@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2025-02-03-ahqkqm3jQBM.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Growing in Belovedness"          # cleaned-up display title; defaults to youtube_title
+content_description: "God calls you beloved before you accomplish anything, then sends you into your actual life to learn that belovedness on the journey—not after you've figured yourself out in some monastery. When self-rejection creeps in, repeat: I'm loved. I'm sent."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:27:28"     # auto: "grace and peace" — verify
+content_end: "00:55:28"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

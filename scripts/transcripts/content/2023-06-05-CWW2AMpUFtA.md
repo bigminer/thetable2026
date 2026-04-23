@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2023-06-05-CWW2AMpUFtA.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Eastertide: This Is Not The End - A Surprising Prayer"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesus prays for the disciples' unity—not doctrinal agreement, but a posture of the heart that leans toward rather than away from one another. Brett connects this to fracture in the American church, particularly evangelical alienation over LGBTQ inclusion, and calls the community to allow Christ to cultivate their own hearts so healing can begin."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

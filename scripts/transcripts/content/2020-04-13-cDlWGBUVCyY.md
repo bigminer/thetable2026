@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2020-04-13-cDlWGBUVCyY.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Easter Service Live"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett traces skepticism from Western rationalism through postmodern nihilism, then argues that belief in Jesus's actual resurrection—not metaphorical rebirth—is what grounds hope, goodness, and truth against the creeping meaninglessness of our age."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

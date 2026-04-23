@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2025-03-17-wVBhb9BsYDA.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Youth Sunday"          # cleaned-up display title; defaults to youtube_title
+content_description: "Three youth leaders share what they're learning: the Enneagram as a tool for self-awareness, finding God in art and friends and nature, and how faith sustains them through anxiety, college pressure, and the weight of time passing fast."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

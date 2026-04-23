@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2025-12-01-yPglPwrPwJY.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Come Let Us Walk in the Light of the Lord  📱"          # cleaned-up display title; defaults to youtube_title
+content_description: "The speaker addresses the gap between the world's current violence—war in Gaza, deportations, polarization—and Christian hopes for Christ's return, rejecting both spiritual bypass and paralyzing despair. Instead, she argues that faithful Advent waiting means embodying God's peace and justice now through concrete action, citing her work with immigration advocates at ICE detention as practicing the future we long for."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2025-02-24-idrz2xpqEgo.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "February 223, 2025"          # cleaned-up display title; defaults to youtube_title
+content_description: "Cherelle Russell on Matthew 25's sheep and goats: both groups miss seeing God in the hungry, sick, and imprisoned because they expect divine goodness in power and glory, not in vulnerability and need. She reframes the passage away from judgment toward an invitation to recognize and embody God's goodness in everyday acts of mercy."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

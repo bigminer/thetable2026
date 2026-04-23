@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2022-04-25-T4HgnUnkqII.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "1 Peter: Part Three | EVANGELISM...Gulp"          # cleaned-up display title; defaults to youtube_title
+content_description: "Peter urges believers facing persecution to keep Christ as their lord, then share their faith only with those who ask—letting personal hope rather than theology do the speaking, all with gentleness and respect instead of judgment or sales tactics."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:28:28"     # auto: "grace and peace" — verify
+content_end: "00:54:15"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

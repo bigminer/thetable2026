@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2023-12-18-tDHR-HMpRtg.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Advent - Guest Speaker Jesse Watts"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesse identifies the star in the nativity story not as lazy storytelling but as symbolism: Christ as the light guiding us, yet today we're drowning in artificial lights—social media, consumption, addiction—that masquerade as guidance. The real discernment happens inward through spiritual disciplines like silence and prayer, not outward chasing."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

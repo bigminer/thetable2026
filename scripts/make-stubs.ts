@@ -68,6 +68,7 @@ vtt_path: ${vttPath}
 
 # --- REVIEW: confirm defaults or override ---
 title: "${safeTitle}"          # cleaned-up display title; defaults to youtube_title
+content_description: null      # short summary for the index; auto-filled by make-descriptions
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

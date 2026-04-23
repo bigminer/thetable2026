@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2023-03-27-Rnyttpyan9U.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Lent - the way of the cross : Rev. Deniece Mason"          # cleaned-up display title; defaults to youtube_title
+content_description: "Rev. Deniece Mason on the cross as foolishness to worldly power: God defeats sin and death not through force but through Christ's crucified weakness, absorbing humanity's violence and shame to show God stands with the humiliated, not the powerful."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

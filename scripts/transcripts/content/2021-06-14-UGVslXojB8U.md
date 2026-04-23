@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2021-06-14-UGVslXojB8U.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The First Forgiveness | Guest speaker Aaron Brownbrook"          # cleaned-up display title; defaults to youtube_title
+content_description: "Aaron Brownbrook challenges listeners to forgive the world itself for not matching their expectations—the foundational step before loving enemies. Without accepting reality as broken and mixed (rather than waiting for it to become perfect), he argues, Christians remain stuck in denial or rebellion, unable to practice the inclusion Jesus modeled."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

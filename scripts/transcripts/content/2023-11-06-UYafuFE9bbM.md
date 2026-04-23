@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2023-11-06-UYafuFE9bbM.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Bible Doesn't Say That | The Lord Helps Those Who Help Themselves"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesus calls disciples to deny their ego-driven, acquisitive self—the part chasing worldly success and efficiency—so they can come alive to their deep self in God; the cultural maxim \"the Lord helps those who help themselves\" invites endless self-improvement while neglecting the inner world that actually determines whether life feels hollow or full."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:27:10"     # auto: "grace and peace" — verify
+content_end: "00:54:28"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

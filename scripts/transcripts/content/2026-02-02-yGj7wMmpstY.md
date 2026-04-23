@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2026-02-02-yGj7wMmpstY.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Three Expressions of the Ego"          # cleaned-up display title; defaults to youtube_title
+content_description: "John names three ego expressions that block love for God: wanting your own way (control and certainty), wanting everything for yourself (acquisition and consumption), and wanting to appear important (image management). He argues these aren't character flaws to fight but patterns to notice and gently release to God."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:28:27"     # auto: "grace and peace" — verify
+content_end: "00:56:00"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

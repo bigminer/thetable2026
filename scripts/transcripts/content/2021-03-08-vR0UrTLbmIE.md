@@ -13,9 +13,10 @@ vtt_path: scripts/transcripts/raw/2021-03-08-vR0UrTLbmIE.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Lent: From Repentance to Renewal | Return"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett names craving and aversion—the restless chase for what we lack and avoidance of what we fear—as the engine of spiritual deadness, then calls return (centering yourself in God's presence) the only path to transformation and real peace."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:26:59"     # auto: "grace and peace" — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
 series: null                   # leave null if not in a series
 

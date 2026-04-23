@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2022-12-12-mwfrFrDyPWc.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Advent at the Table | The Package Deal"          # cleaned-up display title; defaults to youtube_title
+content_description: "Mary's joy in bearing God's child coexists with real hardship—homelessness, a fleeing refugee family, a dead husband—yet she remains grounded in blessing. Blessings and burdens come as a package deal; spiritual maturity means focusing on the former while acknowledging both, especially when depression, anxiety, or exhaustion depletes your capacity—sometimes restored through practical care of your body: movement, food, sleep."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:27:51"     # auto: "grace and peace" — verify
+content_end: "00:56:27"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

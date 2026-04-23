@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2024-08-05-8jTZdJNjmGM.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Table: The Parables of Jesus"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesus uses the parable of the sower to diagnose the real problem: not external obstacles, but the soil—the state of one's heart as a still, open, non-reactive inner space. Without this settled inward condition, intellectual understanding alone remains sterile."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:27:48"     # auto: "grace and peace" — verify
+content_end: "00:59:17"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

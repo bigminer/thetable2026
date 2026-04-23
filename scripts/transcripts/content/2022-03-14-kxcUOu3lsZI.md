@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2022-03-14-kxcUOu3lsZI.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Fox & The Hen"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesus calls King Herod a \"fox\" for his cunning manipulation, then reveals God as a mother hen—stretching her arms wide on the cross to gather her children, the opposite of humanity's scheming nature."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:31:37"     # auto: "grace and peace" — verify
+content_end: "01:00:34"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

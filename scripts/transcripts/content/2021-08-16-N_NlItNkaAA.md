@@ -13,9 +13,10 @@ vtt_path: scripts/transcripts/raw/2021-08-16-N_NlItNkaAA.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Deconstruction: Finding God Again | Deconstruction & Hell"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett argues that hell is God's purifying love—discipline and restoration, not eternal torture—grounded in the judgment being based on how we live and the Greek words actually used by Jesus (colossus: chastisement; ionios: age-lasting, not necessarily endless)."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:28:00"     # auto: "grace and peace" — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
 series: null                   # leave null if not in a series
 

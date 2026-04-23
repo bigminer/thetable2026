@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2024-07-15-TICJvYqiagk.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Burned Out By Religion - Guest Speaker Charles Kiser"          # cleaned-up display title; defaults to youtube_title
+content_description: "Charles Kaiser on religious trauma: how abuse in churches—whether authoritarian control, cover-ups, or toxic theology—lodges in the nervous system as imprinted fear, and how Jesus as an empathetic witness to our pain offers liberation from the yoke of religious oppression, not magical healing but the possibility of walking alongside him."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

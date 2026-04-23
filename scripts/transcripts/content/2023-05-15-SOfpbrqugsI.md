@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2023-05-15-SOfpbrqugsI.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Eastertide: Drawn"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesus commands obedience not as proof of love, but as the natural outflow of a heart already transformed by loving God—the source of keeping is the loving, not vice versa."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:29:17"     # auto: "grace and peace" — verify
+content_end: "00:58:49"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

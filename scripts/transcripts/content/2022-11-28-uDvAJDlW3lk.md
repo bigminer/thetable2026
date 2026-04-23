@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2022-11-28-uDvAJDlW3lk.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Advent at the Table"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett reframes Christ's second coming from a source of childhood anxiety into genuine hope: God's resurrection of Jesus promises future healing for all creation, and every act of love now participates in that restoration, not wasted effort."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:28:16"     # auto: "grace and peace" — verify
+content_end: "00:58:11"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

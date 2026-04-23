@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2025-03-03-NvTRyqu0DjQ.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Waking Up"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett argues that Christian spiritual practice aims ultimately at \"waking up\"—realizing our shared nature with God in Christ—rather than merely growing up morally, cleaning up emotionally, or showing up socially. He identifies the obstacle: the \"monkey mind\" of ego that keeps us asleep through arguing, blaming, demanding, and controlling, and invites the congregation to catch themselves in these patterns and surrender them to God's presence."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

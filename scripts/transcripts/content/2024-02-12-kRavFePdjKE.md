@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2024-02-12-kRavFePdjKE.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Caterpillars & Butterflies"          # cleaned-up display title; defaults to youtube_title
+content_description: "The speaker connects Jesus's transfiguration to Paul's call for Christians to be \"transformed\" (same Greek word), arguing that we're invited into a radical metamorphosis—not incremental moral improvement, but a butterfly-emerging-from-cocoon kind of becoming. This unveiling of our true nature in Christ challenges Western Christianity's limited vision of discipleship as merely \"being a better caterpillar."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:25:44"     # auto: "grace and peace" — verify
+content_end: "00:58:54"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

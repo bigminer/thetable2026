@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2023-09-18-ZhQEH9XWdmU.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Confession"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett argues that avoiding confession is fleeing reality itself, and that churches often breed pretenders by setting standards people can't meet, then hiding their failures. He invites confession not as shame but as genuine vulnerability, followed by grace and blessing that acknowledge people's existing sacredness—and healing happens when jagged edges connect us to each other."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:28:25"     # auto: "grace and peace" — verify
+content_end: "00:58:01"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

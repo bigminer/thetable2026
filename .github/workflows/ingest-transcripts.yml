@@ -35,8 +35,21 @@ jobs:
       - name: Download new transcripts
         run: npm run fetch -- "${{ vars.YOUTUBE_CHANNEL_URL }}"
 
+      - name: Whisper fallback for videos without auto-captions
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: npm run transcribe
+
       - name: Generate stubs for new downloads
         run: npm run make-stubs
+
+      - name: Auto-detect sermon bounds via Brett's consistent phrasings
+        run: npm run detect-bounds
+
+      - name: Generate AI descriptions for new stubs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: npm run make-descriptions
 
       - name: Open pull request
         uses: peter-evans/create-pull-request@v7

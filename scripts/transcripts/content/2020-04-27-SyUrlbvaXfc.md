@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2020-04-27-SyUrlbvaXfc.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Live Service"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesus teaches three spiritual disciplines—giving, prayer, and fasting—as practices that break addictions while cultivating love and reliance on God. Start small with a \"20-mile march\": choose one manageable daily practice and maintain it consistently to climb toward the character of Christ."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

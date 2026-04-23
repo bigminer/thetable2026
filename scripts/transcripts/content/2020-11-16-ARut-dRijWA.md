@@ -13,9 +13,10 @@ vtt_path: scripts/transcripts/raw/2020-11-16-ARut-dRijWA.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Table Live"          # cleaned-up display title; defaults to youtube_title
+content_description: "Panel discussion on processing the church's recent sermon series on difficult biblical texts, featuring three community members sharing how reframing scripture through Jesus and love—rather than fear and literalism—has shifted their understanding of faith after leaving restrictive religious backgrounds."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:21:06"     # auto: "grace and peace" — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
 series: null                   # leave null if not in a series
 

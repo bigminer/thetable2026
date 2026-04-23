@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2021-01-11-aocJCfYDsuA.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Table Live - Epiphany: A Radical Invitation"          # cleaned-up display title; defaults to youtube_title
+content_description: "God's circle of welcome is always bigger than ours. Using the magi as outsiders who recognized Jesus first, the speaker argues that tribes—necessary for identity and belonging—must actively resist arrogance, echo chambers, and exclusivism by remaining open to strangers and those we dismiss."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:26:16"     # auto: "grace and peace" — verify
+content_end: "00:52:36"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

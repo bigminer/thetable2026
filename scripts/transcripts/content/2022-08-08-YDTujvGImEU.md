@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2022-08-08-YDTujvGImEU.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "1 Peter | Turning Leadership Upside Down"          # cleaned-up display title; defaults to youtube_title
+content_description: "Peter calls church leaders to shepherd their congregations freely, motivated by service rather than personal gain, and to model Christ's character rather than exercise dominance—inverting worldly leadership that demands honor into one that grants it."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:36:31"     # auto: "grace and peace" — verify
+content_end: "01:05:59"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

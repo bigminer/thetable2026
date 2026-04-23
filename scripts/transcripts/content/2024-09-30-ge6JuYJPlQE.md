@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2024-09-30-ge6JuYJPlQE.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Well 09/29/2024"          # cleaned-up display title; defaults to youtube_title
+content_description: "James 5:13-16 reframes healing as wholeness—body, spirit, and mind—not just physical cure; Brett argues prayer's primary purpose is inner formation rather than getting God to fix circumstances, and authentic vulnerability with others deepens healing."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:26:12"     # auto: "grace and peace" — verify
+content_end: "00:54:31"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

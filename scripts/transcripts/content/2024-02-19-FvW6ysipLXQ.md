@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2024-02-19-FvW6ysipLXQ.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Epiphany - Bruised"          # cleaned-up display title; defaults to youtube_title
+content_description: "Julian of Norwich's vision of a servant fallen into a pit shows sin's first wound as bruising—not mental torment alone, but bodily ache that lingers long after the initial blow. Brett traces this through parenting rage, addiction, resentment, and lament, naming how God meets us in that pit with compassion, not condemnation."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:41:06"     # auto: "grace and peace" — verify
+content_end: "01:07:06"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

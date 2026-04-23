@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2023-10-16-nISITf7jSzI.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Bible Doesn't Say That! | Love the Sinner, Hate the Sin"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesus rarely used the word \"sinner\" and never said \"love the sinner, hate the sin\"—the phrase collapses under its own weight because hatred of someone's sin inevitably becomes hatred of the person, while genuine transformation comes through humility and solidarity, not judgment."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:31:50"     # auto: "grace and peace" — verify
+content_end: "01:01:07"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

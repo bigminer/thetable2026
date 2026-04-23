@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2022-09-19-wiIxZivEIgU.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Unclean | Mercy & Sacrifice"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesus quotes the prophet Hosea to shift the Pharisees from a purity framework to mercy: disgust psychology paired with religious perfectionism builds walls between ourselves and others, but mercy extends a bridge across the chasm that holiness constructs."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:26:49"     # auto: "grace and peace" — verify
+content_end: "00:56:56"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

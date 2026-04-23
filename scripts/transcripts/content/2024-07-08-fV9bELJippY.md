@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2024-07-08-fV9bELJippY.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Guest Speaker - Dr. Aaron Brownbrook"          # cleaned-up display title; defaults to youtube_title
+content_description: "Dr. Aaron Brownbrook, psychiatrist and theologian, applies the story of Jonah—a critique of religious self-righteousness—to modern self-awareness: neutralizing emotions without judgment, decentering yourself to see others' experiences clearly, and using humor to look honestly at yourself. He argues the \"sign of Jonah\" points not to miracle but to the mundane work of reconciliation and self-reflection."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

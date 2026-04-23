@@ -13,9 +13,10 @@ vtt_path: scripts/transcripts/raw/2021-03-15-lN9WcbNApyo.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Lent: From Repentance to Renewal | Be The Fire"          # cleaned-up display title; defaults to youtube_title
+content_description: "God doesn't remove the snakes in your life—he tells you to look at them. Brett traces how suffering, resisted as punishment, becomes the means of transformation: the bronze serpent heals those bitten by serpents; Christ takes the shape of sin to destroy it; Paul's thorn becomes the site where God's power grows visible. The question isn't whether you'll face snakes, but whether you'll run from them or look toward them as the material God uses to remake you."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:29:34"     # auto: "grace and peace" — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
 series: null                   # leave null if not in a series
 

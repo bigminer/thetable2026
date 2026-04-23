@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2026-03-30-HnAOXmnnDPU.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Crowd"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett argues that crowds suppress individual conscience and truth—citing the crowd's role in mocking Christ, Kierkegaard's claim that \"the crowd is untruth,\" and modern Christian nationalism as a case where people abandon their own convictions by joining the mob. He asks whether you're losing yourself to the crowd's pressure at work, online, or in politics, and calls listeners to turn from group thinking toward Christ for answers on authenticity and justice."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:26:20"     # auto: "grace and peace" — verify
+content_end: "00:52:51"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

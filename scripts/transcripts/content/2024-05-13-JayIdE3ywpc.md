@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2024-05-13-JayIdE3ywpc.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Ascending & Participating"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesus ascended not to abandon his disciples but to expand his spiritual body, incorporating the church as his ongoing presence in the world—a participation that stands against false bodies like Christian nationalism."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:29:04"     # auto: "grace and peace" — verify
+content_end: "00:55:31"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

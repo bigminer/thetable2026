@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2024-11-11-yqSgRfeARfo.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Hero's Journey"          # cleaned-up display title; defaults to youtube_title
+content_description: "Naomi's story—a widow stripped of husband and sons—charts the hero's journey Joseph Campbell named: ordinary life, a call you initially reject, the desert trial that stretches you beyond capacity, breakthrough, and return transformed. Brett argues God invites all of us into this heroic maturation, and that we don't walk it alone—we need our Ruths, our faithful companions in the wilderness."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:26:30"     # auto: "grace and peace" — verify
+content_end: "00:52:40"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

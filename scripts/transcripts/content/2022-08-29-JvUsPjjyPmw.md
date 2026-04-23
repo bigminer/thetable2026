@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2022-08-29-JvUsPjjyPmw.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "1 Peter  | The Unholy Roar"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett identifies three \"roars of the devil\" in contemporary culture: Christian nationalism that replaces God with America, social media that polarizes adults and destabilizes teen mental health, and the church's continued exclusion of LGBTQ people. He argues Christians must wake up to how evil operates through institutions we trust, deepen their faith in Christ rather than secular solutions, and practice vulnerability in Christian community."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:31:32"     # auto: "grace and peace" — verify
+content_end: "01:02:44"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

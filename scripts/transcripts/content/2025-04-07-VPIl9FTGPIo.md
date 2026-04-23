@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2025-04-07-VPIl9FTGPIo.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Perceive it"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett names three phases of spiritual transformation: leaving Egypt (recognizing the world's false promises), entering the desert (a prolonged, unglamorous process of inner healing and formation), and finding provision (perceiving God's grace already present). He argues baptism isn't a finish line but an initiation into difficult, sanctifying work—and that most Christians mistake the desert for abandonment rather than recognizing it as God's necessary surgery."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:28:57"     # auto: "grace and peace" — verify
+content_end: "00:55:37"       # auto: "open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

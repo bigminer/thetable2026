@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2021-09-13-JDKqaRLpplA.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Guest speaker Mike Miller - Observations on Deconstruction"          # cleaned-up display title; defaults to youtube_title
+content_description: "Mike Miller on deconstruction as active rethinking—not passive doubt, but aggressive questioning that frees us from settled, soul-troubling doctrines. He argues beliefs must evolve through constant testing; the incarnation's core message is abolishing every criterion of exclusion."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

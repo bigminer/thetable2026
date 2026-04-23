@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2025-07-07-pTi7PszDOFo.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Life Be Lifin’"          # cleaned-up display title; defaults to youtube_title
+content_description: "Anna Potter shares her journey through Job's story, arguing that faith doesn't require avoiding suffering but rather welcoming it as the space where God works. She parallels Job's losses—livestock, children, health—with her own: losing two teaching jobs in a year, then her mother's cancer diagnosis, learning that God's presence in darkness matters more than answers."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

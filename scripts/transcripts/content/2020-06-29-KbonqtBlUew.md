@@ -13,9 +13,10 @@ vtt_path: scripts/transcripts/raw/2020-06-29-KbonqtBlUew.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Table Live"          # cleaned-up display title; defaults to youtube_title
+content_description: "John the Baptist tells his audience to start small: give your extra shirt to someone without clothes, don't cheat people, don't abuse power. He keeps their world manageable instead of letting overwhelm paralyze them into inactivity."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:26:33"     # auto: "grace and peace" — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
 series: null                   # leave null if not in a series
 

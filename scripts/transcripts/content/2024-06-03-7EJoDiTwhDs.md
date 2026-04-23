@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2024-06-03-7EJoDiTwhDs.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Holy Shift: A 21st Century Faith"          # cleaned-up display title; defaults to youtube_title
+content_description: "Pastor Brett examines how entertainment culture—the constant need for stimulus and distraction—differs from cultures that simply include entertainment, arguing that awareness and attentiveness to our actual lives is the spiritual shift required. He contrasts digital distraction and escapism with the Christian practice of being present to God, others, and ourselves."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

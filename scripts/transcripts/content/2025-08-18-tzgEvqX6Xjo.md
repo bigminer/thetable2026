@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2025-08-18-tzgEvqX6Xjo.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Cultivating Calm: Staying Centered in Difficult Times"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett walks through three steps for managing chronic fear: developing awareness of how fear drives us beneath conscious notice, renarrating fear stories with scripture (particularly Isaiah 41:10's promise of God's presence), and persisting in that new narrative until the brain rewires itself—using his own experience of financial anxiety as a concrete example of the practice in action."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:27:39"     # auto: "grace and peace" — verify
+content_end: "00:58:20"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

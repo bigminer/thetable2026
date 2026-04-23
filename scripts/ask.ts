@@ -61,7 +61,9 @@ function parseTimestamp(s: string): number {
  */
 function parseVtt(vtt: string): Cue[] {
   const cues: Cue[] = [];
-  const blocks = vtt.split(/\n\s*\n/);
+  // Split on truly blank lines only. Auto-caption cues can contain
+  // space-only lines internally; a greedy /\n\s*\n/ would break them apart.
+  const blocks = vtt.split(/\r?\n\r?\n+/);
 
   for (const block of blocks) {
     const lines = block.split("\n").filter((l) => l.length > 0);

@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2026-04-13-GzItLFovvaA.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Trauma & the Judgement of God"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett argues that the Bible emerged from traumatized communities experiencing conquest and exile, and shows how prophets like Isaiah attributed these atrocities to God's will—a coping mechanism that created a dangerous image of God as a controlling, punishing force. Understanding this trauma history invites us to read scripture with compassion for its authors while refusing their violent conclusions about God's character."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2024-08-26-iY4MhVYAvBo.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "The Parable of Lazarus & The Rich Man"          # cleaned-up display title; defaults to youtube_title
+content_description: "The rich man ignored Lazarus at his gate daily, then in Hades still doesn't see his cruelty—he remains blind to his class prejudices and cultural conditioning. Jesus warns that going against the flow of your tribe's biases requires intentional discipleship, not accident."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:28:25"     # auto: "grace and peace" — verify
+content_end: "01:01:01"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

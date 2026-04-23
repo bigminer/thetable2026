@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2022-06-06-YRqESqLV--o.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "1 Peter |  A Fiery Ordeal"          # cleaned-up display title; defaults to youtube_title
+content_description: "Paul and Silas beaten, imprisoned, and singing hymns to God at midnight—a picture of accepting suffering rather than fighting the story we tell ourselves about it, and discovering God's presence in the midst of the fiery ordeal."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:33:51"     # auto: "grace and peace" — verify
+content_end: "01:02:28"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

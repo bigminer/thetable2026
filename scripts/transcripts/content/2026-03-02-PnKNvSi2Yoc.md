@@ -13,10 +13,11 @@ vtt_path: scripts/transcripts/raw/2026-03-02-PnKNvSi2Yoc.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "Humanism & Transhumanism"          # cleaned-up display title; defaults to youtube_title
+content_description: "Brett argues that transhumanism—the techno-optimist vision of uploading human consciousness into machines to transcend mortality and limitation—repeats the serpent's Genesis temptation to reject creaturely dependence on God. Rather than embrace this drive for mastery and control, Christians should cherish their embodied, finite, mortal nature as intrinsic to being creatures, and ensure technology serves humanity rather than rendering us more machine-like."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_start: "00:33:48"     # auto: "grace and peace" — verify
+content_end: "01:01:33"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

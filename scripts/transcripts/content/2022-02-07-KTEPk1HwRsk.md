@@ -13,9 +13,10 @@ vtt_path: scripts/transcripts/raw/2022-02-07-KTEPk1HwRsk.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "1 Peter : Accept, Reject, Subvert, Transform"          # cleaned-up display title; defaults to youtube_title
+content_description: "Peter counters the misuse of his words on slavery by equating slaves' unjust suffering with Christ's—groundwork for eventual abolition, not defense of the institution. He addresses Christian slaves under pagan masters navigating an oppressive empire, not endorsing slavery as divinely established."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:30:27"     # auto: "grace and peace" — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
 series: null                   # leave null if not in a series
 

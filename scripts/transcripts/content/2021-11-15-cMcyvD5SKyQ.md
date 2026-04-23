@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2021-11-15-cMcyvD5SKyQ.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "1 Peter | Disordered Desire"          # cleaned-up display title; defaults to youtube_title
+content_description: "Peter calls Christians to order their desires rightly—not to kill desire itself, but to stop letting lesser loves (success, control, comfort) override love for God and others. Holiness means integrated desire, shaped through practice and community, not just correct doctrine."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")

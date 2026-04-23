@@ -13,6 +13,7 @@ vtt_path: scripts/transcripts/raw/2026-02-23-JsrW5geqGzU.en.vtt
 
 # --- REVIEW: confirm defaults or override ---
 title: "February 22, 2026 - Jesse Watts"          # cleaned-up display title; defaults to youtube_title
+content_description: "Jesse reflects on Lent as spiritual preparation through discomfort, using fasting to strip away modern distractions and confront our fragility—not as punishment or manipulation, but to recognize that only Christ's grace sustains us."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
