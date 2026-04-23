@@ -110,6 +110,7 @@ function buildChunksForSermon(sermon: Sermon, vtt: string): RawChunk[] {
       source_title: sermon.title,
       source_date: sermon.date,
       source_type: sermon.content_type,
+      series: sermon.series,
       speaker: sermon.speaker,
       start_seconds: Math.floor(slice[0].t),
       end_seconds: Math.floor(slice[slice.length - 1].t),
@@ -187,6 +188,7 @@ export async function buildCorpus(
           source_title: sermon.title,
           source_date: sermon.date,
           source_type: sermon.content_type,
+          series: sermon.series,
         });
       }
       continue;

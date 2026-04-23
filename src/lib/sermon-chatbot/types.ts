@@ -22,6 +22,7 @@ export type RawChunk = {
   source_title: string;
   source_date: string;
   source_type: string;
+  series: string | null;
   speaker: string;
   start_seconds: number;
   end_seconds: number;
@@ -56,6 +57,7 @@ export type AskResponse = {
     source_title: string;
     source_date: string;
     source_type: string;
+    series: string | null;
     start_seconds: number;
     end_seconds: number;
     score: number;
