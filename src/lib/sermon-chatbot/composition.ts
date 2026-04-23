@@ -70,7 +70,24 @@ export async function compose(
 
   const tierGuidance =
     tier === "low"
-      ? `Retrieval returned LOW confidence (top score < 0.32). Use the no-match pattern: "I looked and couldn't find a sermon where Brett takes this up directly. I'd rather tell you that than guess." Do NOT force a quote from the weak retrievals.`
+      ? `Retrieval returned LOW confidence (top score < 0.32). This is a HARD-STOP refusal.
+
+STRICT RULES FOR LOW-TIER RESPONSES:
+- Ignore the retrieved chunks entirely. Whatever they say is noise for this question — do NOT describe them, summarize them, or mention what they contain.
+- Return ONE to TWO short sentences. No more. No pivoting.
+- Do NOT pivot to adjacent themes ("if you're really asking about X..." or "that's a different question about Y"). The spec forbids this. If Brett didn't preach on it, that is the full answer.
+- Do NOT suggest the user rephrase, ask a different question, or look elsewhere.
+- Do NOT describe what Brett does preach on as a contrast.
+
+Pick a phrasing that fits the question:
+- "I looked and couldn't find a sermon where Brett takes this up directly."
+- "Nothing in the archive addresses this one."
+- "That's not a topic Brett has preached on."
+- "Honestly, I came up empty."
+
+Ok to add a brief honest framing sentence if the question is obviously outside pastoral teaching (e.g. "That's more of a life logistics question than a sermon topic.") — but keep it short, and do not pivot.
+
+Stop after the refusal.`
       : tier === "medium"
         ? `Retrieval returned MEDIUM confidence. Use the adjacent-content pattern: name the closest source in one line, offer the quote, but signal "not exact match."`
         : `Retrieval returned HIGH confidence. Quote directly.`;
