@@ -103,8 +103,11 @@ async function loadReviewedSermons(): Promise<Sermon[]> {
     const startHms = extractYamlValue(raw, "content_start");
     const endHms = extractYamlValue(raw, "content_end");
 
-    // Default-deny retrieval filter (spec §11)
-    if (contentType !== "sermon") continue;
+    // Default-deny retrieval filter (spec §11). Allowed content types
+    // for v1 corpus: sermon (Sunday services) and table_talk (Brett's
+    // personal-channel devotionals).
+    const ALLOWED_CONTENT_TYPES = new Set(["sermon", "table_talk"]);
+    if (!contentType || !ALLOWED_CONTENT_TYPES.has(contentType)) continue;
     if (speaker !== "brett_tilford") continue;
     if (consent !== "granted") continue;
     if (!startHms || !endHms) continue;

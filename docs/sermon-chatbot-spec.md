@@ -234,7 +234,7 @@ I'd rather tell you that than guess.
   "filters": {
     "after_date": "YYYY-MM-DD | null",
     "speakers": ["brett_tilford"],
-    "content_types": ["sermon"]
+    "content_types": ["sermon", "table_talk"]
   },
   "intent": "topical_overview | specific_pastoral | biographical | doctrinal"
 }
@@ -250,7 +250,7 @@ Cost ~$0.0001 per query, latency ~300ms. The preprocessor is where natural-langu
   "service_id": "2025-10-12",
   "youtube_id": "abc123",
   "content_id": "sermon-2025-10-12-brett",
-  "content_type": "sermon | worship | announcement | story_sunday | guest_sermon",
+  "content_type": "sermon | table_talk | worship | announcement | story_sunday | guest_sermon",
   "speaker": "brett_tilford | guest:jane_doe | congregant:anon_042 | null",
   "consent_status": "granted | pending | unknown | revoked",
   "start_seconds": 1820,
@@ -284,7 +284,7 @@ vtt_path: scripts/transcripts/raw/2026-04-20-u7Q-WVrNLfc.en.vtt
 title: "Trauma  Self Blame"              # defaults to youtube_title
 content_description: "Self-blame offers traumatized people a false sense of control..."   # auto-filled by make-descriptions
 speaker: "brett_tilford"                  # common-case default; override for guests
-content_type: "sermon"                    # common-case default; override for worship, story_sunday, etc.
+content_type: "sermon"                    # common-case default; override for table_talk, worship, story_sunday, etc.
 content_start: "00:21:20"                 # hh:mm:ss where the content begins in the video (auto-detected or null)
 content_end: "00:54:22"                   # hh:mm:ss where it ends (auto-detected or null)
 series: null                              # name or null
@@ -308,7 +308,7 @@ Notes:
 **Default-deny.** The retrieval code filters before the LLM ever sees chunks.
 
 ```js
-const allowedTypes = filters.content_types ?? ["sermon"];
+const allowedTypes = filters.content_types ?? ["sermon", "table_talk"];
 const allowedSpeakers = filters.speakers ?? ["brett_tilford"];
 
 chunks.filter(c =>
@@ -366,6 +366,7 @@ Every query + response must be logged as structured JSON — `queries.jsonl` in 
 | Content type | v1 | Phase 2 | Never |
 |---|---|---|---|
 | Brett sermons | Chatbot + index | — | — |
+| Brett's Table Talk videos (personal YouTube channel, archived) | Chatbot + index | — | — |
 | Guest speakers | Index only, clearly labeled | Chatbot (with per-guest consent) | — |
 | Worship songs | Metadata card only (title, date, timestamp, songwriter) | — | Lyrics in corpus (CCLI) |
 | Story Sunday | — | Chatbot + separate testimony surface (consent infrastructure REQUIRED FIRST) | — |
