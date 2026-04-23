@@ -174,9 +174,18 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
 
   <style>
     .chat-page {
-      max-width: 760px;
+      max-width: 1520px;
       margin: 0 auto;
       padding: 2rem 1.25rem 4rem;
+    }
+    /* Keep everything except the form at the narrower reading width,
+       centered within the wide page. The form alone stretches wide. */
+    .intro,
+    .response,
+    .feed {
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .intro h1 {
       font-size: 1.75rem;
@@ -193,13 +202,21 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
       border-bottom: 1px solid currentColor;
       border-bottom-color: rgba(127, 127, 127, 0.25);
       margin-bottom: 2rem;
+      width: 100%;
+      box-sizing: border-box;
     }
     #ask-form {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto;
       gap: 0.5rem;
+      width: 1400px;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
     }
     #ask-form input {
-      flex: 1;
+      width: 100%;
+      min-width: 0;
       padding: 1.25rem 1.5rem;
       font-size: 1.2rem;
       border: 1px solid rgba(127, 127, 127, 0.35);
@@ -207,6 +224,7 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
       color: inherit;
       border-radius: 8px;
       font-family: inherit;
+      box-sizing: border-box;
     }
     #ask-form input:focus {
       outline: 2px solid rgba(127, 127, 127, 0.5);
