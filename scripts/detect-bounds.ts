@@ -28,6 +28,8 @@ import { join } from "node:path";
 const CONTENT_DIR = "scripts/transcripts/content";
 const MIN_START_SECONDS = 15 * 60; // sermon starts no earlier than 15 min
 const MIN_SERMON_SECONDS = 10 * 60; // sermon must be at least 10 min long
+const MIN_END_SECONDS_STANDALONE = 25 * 60; // absolute floor for end-only detection
+const END_STANDALONE_FRACTION = 0.6; // end-only must also be past this fraction of the video (filters worship-song phrases that happen to mention "come to the table")
 
 type Cue = { start: number; end: number; text: string };
 type Word = { t: number; text: string };
@@ -192,12 +194,20 @@ async function processStub(filePath: string, filename: string): Promise<StubResu
     detectedStart = findPhraseTime(words, /\bgrace\s+and\s+peace\b/i, MIN_START_SECONDS);
   }
 
-  // Find end (needs a start — existing or just detected)
+  // Find end. Prefer using start + 10-min floor when start is known. When
+  // start is unknown, fall back to a higher absolute floor (25 min) AND
+  // require the match to be past 60% of the video — filters worship-song
+  // references to "come to the table" etc that happen in the first half.
   let detectedEnd: number | null = null;
   let endPattern: string | undefined;
-  if (currentEnd === null && (currentStart !== null || detectedStart !== null)) {
-    const startSeconds = currentStart !== null ? parseHms(currentStart) : detectedStart!;
-    const afterSeconds = startSeconds + MIN_SERMON_SECONDS;
+  if (currentEnd === null) {
+    const startSeconds = currentStart !== null ? parseHms(currentStart) : detectedStart;
+    const durationSecondsStr = extractYamlValue(content, "duration_seconds");
+    const durationSeconds = durationSecondsStr ? Number(durationSecondsStr) : 0;
+    const afterSeconds =
+      startSeconds !== null
+        ? startSeconds + MIN_SERMON_SECONDS
+        : Math.max(MIN_END_SECONDS_STANDALONE, durationSeconds * END_STANDALONE_FRACTION);
 
     // Try multiple patterns in priority order: most specific to least.
     // Trinitarian benediction marks the literal end of the sermon, so use

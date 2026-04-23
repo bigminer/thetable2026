@@ -17,7 +17,7 @@ content_description: "Laurie reflects on discovering her identity at age eight i
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_end: "01:01:38"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---
