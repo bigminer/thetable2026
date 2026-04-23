@@ -1,0 +1,67 @@
+name: Ingest sermon transcripts
+
+# Downloads new auto-captioned transcripts from The Table's YouTube channel,
+# generates markdown stubs for any new downloads, and opens a PR for human
+# review. Stubs carry null fields that must be filled in before merge.
+
+on:
+  schedule:
+    # Mondays at 10:00 UTC — Sunday night / Monday morning in US.
+    - cron: "0 10 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yt-dlp
+        run: pipx install yt-dlp
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download new transcripts
+        run: npm run fetch -- "${{ vars.YOUTUBE_CHANNEL_URL }}"
+
+      - name: Generate stubs for new downloads
+        run: npm run make-stubs
+
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: transcripts/ingest
+          delete-branch: true
+          commit-message: "Ingest new sermon transcripts"
+          title: "Review: new sermon transcripts"
+          body: |
+            Auto-ingested new sermon transcripts from YouTube.
+
+            **For each stub in `scripts/transcripts/content/`, replace the `null` fields with the correct values:**
+
+            - `title` — cleaned-up display title
+            - `speaker` — `brett_tilford` for Brett, or `guest:first-last` for a guest teacher
+            - `content_type` — `sermon` | `guest_sermon` | `worship` | `story_sunday` | `announcements`
+            - `sermon_start_seconds` — integer seconds where the sermon begins in the video
+            - `sermon_end_seconds` — integer seconds where the sermon ends
+            - `series` — leave `null` if not part of a series, otherwise the series name
+
+            Merge when every stub has its `null` fields filled in. A follow-up workflow will pick up from there (chunking, embedding, deploy — not wired yet).
+          labels: |
+            transcripts
+            needs-review
+          add-paths: |
+            scripts/transcripts/raw/
+            scripts/transcripts/content/
+            scripts/transcripts/archive.txt

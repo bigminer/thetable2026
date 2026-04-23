@@ -224,6 +224,7 @@ I'd rather tell you that than guess.
 | Vector store | `scripts/transcripts/embeddings.json`, ~15MB | Committed to repo, loaded into Function memory on cold start, cosine similarity computed in-process |
 | Migration path | Turso + `sqlite-vec` | Only if/when scale demands it |
 | Chunking | ~400 token windows, speaker-turn coalescing | 50-token overlap between adjacent chunks. Preserve `start_seconds`. |
+| Transcripts | YouTube auto-captions (primary), OpenAI Whisper API (fallback) | Whisper used when YouTube has no English auto-captions; ~18% of videos in practice. Always passed `language: "en"` — auto-detect gets confused by opening music. |
 | Deep-links | `https://www.youtube.com/watch?v={id}&t={seconds}s` | Integer seconds |
 
 **Preprocessor.** One Haiku call before retrieval extracts a small structured object:
@@ -262,6 +263,40 @@ Cost ~$0.0001 per query, latency ~300ms. The preprocessor is where natural-langu
 **File layout rule: one markdown file per `content_id`, not per video.** A Sunday service video may split into a Brett sermon, a guest segment, a Story Sunday testimony, and worship — four `content_id`s, four markdown files, all pointing at the same `youtube_id` with different time windows. This is not incidental.
 
 **Why per-content_id?** Consent revocation. If a Story Sunday participant asks to be removed, Anna deletes that markdown file and re-embeds. The words are cleanly out of the corpus and the vector store. If we had used one file per video, revocation would mean surgery on a shared file — harder, riskier, auditable only by diff.
+
+### Authored markdown frontmatter
+
+Each `content_id` markdown file lives in `scripts/transcripts/content/` and carries two bands of fields: auto-generated (from yt-dlp metadata) and human-reviewed (defaults applied, adjust per content):
+
+```yaml
+---
+# Auto-generated fields
+content_id: sermon-2026-04-20-u7Q-WVrNLfc
+youtube_id: u7Q-WVrNLfc
+youtube_title: "Trauma  Self Blame"
+upload_date: 2026-04-20
+duration_seconds: 4437  # 01:13:57
+vtt_path: scripts/transcripts/raw/2026-04-20-u7Q-WVrNLfc.en.vtt
+
+# Watch: https://www.youtube.com/watch?v=u7Q-WVrNLfc
+
+# Human-reviewed fields (defaults applied; adjust as needed)
+title: "Trauma  Self Blame"              # defaults to youtube_title
+speaker: "brett_tilford"                  # common-case default; override for guests
+content_type: "sermon"                    # common-case default; override for worship, story_sunday, etc.
+content_start: null                       # hh:mm:ss where the content begins in the video
+content_end: null                         # hh:mm:ss where the content ends
+series: null                              # name or null
+
+# Defaults ok as-is
+consent_status: granted                   # implied consent for streamed pulpit content (§14)
+---
+```
+
+Notes:
+- `content_start` / `content_end` are **hh:mm:ss strings**, not integer seconds. This matches what YouTube's mobile player displays — reviewers entering bounds from their phone don't do arithmetic.
+- Pending-review signal: any required field (`content_start`, `content_end`, and any non-defaulted field) still `null` means the markdown is not yet ingestible. The chunker skips it.
+- The inline `# Watch: <url>` comment is clickable in VS Code and GitHub PR diffs — reviewer clicks to open the video, scrubs to confirm bounds, fills in the nulls.
 
 ---
 
@@ -414,18 +449,21 @@ Regardless of ingestion path, any chunk with `content_type == "story_sunday"` is
 
 Staged deliberately. Build the dumbest thing that works, then integrate only when real pain justifies it.
 
-### v1 — start dumb
+### v1 — two-stage GitHub Action with PR review
 
-Anna hand-authors one markdown file per sermon. Transcripts are captured via `yt-dlp` into `scripts/transcripts/raw/<slug>.vtt`, but the markdown file with `content_id`, segments, and pull-quotes is authored manually.
+(Revised from the earlier "start dumb" recommendation. Anna weighed the weekly-rhythm UX and concluded that PRs pay for themselves even with one committer: mobile notifications tell you there's work, diffs make each stub reviewable, and merges can happen from anywhere. The ceremony is worth it at this volume.)
 
-```bash
-yt-dlp --write-auto-subs --sub-lang en --skip-download --convert-subs vtt <url>
-# Output: scripts/transcripts/raw/<slug>.vtt
-```
+**Stage 1 — download + stub generation** (runs in a single GitHub Action, `ingest-transcripts.yml`, on weekly cron + `workflow_dispatch`).
 
-A CLI script `scripts/ask.ts` loads the markdown files, generates embeddings locally, and answers queries in the terminal. No GitHub Actions. No PR review ceremony. No chapter markers. No auto-classification.
+1. **`npm run fetch`** — `yt-dlp` pulls auto-captioned VTTs from The Table's `/streams` tab into `scripts/transcripts/raw/`. Naming: `YYYY-MM-DD-<youtube_id>.en.vtt`. Also writes `<base>.info.json` alongside. `archive.txt` records processed video IDs for idempotency.
+2. **`npm run transcribe`** — Whisper fallback. For any info.json without a matching VTT (YouTube had no English auto-captions), downloads low-bitrate mono audio via `yt-dlp` and sends to OpenAI Whisper (`response_format: "vtt"`, `language: "en"`). Writes to the same path the auto-caption would have. ~$0.40 per 70-min service. ~18% of videos in The Table's backlog needed this.
+3. **`npm run make-stubs`** — for each VTT without a matching markdown in `scripts/transcripts/content/`, generates a stub with auto-filled metadata, defaulted review fields (`title`, `speaker`, `content_type`), and null placeholders for `content_start` / `content_end` / `series`. Also maintains `archive.txt` directly (works around yt-dlp not writing it under `--skip-download`).
 
-**This is the appropriate workflow for a single-committer repo with 0-1 services per week.** Copy-paste is the fastest path to a working corpus at this volume. Build more only when the copy-paste itself is hurting.
+**Stage 2 — PR review.** The Action commits new VTTs + `archive.txt` + stubs and opens a PR titled "Review: new sermon transcripts" with the `transcripts` and `needs-review` labels. A reviewer fills in the null fields — usually just `content_start` and `content_end`, occasionally overriding `speaker` (for guests) or `content_type` — and merges.
+
+**Pending-review signal.** Any markdown in `scripts/transcripts/content/` with a null required field is pending. `grep -l "^content_start: null" scripts/transcripts/content/*.md` lists work queue.
+
+**Secrets the Action needs.** `OPENAI_API_KEY` (Whisper + embeddings), `YOUTUBE_CHANNEL_URL` as a repo variable (not secret — it's public).
 
 ### v1.5 — Planning Center integration (trigger: Anna feels copy-paste pain for 3 consecutive weeks)
 
@@ -445,7 +483,9 @@ When the manual workflow starts costing real time, integrate Planning Center Ser
 
 ### Design note
 
-Single-committer repos don't benefit from PR review ceremonies. Kill the ceremony until there's actual collaboration to govern. Misattributing a guest as Brett is still a reputation event — the defense for that in v1 is the retrieval filter (§11) and the attribution rules (§15), not a workflow gate.
+The "kill the PR ceremony" recommendation from an earlier draft was walked back: even with one committer, the PR workflow earns its keep on weekly rhythm (notifications, reviewable diffs, mobile-friendly merging). But the underlying discipline still applies — every other piece of automation ceremony (chapter-marker requirements, auto-classification from textual cues, PC integration before pain is felt) stays deferred until real friction justifies it.
+
+Misattributing a guest as Brett is a reputation event. The defense is the retrieval filter (§11) and the attribution rules (§15), not the workflow gate — the PR gate helps but doesn't substitute for the retrieval-level default-deny.
 
 ---
 
@@ -453,8 +493,10 @@ Single-committer repos don't benefit from PR review ceremonies. Kill the ceremon
 
 A deliberately small first step. Each stage validates the next before anything user-facing is built.
 
-1. **Afternoon 1.** `scripts/ask.ts` CLI over the existing `Trauma Self Blame [u7Q-WVrNLfc].en.vtt` transcript. Chunk, embed, answer one question in the terminal. Validate retrieval quality before any UI exists.
-2. **Week 1-2.** Hand-author markdown for 3-5 more sermons. Run calibration queries. Watch retrieval behavior with a larger corpus.
+1. **Afternoon 1 — ✓ complete.** `scripts/ask.ts` CLI over the Trauma/Self-Blame transcript. Validated retrieval on a direct hit (top-1 = 0.415), a topical near-miss (0.378), and a clear off-topic (0.123). Honest-warmth voice held, anti-list rule held, verbatim+inline deep-links working.
+1a. **Ingestion pipeline — ✓ complete.** `fetch` / `transcribe` / `make-stubs` scripts + `ingest-transcripts.yml` GitHub Action per §17 v1. Full 303-video backlog processed; 23 Whisper fallbacks (~$9 total). Stubs sit in `scripts/transcripts/content/` awaiting per-sermon review.
+2. **Next — refactor ask.ts to read from the stubs.** Currently hardcoded to one VTT. Once a handful of content files have their review fields filled in, point the CLI at the reviewed set to query across a real multi-sermon corpus. This is where `parallel` and `sprawl` response shapes first become testable.
+3. **Week 1-2.** Run calibration queries against the reviewed subset. Watch retrieval behavior.
 3. **Week 2-3.** Cloudflare Pages Function with telemetry (structured query logging per §12) from day one.
 4. **Week 3-4.** Astro page with chat + feed (per §16 Index Design).
 5. **Post-launch.** Review `queries.jsonl` weekly. Recalibrate thresholds at n=500 real queries (Amelia's recommendation; the initial n=90 is smoke-test calibration, not settled thresholds — see §19).
@@ -540,7 +582,7 @@ Things worth flagging to any future implementer or reviewer:
 
 **Consent-before-capture for Story Sunday is non-negotiable.** No allow-lists, no "we'll get permission later." The ingestion script refuses un-granted chunks at the door. This protects both individual congregants and the long-term trustworthiness of the whole surface. The moment anyone's words show up in the corpus without granted consent, the product has lost something it can't fully earn back.
 
-**"Start dumb" discipline is a design commitment.** Winston explicitly walked back the GitHub Actions + PR review pattern for v1 because this is a single-committer repo with 0-1 services/week. Building that pipeline before the copy-paste pain is felt is speculative architecture. Resist it. The §17 v1.5 integration exists on paper precisely so it doesn't need to exist in code yet.
+**"Start dumb" discipline — revised on the PR workflow, intact everywhere else.** Winston initially walked back the GitHub Actions + PR review pattern for v1. Anna reconsidered and kept it — on weekly rhythm, PRs give mobile notifications, reviewable diffs, and async-friendly merging even with one committer. The principle still applies to every other speculative piece: Planning Center integration (§17 v1.5), chapter markers, auto-classification, multi-reviewer approval gates. Don't build those until real pain justifies them.
 
 **Telemetry is day-one, not phase 2.** Silent misses — Brett preached on it, the user got refused — are the product's first failure mode. Structured query logging (§12) must ship with the Function, not be added later. You cannot debug what you did not log.
 
