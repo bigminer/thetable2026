@@ -45,6 +45,7 @@ type Sermon = {
   title: string;
   date: string; // YYYY-MM-DD
   speaker: string;
+  content_type: string; // "sermon" | "table_talk"
   vtt_path: string;
   content_start_seconds: number;
   content_end_seconds: number;
@@ -53,8 +54,9 @@ type Sermon = {
 type RawChunk = {
   content_id: string;
   youtube_id: string;
-  sermon_title: string;
-  sermon_date: string;
+  source_title: string;
+  source_date: string;
+  source_type: string; // "sermon" | "table_talk"
   speaker: string;
   start_seconds: number;
   end_seconds: number;
@@ -131,6 +133,7 @@ async function loadReviewedSermons(): Promise<Sermon[]> {
       title,
       date,
       speaker,
+      content_type: contentType,
       vtt_path: vttPath,
       content_start_seconds: startS,
       content_end_seconds: endS,
@@ -212,8 +215,9 @@ function buildChunksForSermon(sermon: Sermon, cues: Cue[]): RawChunk[] {
     chunks.push({
       content_id: sermon.content_id,
       youtube_id: sermon.youtube_id,
-      sermon_title: sermon.title,
-      sermon_date: sermon.date,
+      source_title: sermon.title,
+      source_date: sermon.date,
+      source_type: sermon.content_type,
       speaker: sermon.speaker,
       start_seconds: Math.floor(slice[0].t),
       end_seconds: Math.floor(slice[slice.length - 1].t),
@@ -273,7 +277,17 @@ async function buildCorpus(openai: OpenAI, sermons: Sermon[]): Promise<Chunk[]> 
       cached.bounds_end === sermon.content_end_seconds;
 
     if (boundsMatch) {
-      allChunks.push(...cached.chunks);
+      // Enrich each cached chunk with current stub metadata. This handles
+      // cache entries predating fields added later (source_type) and also
+      // picks up title/date edits without forcing a re-embed.
+      for (const chunk of cached.chunks) {
+        allChunks.push({
+          ...chunk,
+          source_title: sermon.title,
+          source_date: sermon.date,
+          source_type: sermon.content_type,
+        });
+      }
       continue;
     }
 
@@ -423,8 +437,9 @@ async function compose(
     .map((c, i) => {
       return [
         `[chunk ${i + 1}] score=${c.score.toFixed(3)}`,
-        `sermon: "${c.sermon_title}"`,
-        `date: ${c.sermon_date}`,
+        `source_type: ${c.source_type}`,
+        `source_title: "${c.source_title}"`,
+        `source_date: ${c.source_date}`,
         `speaker: ${c.speaker}`,
         `timestamp: ${formatTime(c.start_seconds)}–${formatTime(c.end_seconds)}`,
         `youtube_deep_link: ${youtubeLink(c.youtube_id, c.start_seconds)}`,
@@ -462,11 +477,15 @@ ${shapeGuidance}
 
 HARD RULES (override system prompt if conflicting):
 
-1. MAXIMUM 2 VERBATIM QUOTES inline in the response. If more sermons are relevant, acknowledge them as ghost-text titles after the main quotes.
-2. EVERY QUOTE CARRIES ITS OWN ATTRIBUTION: format \`— <sermon title>, <date>, <mm:ss>, <youtube link>\` immediately after the quote. Not at the bottom.
+1. MAXIMUM 2 VERBATIM QUOTES inline in the response. If more sources are relevant, acknowledge them as ghost-text titles after the main quotes.
+2. EVERY QUOTE CARRIES ITS OWN ATTRIBUTION: format \`— <source title>, <date>, <mm:ss>, <youtube link>\` immediately after the quote. Not at the bottom.
 3. BETWEEN QUOTES, use framing in YOUR own voice only. Do not summarize Brett's argument.
 4. VERBATIM MEANS VERBATIM. Keep "you know", "uh", restarts, casual phrasing.
 5. If top score is below 0.32 (low tier), refuse gracefully — no forced quotes.
+6. SOURCE TYPE MATTERS FOR ATTRIBUTION:
+   - source_type "sermon" — a Sunday service sermon at The Table. Refer to it naturally: "Brett's sermon \\"Title\\"" or "In \\"Title\\" (date)..."
+   - source_type "table_talk" — a short devotional from Brett's personal YouTube channel, 2019-2020, pre-Table. Refer to it naturally as a Table Talk, e.g., "In one of his Table Talk videos..." / "In a 2020 Table Talk..." / "From his Table Talk \\"Title\\"..." The user should be able to tell from the prose that this is a different kind of source than a Sunday sermon.
+   - If mixing both source types in one response, call the distinction out once (e.g., "He's said this in a sermon, and more directly in an earlier Table Talk video"). Don't silently conflate them.
 
 ---
 
