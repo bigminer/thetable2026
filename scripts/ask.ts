@@ -1,98 +1,170 @@
 /**
- * scripts/ask.ts — Afternoon 1 prototype.
+ * scripts/ask.ts — query the sermon corpus.
  *
- * Answers a question using Brett's Trauma / Self-Blame sermon transcript.
- * Parses YouTube auto-captions, chunks them, embeds once, caches the result,
- * retrieves top-k by cosine, and composes a response with Claude using the
- * voice rules from docs/sermon-chatbot-spec.md §20.
+ * Loads every reviewed sermon stub from scripts/transcripts/content/,
+ * bounds each VTT by content_start/content_end, chunks + embeds the
+ * results, caches per-content_id in scripts/transcripts/embeddings.json,
+ * and composes an answer via Claude.
  *
- * Usage:
- *   npm run ask -- "why does everything feel like my fault?"
+ * A stub is "reviewed" (eligible for the corpus) when all of:
+ *   - content_type = "sermon"
+ *   - speaker = "brett_tilford"
+ *   - consent_status = "granted"
+ *   - content_start and content_end both non-null
+ *
+ * The cache is keyed by content_id and versioned by the bounds. When a
+ * stub's bounds change (volunteer edits start/end), that single sermon
+ * gets re-embedded on the next run; everything else reuses its cache.
+ *
+ * Usage: npm run ask -- "your question"
  */
 
-import { readFile, writeFile } from "node:fs/promises";
 import Anthropic from "@anthropic-ai/sdk";
+import { existsSync } from "node:fs";
+import { readFile, readdir, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import OpenAI from "openai";
 
 // ---- Config --------------------------------------------------------------
 
-const SERMON = {
-  content_id: "sermon-trauma-self-blame",
-  title: "Trauma / Self-Blame",
-  speaker: "brett_tilford",
-  youtube_id: "u7Q-WVrNLfc",
-  vtt_path: "scripts/transcripts/raw/trauma-self-blame.vtt",
-} as const;
-
+const CONTENT_DIR = "scripts/transcripts/content";
 const EMBEDDINGS_CACHE = "scripts/transcripts/embeddings.json";
-const CHUNK_TARGET_CHARS = 1600; // ~400 tokens at 4 chars/token
-const CHUNK_OVERLAP_CHARS = 200; // ~50 tokens overlap
-const TOP_K = 3;
+const CHUNK_TARGET_CHARS = 1600; // ~400 tokens
+const CHUNK_OVERLAP_CHARS = 200; // ~50 tokens
+const TOP_K = 5; // retrieve more than the spec's 2-inline limit so sprawl can fall back
 const EMBEDDING_MODEL = "text-embedding-3-small";
 const CLAUDE_MODEL = "claude-sonnet-4-6";
+const TIER_HIGH = 0.4; // empirical thresholds from prototype calibration
+const TIER_MEDIUM = 0.32;
 
 // ---- Types ---------------------------------------------------------------
 
-type Cue = { start: number; end: number; text: string };
-
-type Chunk = {
+type Sermon = {
   content_id: string;
+  youtube_id: string;
+  title: string;
+  date: string; // YYYY-MM-DD
+  speaker: string;
+  vtt_path: string;
+  content_start_seconds: number;
+  content_end_seconds: number;
+};
+
+type RawChunk = {
+  content_id: string;
+  youtube_id: string;
+  sermon_title: string;
+  sermon_date: string;
   speaker: string;
   start_seconds: number;
   end_seconds: number;
   text: string;
-  embedding: number[];
 };
 
-// ---- VTT parsing ---------------------------------------------------------
+type Chunk = RawChunk & { embedding: number[] };
 
-function parseTimestamp(s: string): number {
-  const match = s.match(/(\d+):(\d+):(\d+)\.(\d+)/);
-  if (!match) return NaN;
-  const [, h, m, sec, ms] = match;
-  return Number(h) * 3600 + Number(m) * 60 + Number(sec) + Number(ms) / 1000;
+type CacheEntry = {
+  bounds_start: number;
+  bounds_end: number;
+  chunks: Chunk[];
+};
+
+type Cache = Record<string, CacheEntry>;
+
+type Cue = { start: number; end: number; text: string };
+
+// ---- Stub frontmatter parsing -------------------------------------------
+
+function extractYamlValue(content: string, field: string): string | null {
+  const re = new RegExp(`^${field}:\\s*(.*?)\\s*(?:#.*)?$`, "m");
+  const m = content.match(re);
+  if (!m) return null;
+  const v = m[1].trim();
+  if (v === "null" || v === "") return null;
+  return v.replace(/^"(.*)"$/, "$1");
 }
 
-/**
- * Parse YouTube auto-caption VTT into clean cues, each representing new
- * spoken words with their spoken time. Skips 10ms echo cues; keeps only
- * the last line of each real cue (that's where new words appear) and
- * strips inline timing tags.
- */
+function parseHms(hms: string): number {
+  const parts = hms.split(":").map(Number);
+  if (parts.length !== 3 || parts.some(isNaN)) return NaN;
+  return parts[0] * 3600 + parts[1] * 60 + parts[2];
+}
+
+async function loadReviewedSermons(): Promise<Sermon[]> {
+  const entries = await readdir(CONTENT_DIR);
+  const stubs = entries.filter((f) => f.endsWith(".md")).sort();
+  const sermons: Sermon[] = [];
+
+  for (const filename of stubs) {
+    const raw = await readFile(join(CONTENT_DIR, filename), "utf8");
+    const contentType = extractYamlValue(raw, "content_type");
+    const speaker = extractYamlValue(raw, "speaker");
+    const consent = extractYamlValue(raw, "consent_status");
+    const startHms = extractYamlValue(raw, "content_start");
+    const endHms = extractYamlValue(raw, "content_end");
+
+    // Default-deny retrieval filter (spec §11)
+    if (contentType !== "sermon") continue;
+    if (speaker !== "brett_tilford") continue;
+    if (consent !== "granted") continue;
+    if (!startHms || !endHms) continue;
+
+    const startS = parseHms(startHms);
+    const endS = parseHms(endHms);
+    if (isNaN(startS) || isNaN(endS)) continue;
+
+    const contentId = extractYamlValue(raw, "content_id");
+    const youtubeId = extractYamlValue(raw, "youtube_id");
+    const title =
+      extractYamlValue(raw, "title") ?? extractYamlValue(raw, "youtube_title") ?? "(untitled)";
+    const date = extractYamlValue(raw, "upload_date") ?? "";
+    const vttPath = extractYamlValue(raw, "vtt_path");
+
+    if (!contentId || !youtubeId || !vttPath) continue;
+
+    sermons.push({
+      content_id: contentId,
+      youtube_id: youtubeId,
+      title,
+      date,
+      speaker,
+      vtt_path: vttPath,
+      content_start_seconds: startS,
+      content_end_seconds: endS,
+    });
+  }
+
+  return sermons;
+}
+
+// ---- VTT parsing + chunking ---------------------------------------------
+
+function parseTimestamp(s: string): number {
+  const m = s.match(/(\d+):(\d+):(\d+)\.(\d+)/);
+  if (!m) return NaN;
+  return Number(m[1]) * 3600 + Number(m[2]) * 60 + Number(m[3]) + Number(m[4]) / 1000;
+}
+
 function parseVtt(vtt: string): Cue[] {
   const cues: Cue[] = [];
-  // Split on truly blank lines only. Auto-caption cues can contain
-  // space-only lines internally; a greedy /\n\s*\n/ would break them apart.
   const blocks = vtt.split(/\r?\n\r?\n+/);
-
   for (const block of blocks) {
     const lines = block.split("\n").filter((l) => l.length > 0);
     const timeLineIdx = lines.findIndex((l) => l.includes("-->"));
     if (timeLineIdx === -1) continue;
-
-    const timeLine = lines[timeLineIdx];
-    const tsMatch = timeLine.match(
+    const tsMatch = lines[timeLineIdx].match(
       /(\d+:\d+:\d+\.\d+)\s*-->\s*(\d+:\d+:\d+\.\d+)/,
     );
     if (!tsMatch) continue;
-
     const start = parseTimestamp(tsMatch[1]);
     const end = parseTimestamp(tsMatch[2]);
-
-    // Skip echo cues (10ms "frame" between real captions)
-    if (end - start < 0.1) continue;
-
-    // Take the last content line — that's where new words with inline
-    // <timing><c>word</c> tags appear. Preceding lines are carry-over.
+    if (end - start < 0.1) continue; // skip echo cues
     const contentLines = lines
       .slice(timeLineIdx + 1)
       .map((l) => l.trim())
       .filter((l) => l.length > 0);
     if (contentLines.length === 0) continue;
-
     const lastLine = contentLines[contentLines.length - 1];
-
-    // Strip inline timing tags and <c>/</c> markers
     let text = lastLine
       .replace(/<\d+:\d+:\d+\.\d+>/g, "")
       .replace(/<\/?c[^>]*>/g, "")
@@ -100,80 +172,151 @@ function parseVtt(vtt: string): Cue[] {
       .replace(/&amp;/g, "&")
       .replace(/&lt;/g, "<")
       .replace(/\s+/g, " ")
-      .trim();
-
-    // Strip speaker-change markers (">>"); these come from YouTube, not Brett
-    text = text.replace(/^>>\s*/, "").trim();
+      .trim()
+      .replace(/^>>\s*/, "");
     if (!text) continue;
-
     cues.push({ start, end, text });
   }
-
   return cues;
 }
 
-// ---- Chunking ------------------------------------------------------------
+function buildChunksForSermon(sermon: Sermon, cues: Cue[]): RawChunk[] {
+  // Filter to sermon bounds
+  const bounded = cues.filter(
+    (c) => c.start >= sermon.content_start_seconds && c.start <= sermon.content_end_seconds,
+  );
 
-/**
- * Turn the word-level cue stream into overlapping ~400-token chunks. Each
- * chunk keeps the spoken time of its first and last words so we can build
- * YouTube deep-links into the exact moment.
- */
-function buildChunks(cues: Cue[]): Array<Omit<Chunk, "embedding">> {
-  // Flatten to a word timeline: each word gets the cue's start time.
-  // (Good enough for deep-link granularity; precise sub-word timing lives
-  // in the source VTT if we ever want it.)
+  // Flatten to word-level stream with per-word timestamps
   const words: Array<{ t: number; w: string }> = [];
-  for (const cue of cues) {
-    const parts = cue.text.split(/\s+/).filter(Boolean);
-    for (const w of parts) words.push({ t: cue.start, w });
+  for (const cue of bounded) {
+    for (const part of cue.text.split(/\s+/).filter(Boolean)) {
+      words.push({ t: cue.start, w: part });
+    }
   }
 
-  const chunks: Array<Omit<Chunk, "embedding">> = [];
+  const chunks: RawChunk[] = [];
   let i = 0;
   while (i < words.length) {
-    // Grow chunk until we hit target chars
     let j = i;
     let chars = 0;
     while (j < words.length && chars < CHUNK_TARGET_CHARS) {
       chars += words[j].w.length + 1;
       j++;
     }
-
     const slice = words.slice(i, j);
     if (slice.length === 0) break;
 
     chunks.push({
-      content_id: SERMON.content_id,
-      speaker: SERMON.speaker,
+      content_id: sermon.content_id,
+      youtube_id: sermon.youtube_id,
+      sermon_title: sermon.title,
+      sermon_date: sermon.date,
+      speaker: sermon.speaker,
       start_seconds: Math.floor(slice[0].t),
       end_seconds: Math.floor(slice[slice.length - 1].t),
       text: slice.map((w) => w.w).join(" "),
     });
 
-    // Step forward, leaving ~overlap chars behind
-    const stepTargetChars = CHUNK_TARGET_CHARS - CHUNK_OVERLAP_CHARS;
+    const stepTarget = CHUNK_TARGET_CHARS - CHUNK_OVERLAP_CHARS;
     let stepped = 0;
     let stepWords = 0;
-    while (stepped < stepTargetChars && stepWords < slice.length) {
+    while (stepped < stepTarget && stepWords < slice.length) {
       stepped += slice[stepWords].w.length + 1;
       stepWords++;
     }
     i += Math.max(1, stepWords);
   }
-
   return chunks;
 }
 
-// ---- Embeddings ----------------------------------------------------------
+// ---- Embedding + cache --------------------------------------------------
 
 async function embedTexts(openai: OpenAI, texts: string[]): Promise<number[][]> {
-  const res = await openai.embeddings.create({
-    model: EMBEDDING_MODEL,
-    input: texts,
-  });
-  return res.data.map((d) => d.embedding);
+  // OpenAI embeddings endpoint accepts up to 2048 inputs per call
+  const BATCH = 200;
+  const out: number[][] = [];
+  for (let i = 0; i < texts.length; i += BATCH) {
+    const batch = texts.slice(i, i + BATCH);
+    const res = await openai.embeddings.create({ model: EMBEDDING_MODEL, input: batch });
+    for (const d of res.data) out.push(d.embedding);
+  }
+  return out;
 }
+
+async function loadCache(): Promise<Cache> {
+  if (!existsSync(EMBEDDINGS_CACHE)) return {};
+  try {
+    const raw = await readFile(EMBEDDINGS_CACHE, "utf8");
+    return JSON.parse(raw) as Cache;
+  } catch {
+    return {};
+  }
+}
+
+async function saveCache(cache: Cache): Promise<void> {
+  await writeFile(EMBEDDINGS_CACHE, JSON.stringify(cache));
+}
+
+async function buildCorpus(openai: OpenAI, sermons: Sermon[]): Promise<Chunk[]> {
+  const cache = await loadCache();
+  let dirty = false;
+  const allChunks: Chunk[] = [];
+
+  for (const sermon of sermons) {
+    const cached = cache[sermon.content_id];
+    const boundsMatch =
+      cached &&
+      cached.bounds_start === sermon.content_start_seconds &&
+      cached.bounds_end === sermon.content_end_seconds;
+
+    if (boundsMatch) {
+      allChunks.push(...cached.chunks);
+      continue;
+    }
+
+    // Need to (re)embed this sermon
+    if (!existsSync(sermon.vtt_path)) {
+      console.error(`  skip ${sermon.content_id}: VTT missing at ${sermon.vtt_path}`);
+      continue;
+    }
+    const vtt = await readFile(sermon.vtt_path, "utf8");
+    const cues = parseVtt(vtt);
+    const raw = buildChunksForSermon(sermon, cues);
+    if (raw.length === 0) {
+      console.error(`  skip ${sermon.content_id}: no chunks after bounds filtering`);
+      continue;
+    }
+    const embeddings = await embedTexts(
+      openai,
+      raw.map((c) => c.text),
+    );
+    const chunks: Chunk[] = raw.map((c, i) => ({ ...c, embedding: embeddings[i] }));
+    cache[sermon.content_id] = {
+      bounds_start: sermon.content_start_seconds,
+      bounds_end: sermon.content_end_seconds,
+      chunks,
+    };
+    allChunks.push(...chunks);
+    dirty = true;
+    console.error(
+      `  embedded ${sermon.content_id}: ${chunks.length} chunks from "${sermon.title}"`,
+    );
+  }
+
+  // Remove cache entries for sermons no longer in the reviewed corpus
+  const currentIds = new Set(sermons.map((s) => s.content_id));
+  for (const id of Object.keys(cache)) {
+    if (!currentIds.has(id)) {
+      delete cache[id];
+      dirty = true;
+    }
+  }
+
+  if (dirty) await saveCache(cache);
+  return allChunks;
+}
+
+// ---- Retrieval ----------------------------------------------------------
 
 function cosineSimilarity(a: number[], b: number[]): number {
   let dot = 0;
@@ -187,51 +330,41 @@ function cosineSimilarity(a: number[], b: number[]): number {
   return dot / (Math.sqrt(magA) * Math.sqrt(magB));
 }
 
-async function loadOrBuildCorpus(openai: OpenAI): Promise<Chunk[]> {
-  try {
-    const raw = await readFile(EMBEDDINGS_CACHE, "utf8");
-    const cached: Chunk[] = JSON.parse(raw);
-    console.error(`[cache] Loaded ${cached.length} chunks from ${EMBEDDINGS_CACHE}`);
-    return cached;
-  } catch {
-    console.error(`[build] Cache miss. Parsing ${SERMON.vtt_path}...`);
-    const vtt = await readFile(SERMON.vtt_path, "utf8");
-    const cues = parseVtt(vtt);
-    console.error(`[build] Parsed ${cues.length} cues`);
-
-    const rawChunks = buildChunks(cues);
-    console.error(`[build] Coalesced into ${rawChunks.length} chunks. Embedding...`);
-
-    const embeddings = await embedTexts(openai, rawChunks.map((c) => c.text));
-    const chunks: Chunk[] = rawChunks.map((c, i) => ({
-      ...c,
-      embedding: embeddings[i],
-    }));
-
-    await writeFile(EMBEDDINGS_CACHE, JSON.stringify(chunks, null, 2));
-    console.error(`[build] Cached ${chunks.length} chunks to ${EMBEDDINGS_CACHE}`);
-    return chunks;
-  }
-}
-
-// ---- Retrieval -----------------------------------------------------------
-
 async function retrieveTopK(
   openai: OpenAI,
   corpus: Chunk[],
   query: string,
   k: number,
 ): Promise<Array<Chunk & { score: number }>> {
-  const [queryEmbedding] = await embedTexts(openai, [query]);
-  const scored = corpus.map((c) => ({
-    ...c,
-    score: cosineSimilarity(queryEmbedding, c.embedding),
-  }));
+  const [q] = await embedTexts(openai, [query]);
+  const scored = corpus.map((c) => ({ ...c, score: cosineSimilarity(q, c.embedding) }));
   scored.sort((a, b) => b.score - a.score);
   return scored.slice(0, k);
 }
 
-// ---- Composition ---------------------------------------------------------
+// ---- Tier + shape classification ----------------------------------------
+
+function classifyTier(topScore: number): "high" | "medium" | "low" {
+  if (topScore >= TIER_HIGH) return "high";
+  if (topScore >= TIER_MEDIUM) return "medium";
+  return "low";
+}
+
+function classifyShape(
+  results: Array<Chunk & { score: number }>,
+): "single" | "parallel" | "sprawl" {
+  if (results.length === 0) return "single";
+  const top = results[0].score;
+  const distinctSermons = new Set(results.map((r) => r.content_id)).size;
+  const gap = results.length >= 3 ? top - results[2].score : 0;
+
+  if (distinctSermons === 1) return "single";
+  if (distinctSermons <= 3 && gap < 0.06) return "parallel";
+  if (distinctSermons >= 4) return "sprawl";
+  return "single";
+}
+
+// ---- Composition --------------------------------------------------------
 
 const SYSTEM_PROMPT = `You answer questions using Brett's sermons at The Table.
 
@@ -246,7 +379,7 @@ the person asking is okay — not like a search interface being polite.
 
 Rules:
 - Every claim about what Brett said must be a direct, verbatim quote
-  with sermon title, timestamp, and YouTube deep-link.
+  with sermon title, date, timestamp, and YouTube deep-link.
 - Do not paraphrase Brett. Do not smooth his grammar. Keep restarts,
   filler, and casual phrasing intact.
 - If Brett hasn't preached on the topic, say exactly that and stop.
@@ -272,67 +405,73 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-function youtubeLink(youtubeId: string, startSeconds: number): string {
-  return `https://www.youtube.com/watch?v=${youtubeId}&t=${startSeconds}s`;
+function youtubeLink(id: string, start: number): string {
+  return `https://www.youtube.com/watch?v=${id}&t=${start}s`;
 }
 
 async function compose(
   anthropic: Anthropic,
   query: string,
   chunks: Array<Chunk & { score: number }>,
+  tier: "high" | "medium" | "low",
+  shape: "single" | "parallel" | "sprawl",
 ): Promise<string> {
   const contextBlock = chunks
     .map((c, i) => {
-      const url = youtubeLink(SERMON.youtube_id, c.start_seconds);
       return [
         `[chunk ${i + 1}] score=${c.score.toFixed(3)}`,
-        `sermon_title: ${SERMON.title}`,
+        `sermon: "${c.sermon_title}"`,
+        `date: ${c.sermon_date}`,
         `speaker: ${c.speaker}`,
         `timestamp: ${formatTime(c.start_seconds)}–${formatTime(c.end_seconds)}`,
-        `youtube_deep_link: ${url}`,
+        `youtube_deep_link: ${youtubeLink(c.youtube_id, c.start_seconds)}`,
         `text:`,
         `"${c.text}"`,
       ].join("\n");
     })
     .join("\n\n---\n\n");
 
+  const distinctSermons = new Set(chunks.map((c) => c.content_id)).size;
+
+  const shapeGuidance = {
+    single: `This query resolved to ONE sermon. Use the single-high pattern: one opener sentence + one verbatim quote with inline attribution + a soft close.`,
+    parallel: `This query resolved to a handful of sermons where Brett has come back to the same theme. Use the parallel pattern: two verbatim quotes from DIFFERENT sermons, linked by a short framing like "Brett's come back to this" or "same instinct, different words." Both quotes must carry inline attribution.`,
+    sprawl: `This query is topical/diffuse — many sermons touch it, no single one owns it. Use the sprawl pattern: one anchor quote + an honest acknowledgment that the topic is diffuse ("this one's everywhere" / "he touches this a lot but doesn't sit down with it for a whole sermon") + a ghost-text list of other sermons where it surfaces (no more than 4-5 titles).`,
+  }[shape];
+
+  const tierGuidance =
+    tier === "low"
+      ? `Retrieval returned LOW confidence (top score < 0.32). Use the no-match pattern: "I looked and couldn't find a sermon where Brett takes this up directly. I'd rather tell you that than guess." Do NOT force a quote from the weak retrievals.`
+      : tier === "medium"
+        ? `Retrieval returned MEDIUM confidence. Use the adjacent-content pattern: name the closest sermon in one line, offer the quote, but signal "not exact match."`
+        : `Retrieval returned HIGH confidence. Quote directly.`;
+
   const userMessage = `User asked: "${query}"
 
-Single-sermon corpus this run: "${SERMON.title}". All chunks below come from this one sermon. Ignore any "other sermons" framing; there are none.
+Retrieved ${chunks.length} chunks from ${distinctSermons} sermon(s).
+Tier: ${tier}. Shape: ${shape}.
+
+${tierGuidance}
+
+${shapeGuidance}
 
 ---
 
-FORMAT THE RESPONSE LIKE THIS (illustrative example from the spec's calibration target):
+HARD RULES (override system prompt if conflicting):
 
-  Yeah, that's a heavy one. Brett hit this pretty directly in "${SERMON.title}":
-
-    "<verbatim quote>" — ${SERMON.title}, <mm:ss>, <youtube deep-link>
-
-  <optional short framing sentence in YOUR own voice — NOT a paraphrase of Brett's argument>
-
-    "<optional second verbatim quote>" — ${SERMON.title}, <mm:ss>, <youtube deep-link>
-
-  <soft close, one sentence, no "anything else?" nudge>
-
-HARD RULES (these override anything in the system prompt if they conflict):
-
-1. MAXIMUM 2 VERBATIM QUOTES. No third quote. Not even a short one. If the answer needs three, it doesn't — pick the two strongest and stop.
-
-2. EVERY QUOTE CARRIES ITS OWN TIMESTAMP AND YOUTUBE DEEP-LINK, INLINE, IMMEDIATELY AFTER THE QUOTE. Format: \`— ${SERMON.title}, <mm:ss>, <url>\`. Not a single URL at the bottom.
-
-3. BETWEEN QUOTES, USE FRAMING SENTENCES IN YOUR OWN VOICE ONLY. Do not summarize Brett's argument in your prose. ("That backwards logic — that blaming gives you back control — it works in the short run" is the forbidden kind of summary-of-Brett.) If you can't think of a short framing sentence that isn't a paraphrase, omit the framing and just put the quote.
-
-4. VERBATIM MEANS VERBATIM. Keep every "you know", "uh", "like", restart, and false start from the retrieved chunk. Do not tidy.
-
-5. The opener ("Yeah, that's a heavy one.") is illustrative — use a register that fits the question. Don't parrot that exact phrase unless the topic actually warrants it.
+1. MAXIMUM 2 VERBATIM QUOTES inline in the response. If more sermons are relevant, acknowledge them as ghost-text titles after the main quotes.
+2. EVERY QUOTE CARRIES ITS OWN ATTRIBUTION: format \`— <sermon title>, <date>, <mm:ss>, <youtube link>\` immediately after the quote. Not at the bottom.
+3. BETWEEN QUOTES, use framing in YOUR own voice only. Do not summarize Brett's argument.
+4. VERBATIM MEANS VERBATIM. Keep "you know", "uh", restarts, casual phrasing.
+5. If top score is below 0.32 (low tier), refuse gracefully — no forced quotes.
 
 ---
 
-RETRIEVED CHUNKS (in score order, highest first):
+RETRIEVED CHUNKS (score order):
 
 ${contextBlock}
 
-Now compose the response.`;
+Compose the response.`;
 
   const res = await anthropic.messages.create({
     model: CLAUDE_MODEL,
@@ -345,7 +484,7 @@ Now compose the response.`;
   return textBlock && textBlock.type === "text" ? textBlock.text : "(empty response)";
 }
 
-// ---- Main ----------------------------------------------------------------
+// ---- Main ---------------------------------------------------------------
 
 async function main() {
   const query = process.argv.slice(2).join(" ").trim();
@@ -353,32 +492,47 @@ async function main() {
     console.error('Usage: npm run ask -- "your question"');
     process.exit(1);
   }
-
   if (!process.env.OPENAI_API_KEY) {
-    console.error("OPENAI_API_KEY is not set. Add it to .env");
+    console.error("OPENAI_API_KEY is not set.");
     process.exit(1);
   }
   if (!process.env.ANTHROPIC_API_KEY) {
-    console.error("ANTHROPIC_API_KEY is not set. Add it to .env");
+    console.error("ANTHROPIC_API_KEY is not set.");
     process.exit(1);
   }
 
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-  const corpus = await loadOrBuildCorpus(openai);
-  const topChunks = await retrieveTopK(openai, corpus, query, TOP_K);
+  console.error("[corpus] scanning reviewed stubs...");
+  const sermons = await loadReviewedSermons();
+  console.error(`[corpus] ${sermons.length} reviewed sermons in scope`);
+  if (sermons.length === 0) {
+    console.error("No reviewed sermons available. Check scripts/transcripts/content/.");
+    process.exit(1);
+  }
 
-  console.error(`\n[retrieval] Top ${TOP_K} chunks:`);
-  topChunks.forEach((c, i) => {
-    const preview = c.text.slice(0, 90).replace(/\s+/g, " ");
+  console.error("[corpus] building/loading embeddings...");
+  const corpus = await buildCorpus(openai, sermons);
+  console.error(`[corpus] ${corpus.length} chunks across ${sermons.length} sermons`);
+
+  const top = await retrieveTopK(openai, corpus, query, TOP_K);
+  const topScore = top[0]?.score ?? 0;
+  const tier = classifyTier(topScore);
+  const shape = classifyShape(top);
+
+  console.error(`\n[retrieval] tier=${tier} shape=${shape} top_score=${topScore.toFixed(3)}`);
+  console.error(`[retrieval] top ${top.length}:`);
+  for (let i = 0; i < top.length; i++) {
+    const c = top[i];
+    const preview = c.text.slice(0, 70).replace(/\s+/g, " ");
     console.error(
-      `  ${i + 1}. score=${c.score.toFixed(3)} @ ${formatTime(c.start_seconds)}–${formatTime(c.end_seconds)}: "${preview}..."`,
+      `  ${i + 1}. ${c.score.toFixed(3)} "${c.sermon_title}" (${c.sermon_date}) @ ${formatTime(c.start_seconds)}: "${preview}..."`,
     );
-  });
+  }
   console.error("");
 
-  const response = await compose(anthropic, query, topChunks);
+  const response = await compose(anthropic, query, top, tier, shape);
   console.log(response);
 }
 
