@@ -124,7 +124,10 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
 
     const defaultFeedHeaderHTML = feedHeaderEl.innerHTML;
 
-    function applySeriesFilter(series: string | null): void {
+    function applySeriesFilter(
+      series: string | null,
+      options: { updateUrl?: boolean } = {},
+    ): void {
       for (const card of allCards) {
         if (series === null) {
           card.style.display = "";
@@ -150,7 +153,25 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
           </button>
         `;
       }
+      if (options.updateUrl !== false) {
+        const url = new URL(window.location.href);
+        if (series === null) url.searchParams.delete("series");
+        else url.searchParams.set("series", series);
+        history.pushState({ series }, "", url.toString());
+      }
     }
+
+    // Apply initial filter from the URL on page load.
+    const initialSeries = new URLSearchParams(window.location.search).get(
+      "series",
+    );
+    if (initialSeries) applySeriesFilter(initialSeries, { updateUrl: false });
+
+    // Back/forward navigation updates the filter without pushing a new entry.
+    window.addEventListener("popstate", () => {
+      const params = new URLSearchParams(window.location.search);
+      applySeriesFilter(params.get("series"), { updateUrl: false });
+    });
 
     // Event delegation — handles clicks on card series badges AND the
     // "View all in [series]" suggestions rendered under a chat response.
