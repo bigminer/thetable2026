@@ -16,7 +16,7 @@ title: "The First Forgiveness | Guest speaker Aaron Brownbrook"          # clean
 content_description: "Aaron Brownbrook challenges listeners to forgive the world itself for not matching their expectations—the foundational step before loving enemies. Without accepting reality as broken and mixed (rather than waiting for it to become perfect), he argues, Christians remain stuck in denial or rebellion, unable to practice the inclusion Jesus modeled."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:30:20"     # auto: "prayers of the people" → sermon — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
 series: null                   # leave null if not in a series
 

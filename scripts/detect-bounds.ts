@@ -88,11 +88,57 @@ function flattenToWords(cues: Cue[]): Word[] {
   return words;
 }
 
+/**
+ * Compound detection for The Table's standard service order:
+ *   welcome/music → Prayers of the People → music+prayer → sermon.
+ *
+ * Finds the "prayers of the people" phrase, then the first "amen" after
+ * it (end of POTP), then the NEXT "amen" at least 60 seconds later (end
+ * of the brief prayer that closes the worship segment before Brett
+ * speaks). The second amen marks sermon start within a few seconds.
+ */
+function findPotpSermonStart(
+  words: Word[],
+  minSeconds: number,
+  maxSeconds: number,
+): number | null {
+  const potpTime = findPhraseTime(
+    words,
+    /\bprayers?\s+of\s+the\s+people\b/i,
+    minSeconds,
+    "first",
+    maxSeconds,
+  );
+  if (potpTime === null) return null;
+
+  const amen1 = findPhraseTime(
+    words,
+    /\bamen\b/i,
+    potpTime,
+    "first",
+    maxSeconds,
+  );
+  if (amen1 === null || amen1 === potpTime) return null;
+
+  // amen2 must be at least 60s after amen1 AND within 15 min after it
+  // (worship segment is usually 5-10 min; cap at 15 min to avoid catching
+  // a mid-sermon amen).
+  const amen2 = findPhraseTime(
+    words,
+    /\bamen\b/i,
+    amen1 + 60,
+    "first",
+    Math.min(maxSeconds, amen1 + 15 * 60),
+  );
+  return amen2;
+}
+
 function findPhraseTime(
   words: Word[],
   pattern: RegExp,
   afterSeconds: number,
   direction: "first" | "last" = "first",
+  beforeSeconds: number = Infinity,
 ): number | null {
   // Concatenate words into one string, tracking char offset per word
   const wordOffsets: number[] = [];
@@ -120,7 +166,7 @@ function findPhraseTime(
       }
     }
     const word = words[wordIdx];
-    if (word && word.t >= afterSeconds) {
+    if (word && word.t >= afterSeconds && word.t <= beforeSeconds) {
       if (direction === "first") return word.t;
       lastValid = word.t;
     }
@@ -188,10 +234,75 @@ async function processStub(filePath: string, filename: string): Promise<StubResu
   const cues = parseVtt(vtt);
   const words = flattenToWords(cues);
 
-  // Find start
+  // Find start using layered patterns (highest-precision first).
+  // If end is known, constrain start to end - 10min (sermon must be ≥10 min).
   let detectedStart: number | null = null;
+  let startPattern: string | undefined;
   if (currentStart === null) {
-    detectedStart = findPhraseTime(words, /\bgrace\s+and\s+peace\b/i, MIN_START_SECONDS);
+    const currentEndSeconds = currentEnd !== null ? parseHms(currentEnd) : null;
+    const startBefore =
+      currentEndSeconds !== null ? currentEndSeconds - MIN_SERMON_SECONDS : Infinity;
+
+    const startPatterns: Array<{
+      re: RegExp;
+      label: string;
+      direction: "first" | "last";
+    }> = [
+      // High precision — Brett's explicit sermon-start phrasings.
+      {
+        re: /\bgrace\s+and\s+peace\b/i,
+        label: `"grace and peace"`,
+        direction: "first",
+      },
+      {
+        re: /\btitle\s+of\s+my\s+message\b/i,
+        label: `"title of my message"`,
+        direction: "first",
+      },
+      {
+        re: /\bmy\s+message\s+(today|tonight|this\s+(morning|evening))\b/i,
+        label: `"my message today/tonight"`,
+        direction: "first",
+      },
+      // Medium precision — worship-to-sermon transition phrase.
+      {
+        re: /\bwelcome\s+to\s+the\s+table\b/i,
+        label: `"welcome to the table"`,
+        direction: "first",
+      },
+    ];
+    // (No "amen" fallback — early samples showed it catches the
+    // intercessory-prayer amen before a long worship segment, not the
+    // opening-prayer amen before the sermon. Null is better than a wrong
+    // value that makes the volunteer scrub forward to find the real start.)
+
+    for (const p of startPatterns) {
+      const t = findPhraseTime(
+        words,
+        p.re,
+        MIN_START_SECONDS,
+        p.direction,
+        startBefore,
+      );
+      if (t !== null) {
+        detectedStart = t;
+        startPattern = p.label;
+        break;
+      }
+    }
+
+    // Compound fallback: POTP → amen1 → amen2 (sermon start).
+    if (detectedStart === null) {
+      const potpStart = findPotpSermonStart(
+        words,
+        MIN_START_SECONDS,
+        startBefore,
+      );
+      if (potpStart !== null) {
+        detectedStart = potpStart;
+        startPattern = `"prayers of the people" → sermon`;
+      }
+    }
   }
 
   // Find end. Prefer using start + 10-min floor when start is known. When
@@ -263,7 +374,7 @@ async function processStub(filePath: string, filename: string): Promise<StubResu
   if (detectedStart !== null) {
     updated = updated.replace(
       /^content_start:\s*null.*$/m,
-      `content_start: "${toHms(detectedStart)}"     # auto: "grace and peace" — verify`,
+      `content_start: "${toHms(detectedStart)}"     # auto: ${startPattern} — verify`,
     );
   }
   if (detectedEnd !== null) {

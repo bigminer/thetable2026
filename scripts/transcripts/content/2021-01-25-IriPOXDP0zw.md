@@ -16,7 +16,7 @@ title: "The Table Live"          # cleaned-up display title; defaults to youtube
 content_description: "Karen Miner reconsiders the worship song \"Raise a Hallelujah\" in light of political and cultural division, cautioning against adopting an \"us versus them\" theology that casts outsiders as enemies rather than seeing one's own capacity for harm. Brett argues the Book of Jonah teaches that grace extended to our oppressors reveals an uncomfortable truth: the line between good and evil runs through every human heart, and Christians are commissioned to be agents of reconciliation everywhere."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:36:15"     # auto: "title of my message" — verify
 content_end: "01:07:44"       # auto: "name of Jesus...Amen" (closing prayer) — verify
 series: null                   # leave null if not in a series
 

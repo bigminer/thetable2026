@@ -16,7 +16,7 @@ title: "Waking Up"          # cleaned-up display title; defaults to youtube_titl
 content_description: "Brett argues that Christian spiritual practice aims ultimately at \"waking up\"—realizing our shared nature with God in Christ—rather than merely growing up morally, cleaning up emotionally, or showing up socially. He identifies the obstacle: the \"monkey mind\" of ego that keeps us asleep through arguing, blaming, demanding, and controlling, and invites the congregation to catch themselves in these patterns and surrender them to God's presence."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:38:34"     # auto: "title of my message" — verify
 content_end: "01:01:30"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 

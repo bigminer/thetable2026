@@ -16,7 +16,7 @@ title: "New Normal | Victim"          # cleaned-up display title; defaults to yo
 content_description: "Brett argues that dwelling on victimhood—while real wounds deserve acknowledgment—risks hardening into false identity. He contrasts two ways of telling the same painful story: one that defines you as victim, another that names God's faithfulness alongside the harm, refusing victimhood as your final word."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:35:53"     # auto: "title of my message" — verify
 content_end: "01:00:43"       # auto: "we practice...open table" — verify
 series: null                   # leave null if not in a series
 

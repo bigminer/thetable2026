@@ -16,7 +16,7 @@ title: "1 Peter | Disordered Desire"          # cleaned-up display title; defaul
 content_description: "Peter calls Christians to order their desires rightly—not to kill desire itself, but to stop letting lesser loves (success, control, comfort) override love for God and others. Holiness means integrated desire, shaped through practice and community, not just correct doctrine."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:35:46"     # auto: "title of my message" — verify
 content_end: "01:06:40"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 

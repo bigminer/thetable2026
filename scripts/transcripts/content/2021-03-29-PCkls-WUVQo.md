@@ -16,7 +16,7 @@ title: "Lent: From Repentance to Renewal | What Are You Riding?"          # clea
 content_description: "Jesus entered Jerusalem on a donkey—not a war horse—because inner strength doesn't require external displays of power and status. Brett examines how insecurity pushes us toward ego-driven choices (social media curation, status purchases, defensive reactions) while genuine confidence allows us to simply be ourselves."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:24:06"     # auto: "title of my message" — verify
 content_end: "00:51:49"       # auto: "name of Jesus...Amen" (closing prayer) — verify
 series: null                   # leave null if not in a series
 

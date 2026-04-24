@@ -16,7 +16,7 @@ title: "Holy Shift: A 21st Century Faith"          # cleaned-up display title; d
 content_description: "Pastor Brett examines how entertainment culture—the constant need for stimulus and distraction—differs from cultures that simply include entertainment, arguing that awareness and attentiveness to our actual lives is the spiritual shift required. He contrasts digital distraction and escapism with the Christian practice of being present to God, others, and ourselves."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:42:52"     # auto: "title of my message" — verify
 content_end: "01:04:07"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 

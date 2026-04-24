@@ -16,7 +16,7 @@ title: "Deconstruction: Finding God Again | Who’s Afraid of Deconstruction?"  
 content_description: "Brett introduces \"deconstruction\" as the often-painful realization that beliefs you held as unshakeable truth are actually constructed and contestable—using Paul's Damascus Road experience and Jesus reinterpreting Jewish law as biblical examples. He argues deconstruction is necessary spiritual maturation: moving from stage-one rigid faith (I believe it because I was told) through stage-two reactive doubt (I know what I'm against) toward stage-three reconstruction (I can articulate what I'm for, with room for questions and humility)."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:36:40"     # auto: "title of my message" — verify
 content_end: "01:06:28"       # auto: "name of Jesus...Amen" (closing prayer) — verify
 series: null                   # leave null if not in a series
 

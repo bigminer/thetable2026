@@ -16,7 +16,7 @@ title: "The Good Book: Fresh Insights into an Ancient Text"          # cleaned-u
 content_description: "Brett examines why early Judaism and Christianity had a fluid view of scripture as evolving collections of sacred texts rather than a fixed book, shaped by scroll technology and gradual canonization over centuries—arguing modern Christians must read the Bible with discernment and interpretive care, not rigid certainty, while keeping Christ at the center."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:48:06"     # auto: "title of my message" — verify
 content_end: "01:09:25"       # auto: "in the name of the father...holy spirit" — verify
 series: null                   # leave null if not in a series
 
