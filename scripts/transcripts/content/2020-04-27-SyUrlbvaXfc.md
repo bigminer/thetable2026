@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2020-04-27-SyUrlbvaXfc.en.vtt
 # Watch: https://www.youtube.com/watch?v=SyUrlbvaXfc
 
 # --- REVIEW: confirm defaults or override ---
-title: "Live Service"          # cleaned-up display title; defaults to youtube_title
+title: "Tranquility Habits"          # cleaned-up display title; defaults to youtube_title
 content_description: "Jesus teaches three spiritual disciplines—giving, prayer, and fasting—as practices that break addictions while cultivating love and reliance on God. Start small with a \"20-mile march\": choose one manageable daily practice and maintain it consistently to climb toward the character of Christ."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
-series: null                   # leave null if not in a series
+content_start: "00:23:40"            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_end: "00:54:06"              # when the content ends, format "hh:mm:ss"
+series: "Tranquility: Cultivating Calm in a Crazy World"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2020-06-22-h2CMVUdcRGo.en.vtt
 # Watch: https://www.youtube.com/watch?v=h2CMVUdcRGo
 
 # --- REVIEW: confirm defaults or override ---
-title: "The Table Live"          # cleaned-up display title; defaults to youtube_title
+title: "The Silence"          # cleaned-up display title; defaults to youtube_title
 content_description: "Zechariah's silence becomes either a tomb of bitterness or a womb of transformation—faith is living as though God and life are good even when life has beaten you down and shut your mouth."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: "00:24:44"     # auto: "grace and peace" — verify
-content_end: null              # when the content ends, format "hh:mm:ss"
-series: null                   # leave null if not in a series
+content_start: "00:24:24"     # auto: "grace and peace" — verify
+content_end: "00:49:40"              # when the content ends, format "hh:mm:ss"
+series: "Luke"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

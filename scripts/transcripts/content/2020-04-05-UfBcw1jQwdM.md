@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2020-04-05-UfBcw1jQwdM.en.vtt
 # Watch: https://www.youtube.com/watch?v=UfBcw1jQwdM
 
 # --- REVIEW: confirm defaults or override ---
-title: "The Table Live"          # cleaned-up display title; defaults to youtube_title
+title: "Boundaries"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett teaches that the most compassionate people are also the most boundaried, and that Jesus regularly said no—not from selfishness but from love and clarity about his mission. Setting healthy boundaries isn't disobedience or unkindness; it's essential for long-term flourishing in relationships and prevents resentment from eroding genuine care."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:22:22"     # auto: "grace and peace" — verify
-content_end: null              # when the content ends, format "hh:mm:ss"
-series: null                   # leave null if not in a series
+content_end: "00:52:14"              # when the content ends, format "hh:mm:ss"
+series: "Tranquility: Cultivating Calm in a Crazy World"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

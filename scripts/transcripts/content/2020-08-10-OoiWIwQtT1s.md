@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2020-08-10-OoiWIwQtT1s.en.vtt
 # Watch: https://www.youtube.com/watch?v=OoiWIwQtT1s
 
 # --- REVIEW: confirm defaults or override ---
-title: "The Table Live"          # cleaned-up display title; defaults to youtube_title
+title: "Lost at Home"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett examines the parable of the prodigal son as a story about two lost children—arguing the older brother's obedience-driven exhaustion is spiritual lostness too. He calls son #2 (the responsible one performing for approval) to shift from self-reliance to receiving, from self-protection to trust, and from earning love to accepting it unconditionally."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:26:24"     # auto: "grace and peace" — verify
-content_end: null              # when the content ends, format "hh:mm:ss"
-series: null                   # leave null if not in a series
+content_end: "00:51:33"              # when the content ends, format "hh:mm:ss"
+series: "Luke"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

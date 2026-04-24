@@ -219,6 +219,15 @@ async function processStub(filePath: string, filename: string): Promise<StubResu
       direction: "first" | "last";
     }> = [
       {
+        // Brett's usual sermon-closing prayer ends with something like
+        // "in the [powerful / life-changing] name of Jesus I pray. Amen."
+        // Last-match to avoid scripture quotes that mention Jesus + amen
+        // earlier in the sermon.
+        re: /\bname\s+of\s+(jesus|christ|god)\b[\s\S]{0,60}\bamen\b/i,
+        label: `"name of Jesus...Amen" (closing prayer)`,
+        direction: "last",
+      },
+      {
         re: /\bin\s+the\s+name\s+of\s+the\s+father[\s\S]{0,40}holy\s+(spirit|ghost)/i,
         label: `"in the name of the father...holy spirit"`,
         direction: "last",

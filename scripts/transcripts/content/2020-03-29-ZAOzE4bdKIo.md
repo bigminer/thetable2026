@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2020-03-29-ZAOzE4bdKIo.en.vtt
 # Watch: https://www.youtube.com/watch?v=ZAOzE4bdKIo
 
 # --- REVIEW: confirm defaults or override ---
-title: "The Table Live"          # cleaned-up display title; defaults to youtube_title
+title: "Mindfulness"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett teaches present-moment awareness as the foundation for tranquility and Christian discipleship, identifying four personality types—worriers, thinkers, feelers, and doers—who each escape the present through different habits, then prescribes two practices: mono-tasking (doing one thing at a time) and daily centering prayer (sitting in silence)."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: null              # when the content ends, format "hh:mm:ss"
-series: null                   # leave null if not in a series
+content_start: 00:21:00            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_end: 00:52:12              # when the content ends, format "hh:mm:ss"
+series: "Tranquility: Cultivating Calm in a Crazy World"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted
