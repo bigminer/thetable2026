@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2022-05-23-vvSdOyllLdE.en.vtt
 # Watch: https://www.youtube.com/watch?v=vvSdOyllLdE
 
 # --- REVIEW: confirm defaults or override ---
-title: "1 Peter | What's My Purpose?"          # cleaned-up display title; defaults to youtube_title
+title: "What's My Purpose?"          # cleaned-up display title; defaults to youtube_title
 content_description: "Peter argues that \"the end of all things\" refers not to apocalyptic destruction but to *telos*—humanity's created purpose of learning to give, receive, and grow in love. He grounds this in Matthew 25's judgment scene (feeding the hungry, welcoming strangers, visiting prisoners) and names three concrete practices: forgiveness, hospitality, and service."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:31:31"     # auto: "grace and peace" — verify
 content_end: "01:00:45"       # auto: "we practice...open table" — verify
-series: null                   # leave null if not in a series
+series: "1 Peter"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2021-08-23-HF-gFVrRWUU.en.vtt
 # Watch: https://www.youtube.com/watch?v=HF-gFVrRWUU
 
 # --- REVIEW: confirm defaults or override ---
-title: "Deconstruction: Finding God Again | Deconstruction & Suffering"          # cleaned-up display title; defaults to youtube_title
+title: "Deconstruction & Suffering"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett argues that Christian responses to suffering—\"everything happens for a reason,\" \"it's God's will\"—actually betray Christ's approach. Jesus forgave sin, healed suffering, and conquered death; nowhere did he treat evil as part of God's purposes. The New Testament names the world as fallen, corrupted by spiritual forces opposed to God, not divinely orchestrated; accepting this makes us better Christians than defending God's plan."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:29:24"     # auto: "grace and peace" — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
-series: null                   # leave null if not in a series
+series: "Deconstruction: Finding God Again"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

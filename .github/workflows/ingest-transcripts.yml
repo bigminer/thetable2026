@@ -43,6 +43,9 @@ jobs:
       - name: Generate stubs for new downloads
         run: npm run make-stubs
 
+      - name: Enrich titles and detect series
+        run: npm run enrich-titles
+
       - name: Auto-detect sermon bounds via Brett's consistent phrasings
         run: npm run detect-bounds
 

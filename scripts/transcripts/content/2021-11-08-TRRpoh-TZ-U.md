@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2021-11-08-TRRpoh-TZ-U.en.vtt
 # Watch: https://www.youtube.com/watch?v=TRRpoh-TZ-U
 
 # --- REVIEW: confirm defaults or override ---
-title: "1 Peter | The Pattern"          # cleaned-up display title; defaults to youtube_title
+title: "The Pattern"          # cleaned-up display title; defaults to youtube_title
 content_description: "Peter's point isn't that prophecy proves the future works—it's that Isaiah and the Psalms reveal God's actual pattern: suffering and humility save the world, not might or power. The kingdom comes through obscure, ordinary people living with lowliness and service, not through the powerful and famous."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:31:44"     # auto: "grace and peace" — verify
 content_end: "01:06:27"       # auto: "in the name of the father...holy spirit" — verify
-series: null                   # leave null if not in a series
+series: "1 Peter"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

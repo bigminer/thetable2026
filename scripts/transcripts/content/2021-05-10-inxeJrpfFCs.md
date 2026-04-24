@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2021-05-10-inxeJrpfFCs.en.vtt
 # Watch: https://www.youtube.com/watch?v=inxeJrpfFCs
 
 # --- REVIEW: confirm defaults or override ---
-title: "New Normal | Find the Alleluia"          # cleaned-up display title; defaults to youtube_title
+title: "Find the Alleluia"          # cleaned-up display title; defaults to youtube_title
 content_description: "Pastor Brett teaches that Christian life means receiving everything as a gift from God with gratitude—not rejecting things, people, or situations through complaint. He illustrates the costly, weighty form of this posture through a friend undergoing chemotherapy who finds praise in suffering, contrasting cheap gratitude with genuine thanksgiving that transforms even hardship into holy ground."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:29:32"     # auto: "grace and peace" — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
-series: null                   # leave null if not in a series
+series: "New Normal"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

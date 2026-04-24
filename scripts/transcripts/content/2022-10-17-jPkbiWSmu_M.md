@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2022-10-17-jPkbiWSmu_M.en.vtt
 # Watch: https://www.youtube.com/watch?v=jPkbiWSmu_M
 
 # --- REVIEW: confirm defaults or override ---
-title: "Unclean | Panel Discussion"          # cleaned-up display title; defaults to youtube_title
+title: "Panel Discussion"          # cleaned-up display title; defaults to youtube_title
 content_description: "A panel of four community members shares how the sermon series on disgust psychology challenged them to examine both how they've experienced being labeled \"unclean\" and how they've labeled others—touching on purity culture's damage, sexual trauma, family boundaries, and the hard work of extending Christ's love across real hurt."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:25:56"     # auto: "welcome to the table" — verify
 content_end: "01:01:31"       # auto: "come to the table" — verify
-series: null                   # leave null if not in a series
+series: "Unclean"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

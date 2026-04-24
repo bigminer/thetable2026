@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2022-05-16-ZdCVoLQMD4s.en.vtt
 # Watch: https://www.youtube.com/watch?v=ZdCVoLQMD4s
 
 # --- REVIEW: confirm defaults or override ---
-title: "1 Peter- Part 3 | The Consumers and The Consumed"          # cleaned-up display title; defaults to youtube_title
+title: "The Consumers and The Consumed"          # cleaned-up display title; defaults to youtube_title
 content_description: "Peter contrasts the endless chase of consumer culture—information, products, experiences—with surrender to God's will, where true freedom and identity are secured rather than obliterated. The shift from \"I can't get no satisfaction\" to \"thanks for everything I have no complaints\" marks the difference between slavery to desire and the divine life within us."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:29:45"     # auto: "grace and peace" — verify
 content_end: "01:00:22"       # auto: "come to the table" — verify
-series: null                   # leave null if not in a series
+series: "1 Peter- Part 3"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

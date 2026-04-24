@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2022-07-04-jd7UfvaLfdw.en.vtt
 # Watch: https://www.youtube.com/watch?v=jd7UfvaLfdw
 
 # --- REVIEW: confirm defaults or override ---
-title: "Hearing God: A Listening Life | Hearing God in community"          # cleaned-up display title; defaults to youtube_title
+title: "Hearing God in community"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett explains how God speaks through other people—not in dramatic proclamations but through wisdom, encouragement, and correction that brings life and grace. Using Moses and Jethro's story, he argues we need mature voices to cut through our anxiety and blind spots, and that discernment matters: trust words that uplift and bear fruit, resist those forced upon you, and build community to speak truth to each other."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:34:19"     # auto: "title of my message" — verify
 content_end: "00:57:21"       # auto: "come to the table" — verify
-series: null                   # leave null if not in a series
+series: "Hearing God: A Listening Life"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

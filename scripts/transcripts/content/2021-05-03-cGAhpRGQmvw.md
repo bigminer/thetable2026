@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2021-05-03-cGAhpRGQmvw.en.vtt
 # Watch: https://www.youtube.com/watch?v=cGAhpRGQmvw
 
 # --- REVIEW: confirm defaults or override ---
-title: "New Normal | Same Boat"          # cleaned-up display title; defaults to youtube_title
+title: "Same Boat"          # cleaned-up display title; defaults to youtube_title
 content_description: "Jesus tells panicked disciples in a storm that their fear reveals little faith, then calms the waters—a picture of how we're deeply connected to one another emotionally and spiritually, for better and worse, and how inner peace (or panic) spreads contagiously through those around us."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:29:15"     # auto: "grace and peace" — verify
 content_end: null              # when the content ends, format "hh:mm:ss"
-series: null                   # leave null if not in a series
+series: "New Normal"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

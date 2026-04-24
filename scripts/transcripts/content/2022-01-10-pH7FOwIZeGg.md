@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2022-01-10-pH7FOwIZeGg.en.vtt
 # Watch: https://www.youtube.com/watch?v=pH7FOwIZeGg
 
 # --- REVIEW: confirm defaults or override ---
-title: "1 Peter | Rid & Crave"          # cleaned-up display title; defaults to youtube_title
+title: "Rid & Crave"          # cleaned-up display title; defaults to youtube_title
 content_description: "Peter calls Christians to rid themselves of malice, deceit, hypocrisy, envy, and slander—not as harsh external demands, but as alignment with who they already are in Christ. Like a newborn craving milk, believers taste God's goodness through spiritual practices and gradually recognize that their hunger has been for God himself all along."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:28:45"     # auto: "grace and peace" — verify
 content_end: "00:58:27"       # auto: "in the name of the father...holy spirit" — verify
-series: null                   # leave null if not in a series
+series: "1 Peter"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

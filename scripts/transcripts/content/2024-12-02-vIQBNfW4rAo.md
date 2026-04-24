@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2024-12-02-vIQBNfW4rAo.en.vtt
 # Watch: https://www.youtube.com/watch?v=vIQBNfW4rAo
 
 # --- REVIEW: confirm defaults or override ---
-title: "Advent : Thinking and Drinking"          # cleaned-up display title; defaults to youtube_title
+title: "Thinking and Drinking"          # cleaned-up display title; defaults to youtube_title
 content_description: "Jesus names carousing and drunkenness as ways we numb ourselves from present reality; the real antidote is learning to notice when your mind has wandered from your body, then training yourself to return—the spiritual practice of Advent is simply waking up."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:30:55"     # auto: "grace and peace" — verify
 content_end: "00:59:44"       # auto: "in the name of the father...holy spirit" — verify
-series: null                   # leave null if not in a series
+series: "Advent"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

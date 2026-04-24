@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2023-03-13-hNjnnmdpBHM.en.vtt
 # Watch: https://www.youtube.com/watch?v=hNjnnmdpBHM
 
 # --- REVIEW: confirm defaults or override ---
-title: "Lent - the way of the cross : Christ the Substitute"          # cleaned-up display title; defaults to youtube_title
+title: "Christ the Substitute"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett distinguishes between three objections to substitutionary atonement—that innocent people cannot bear guilt, that it depicts divine child abuse, and that it portrays a vindictive God—then counters by arguing context matters (this metaphor speaks powerfully to those wrestling with shame), that theological language requires poetic not literal thinking, and that Trinitarian theology prevents reading the cross as Father and Son opposed."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:35:43"     # auto: "grace and peace" — verify
 content_end: "01:05:14"       # auto: "we practice...open table" — verify
-series: null                   # leave null if not in a series
+series: "Lent - The Way of the Cross"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2024-06-24-Zvf0ASQyXAE.en.vtt
 # Watch: https://www.youtube.com/watch?v=Zvf0ASQyXAE
 
 # --- REVIEW: confirm defaults or override ---
-title: "Holy Shift: The Virtual"          # cleaned-up display title; defaults to youtube_title
+title: "The Virtual"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett argues that social media and smartphone use pull us toward \"excarnation\"—forgetting we have bodies—while Christianity calls us toward incarnation: inhabiting our material bodies fully and presently in real relationships, prayer, and creation."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:28:40"     # auto: "grace and peace" — verify
 content_end: "00:54:12"       # auto: "in the name of the father...holy spirit" — verify
-series: null                   # leave null if not in a series
+series: "Holy Shift"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

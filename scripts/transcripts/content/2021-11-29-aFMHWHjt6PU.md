@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2021-11-29-aFMHWHjt6PU.en.vtt
 # Watch: https://www.youtube.com/watch?v=aFMHWHjt6PU
 
 # --- REVIEW: confirm defaults or override ---
-title: "Wonder | Making Room for Advent"          # cleaned-up display title; defaults to youtube_title
+title: "Making Room for Advent"          # cleaned-up display title; defaults to youtube_title
 content_description: "Jesus warns that Jerusalem's destruction by Rome is imminent because the people have missed recognizing God's presence among them—and Christ continues to visit us now through the Spirit, teaching us the way of peace that we easily overlook."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:31:39"     # auto: "grace and peace" — verify
 content_end: "01:04:23"       # auto: "in the name of the father...holy spirit" — verify
-series: null                   # leave null if not in a series
+series: "Wonder"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

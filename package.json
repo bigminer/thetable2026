@@ -14,6 +14,7 @@
     "fetch": "yt-dlp --write-auto-subs --sub-lang en --skip-download --write-info-json --download-archive scripts/transcripts/archive.txt --match-filters \"title !*= 📱\" --output 'scripts/transcripts/raw/%(upload_date>%Y-%m-%d)s-%(id)s.%(ext)s' --convert-subs vtt",
     "transcribe": "node --env-file=.env --import tsx scripts/transcribe-missing.ts",
     "make-stubs": "node --import tsx scripts/make-stubs.ts",
+    "enrich-titles": "node --import tsx scripts/enrich-titles.ts",
     "detect-bounds": "node --import tsx scripts/detect-bounds.ts",
     "make-descriptions": "node --env-file=.env --import tsx scripts/make-descriptions.ts"
   },

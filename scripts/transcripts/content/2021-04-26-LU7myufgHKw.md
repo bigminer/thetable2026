@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2021-04-26-LU7myufgHKw.en.vtt
 # Watch: https://www.youtube.com/watch?v=LU7myufgHKw
 
 # --- REVIEW: confirm defaults or override ---
-title: "New Normal | From busyness to wholeness"          # cleaned-up display title; defaults to youtube_title
+title: "From busyness to wholeness"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett argues that busyness functions as a coping mechanism—a drug to avoid internal anxiety and emptiness—rather than a genuine schedule problem. He reframes wholeness through Isaiah 55's metaphor of bread (nourishment), water (refreshment), wine (joy), and milk (growth), urging the congregation to prioritize what actually feeds the soul instead of the junk food of constant activity."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:36:52"     # auto: "title of my message" — verify
 content_end: "01:03:01"       # auto: "name of Jesus...Amen" (closing prayer) — verify
-series: null                   # leave null if not in a series
+series: "New Normal"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

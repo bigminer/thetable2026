@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2022-11-21-ML5FbEXVAJc.en.vtt
 # Watch: https://www.youtube.com/watch?v=ML5FbEXVAJc
 
 # --- REVIEW: confirm defaults or override ---
-title: "Stranger Things | Mysterious Bodies"          # cleaned-up display title; defaults to youtube_title
+title: "Mysterious Bodies"          # cleaned-up display title; defaults to youtube_title
 content_description: "Jesus's body expands through the ascension to fill all things—including the church and the bread of communion—because bodies are not separate autonomous units but mysteriously interconnected through God's spirit, constantly communing and influencing one another in ways we usually don't perceive."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:33:54"     # auto: "grace and peace" — verify
 content_end: "01:01:03"       # auto: "open table" — verify
-series: null                   # leave null if not in a series
+series: "Stranger Things"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

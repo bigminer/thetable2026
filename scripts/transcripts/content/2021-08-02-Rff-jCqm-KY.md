@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2021-08-02-Rff-jCqm-KY.en.vtt
 # Watch: https://www.youtube.com/watch?v=Rff-jCqm-KY
 
 # --- REVIEW: confirm defaults or override ---
-title: "Deconstruction: Finding God Again | Deconstruction & Bible"          # cleaned-up display title; defaults to youtube_title
+title: "Deconstruction & Bible"          # cleaned-up display title; defaults to youtube_title
 content_description: "When Christ is centered as the interpretive lens for Scripture, problematic Old Testament passages like the genocide command in 1 Samuel 15 shift from literal history into spiritual allegory—the ancient church read this way for 1,500 years, and doing so frees us from defensive Bible reading into playful, Spirit-led engagement with the text."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:27:00"     # auto: "grace and peace" — verify
 content_end: "00:56:45"       # auto: "open table" — verify
-series: null                   # leave null if not in a series
+series: "Deconstruction: Finding God Again"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

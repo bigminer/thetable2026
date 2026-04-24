@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2021-02-22-ZtPDoxOD2ww.en.vtt
 # Watch: https://www.youtube.com/watch?v=ZtPDoxOD2ww
 
 # --- REVIEW: confirm defaults or override ---
-title: "Lent: From Repentance to Renewal | From Self-Rejection to Self-Compassion"          # cleaned-up display title; defaults to youtube_title
+title: "From Self-Rejection to Self-Compassion"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett distinguishes guilt (I did something wrong) from shame (I am something wrong), arguing that guilt can lead to humility and self-compassion rather than the self-rejection Christianity often produces. He draws on Psalm 25 and psychology research to show how God's compassionate remembering offers freedom from shame during Lent."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:29:59"     # auto: "grace and peace" — verify
 content_end: "00:57:18"       # auto: "name of Jesus...Amen" (closing prayer) — verify
-series: null                   # leave null if not in a series
+series: "Lent: From Repentance to Renewal"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted
