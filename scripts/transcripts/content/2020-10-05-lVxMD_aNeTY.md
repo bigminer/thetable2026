@@ -12,7 +12,7 @@ vtt_path: scripts/transcripts/raw/2020-10-05-lVxMD_aNeTY.en.vtt
 # Watch: https://www.youtube.com/watch?v=lVxMD_aNeTY
 
 # --- REVIEW: confirm defaults or override ---
-title: "The Table Live"          # cleaned-up display title; defaults to youtube_title
+title: "Scripture: Dealing with Difficult Texts"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett argues that the six \"clobber passages\" condemning same-sex relationships cannot be the foundation for church teaching on LGBTQ inclusion—either they require historical reinterpretation that renders them nearly void, or a plain reading leads to Westboro Baptist theology. The real conversation should be about marriage, sexuality, and what it means to be made in God's image, guided by a hermeneutic of love that bears fruit like joy and peace, not depression and suicide."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements

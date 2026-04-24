@@ -12,7 +12,7 @@ vtt_path: scripts/transcripts/raw/2020-11-09-jpx5XCkSJjg.en.vtt
 # Watch: https://www.youtube.com/watch?v=jpx5XCkSJjg
 
 # --- REVIEW: confirm defaults or override ---
-title: "The Table live"          # cleaned-up display title; defaults to youtube_title
+title: "Scripture: Dealing with Difficult Texts | Us For Them"          # cleaned-up display title; defaults to youtube_title
 content_description: "Jesus is the highest revelation of God, but the Holy Spirit works beyond Christian boundaries—the speaker argues Christians can confess Jesus as Lord while genuinely supporting people of other faiths without arrogance or condescension."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements

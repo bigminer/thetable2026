@@ -12,7 +12,7 @@ vtt_path: scripts/transcripts/raw/2020-10-26-Jos0nHMoIJU.en.vtt
 # Watch: https://www.youtube.com/watch?v=Jos0nHMoIJU
 
 # --- REVIEW: confirm defaults or override ---
-title: "The Table live"          # cleaned-up display title; defaults to youtube_title
+title: "Scripture: Dealing with Difficult Texts | The Good News About The Bad Place"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett argues that the New Testament contains both warnings of hell as purifying spiritual fire and passages indicating all humanity will be saved—a paradox early Christians resolved by understanding God's infinite love burns away our spiritual corruption rather than torturing us eternally."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements

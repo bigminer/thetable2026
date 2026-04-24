@@ -12,7 +12,7 @@ vtt_path: scripts/transcripts/raw/2021-01-25-IriPOXDP0zw.en.vtt
 # Watch: https://www.youtube.com/watch?v=IriPOXDP0zw
 
 # --- REVIEW: confirm defaults or override ---
-title: "The Table Live"          # cleaned-up display title; defaults to youtube_title
+title: "Epiphany: A Radical Invitation | The Wonderful-Terrible Grace of God"          # cleaned-up display title; defaults to youtube_title
 content_description: "Karen Miner reconsiders the worship song \"Raise a Hallelujah\" in light of political and cultural division, cautioning against adopting an \"us versus them\" theology that casts outsiders as enemies rather than seeing one's own capacity for harm. Brett argues the Book of Jonah teaches that grace extended to our oppressors reveals an uncomfortable truth: the line between good and evil runs through every human heart, and Christians are commissioned to be agents of reconciliation everywhere."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
