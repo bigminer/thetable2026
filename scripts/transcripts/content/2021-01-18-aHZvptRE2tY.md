@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2021-01-18-aHZvptRE2tY.en.vtt
 # Watch: https://www.youtube.com/watch?v=aHZvptRE2tY
 
 # --- REVIEW: confirm defaults or override ---
-title: "Epiphany: A Radical Invitation - The Two Scorecards"          # cleaned-up display title; defaults to youtube_title
+title: "The Two Scorecards"          # cleaned-up display title; defaults to youtube_title
 content_description: "God's way prioritizes internal character over external status—the magi sought Jesus in Jerusalem, the powerful capital, but found him in obscure Bethlehem, revealing that God looks at the heart while the world judges appearances. Brett contrasts two scorecards: the external one society pushes (success, status, achievement) and the internal one that actually matters (integrity, kindness, Christ-likeness)."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:23:49"     # auto: "grace and peace" — verify
 content_end: "00:47:29"       # auto: "name of Jesus...Amen" (closing prayer) — verify
-series: null                   # leave null if not in a series
+series: "Epiphany: A Radical Invitation"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

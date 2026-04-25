@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2020-10-05-lVxMD_aNeTY.en.vtt
 # Watch: https://www.youtube.com/watch?v=lVxMD_aNeTY
 
 # --- REVIEW: confirm defaults or override ---
-title: "Scripture: Dealing with Difficult Texts"          # cleaned-up display title; defaults to youtube_title
+title: "The Clobber Passages"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett argues that the six \"clobber passages\" condemning same-sex relationships cannot be the foundation for church teaching on LGBTQ inclusion—either they require historical reinterpretation that renders them nearly void, or a plain reading leads to Westboro Baptist theology. The real conversation should be about marriage, sexuality, and what it means to be made in God's image, guided by a hermeneutic of love that bears fruit like joy and peace, not depression and suicide."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:20:32"     # auto: "grace and peace" — verify
 content_end: "00:55:25"       # auto: "name of Jesus...Amen" (closing prayer) — verify
-series: null                   # leave null if not in a series
+series: "Scripture: Dealing with Difficult Texts"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

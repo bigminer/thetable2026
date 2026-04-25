@@ -17,7 +17,7 @@ content_description: "Brett argues that Christian responses to suffering—\"eve
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:29:24"     # auto: "grace and peace" — verify
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_end: "01:07:54"              # when the content ends, format "hh:mm:ss"
 series: "Deconstruction: Finding God Again"                   # leave null if not in a series
 
 # --- defaults ok as-is ---

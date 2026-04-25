@@ -68,7 +68,7 @@ jobs:
 
             - `title` — cleaned-up display title
             - `speaker` — `brett_tilford` for Brett, or `guest:first-last` for a guest teacher
-            - `content_type` — `sermon` | `guest_sermon` | `worship` | `story_sunday` | `announcements`
+            - `content_type` — `sermon` | `table_talk` | `guest_sermon` | `worship` | `story_sunday` | `panel_discussion` | `announcements`
             - `sermon_start_seconds` — integer seconds where the sermon begins in the video
             - `sermon_end_seconds` — integer seconds where the sermon ends
             - `series` — leave `null` if not part of a series, otherwise the series name

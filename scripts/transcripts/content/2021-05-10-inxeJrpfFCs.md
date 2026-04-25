@@ -17,7 +17,7 @@ content_description: "Pastor Brett teaches that Christian life means receiving e
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:29:32"     # auto: "grace and peace" — verify
-content_end: null              # when the content ends, format "hh:mm:ss"
+content_end: "00:58:15"              # when the content ends, format "hh:mm:ss"
 series: "New Normal"                   # leave null if not in a series
 
 # --- defaults ok as-is ---

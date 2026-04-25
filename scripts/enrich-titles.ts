@@ -153,6 +153,39 @@ type TitleResult = {
 const GENERIC_TITLE_RE = /^the\s+table\s+(live|online)\.?$/i;
 const TABLE_LIVE_PREFIX_RE = /^the\s+table\s+(?:live|online)\s*[-|]\s*(.+)$/i;
 
+// Liturgical/occasion labels that on their own (with optional year) carry
+// no specific topic — the actual sermon title should come from the
+// description or VTT instead. Order matters: longer phrases first.
+const OCCASION_PHRASES = [
+  String.raw`easter\s+sunday`,
+  String.raw`easter\s+service(?:\s+live)?`,
+  String.raw`easter`,
+  String.raw`christmas\s+eve`,
+  String.raw`christmas\s+day`,
+  String.raw`christmas\s+service`,
+  String.raw`christmas`,
+  String.raw`good\s+friday`,
+  String.raw`palm\s+sunday`,
+  String.raw`maundy\s+thursday`,
+  String.raw`ash\s+wednesday`,
+  String.raw`pentecost`,
+  String.raw`holy\s+saturday`,
+  String.raw`all\s+saints(?:'?\s+day)?`,
+  String.raw`thanksgiving(?:\s+sunday)?`,
+  String.raw`new\s+year(?:'?s\s+(?:day|eve))?`,
+];
+const OCCASION_GENERIC_RE = new RegExp(
+  String.raw`^(?:the\s+table\s+(?:live|online)\s+)?(?:` +
+    OCCASION_PHRASES.join("|") +
+    String.raw`)\s*(?:\(?\d{4}\)?)?\s*[!.?]*$`,
+  "i",
+);
+
+function isGenericTitle(yt: string): boolean {
+  const t = yt.trim();
+  return GENERIC_TITLE_RE.test(t) || OCCASION_GENERIC_RE.test(t);
+}
+
 function splitPipeTitle(yt: string): { series: string; title: string } | null {
   const idx = yt.indexOf("|");
   if (idx === -1) return null;
@@ -263,15 +296,63 @@ function verifySeriesInVtt(candidate: string, vttText: string): boolean {
   return new RegExp(`\\b${escaped}\\b`).test(flat);
 }
 
+// In unpunctuated VTT, Brett often says the title twice for emphasis:
+// "the title of my message is tribes and tribalism. tribes and tribalism.
+// and believe it or not...". Find the longest leading phrase X such that
+// the span starts with "X X" — that's the title.
+function detectByRepetition(span: string): string | null {
+  const words = span
+    .toLowerCase()
+    .replace(/[^\w\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+  for (let len = Math.min(8, Math.floor(words.length / 2)); len >= 1; len--) {
+    const a = words.slice(0, len).join(" ");
+    const b = words.slice(len, len * 2).join(" ");
+    if (a === b && a.length >= 3) return a;
+  }
+  return null;
+}
+
+// Pull "the title of <X> message is <TITLE>" out of free text. Used for
+// both descriptions (where Brett often types "title of today's message
+// is...") and transcripts (where he says it aloud).
+function extractTitlePhrase(text: string): string | null {
+  const anchors = [
+    // "title of [my|today's|this morning's] message [optional filler up
+    // to ~40 chars: 'uh this Palm Sunday'] is X". The 40-char gap is
+    // bounded by sentence punctuation so it can't span periods.
+    /\btitle\s+of\s+(?:my|today'?s|this\s+(?:morning'?s|evening'?s|week'?s))\s+message\b[^.?!]{0,40}?\bis\s+/i,
+    /\bmy\s+message\s+(?:today|tonight|this\s+(?:morning|evening))\s*,?\s*is\s+/i,
+    // "My title is, X." — used when Brett interrupts himself mid-intro
+    /\bmy\s+title\s+is\s*,?\s+/i,
+  ];
+  for (const anchor of anchors) {
+    const m = anchor.exec(text);
+    if (!m) continue;
+    const after = text.slice(m.index + m[0].length);
+    // Repetition wins — strongest signal for compound titles in
+    // unpunctuated transcripts ("Tribes and Tribalism. Tribes and
+    // Tribalism. And...").
+    const repeated = detectByRepetition(after.slice(0, 200));
+    if (repeated) return cleanTitle(repeated, true);
+    // Fall back to terminator-based capture (works when description
+    // or VTT has real punctuation).
+    const terminator = /^["']?([^.?!"']{3,80}?)["']?(?:[.?!"']|\band\b|\bum\b|\buh\b|$)/;
+    const tm = terminator.exec(after);
+    if (tm) return cleanTitle(tm[1], true);
+  }
+  return null;
+}
+
 function detectTitleFromDescription(infoJsonText: string): string | null {
   try {
     const info = JSON.parse(infoJsonText);
     const desc = (info.description as string | undefined) ?? "";
-    const firstLine = desc.split(/\r?\n/)[0]?.trim();
-    if (!firstLine) return null;
-    if (isBoilerplate(firstLine)) return null;
-    if (firstLine.length < 3 || firstLine.length > 120) return null;
-    return cleanTitle(firstLine);
+    // Only trust an explicit "the title of my message is X" phrase.
+    // Falling back to the first line was too noisy — descriptions often
+    // open with a teaser sentence that isn't the title.
+    return extractTitlePhrase(desc);
   } catch {
     return null;
   }
@@ -280,15 +361,7 @@ function detectTitleFromDescription(infoJsonText: string): string | null {
 function detectTitleFromVtt(vttText: string): string | null {
   const cues = parseVtt(vttText);
   const flat = cues.map((c) => c.text).join(" ");
-  const patterns = [
-    /\btitle\s+of\s+my\s+message[^.?!]{0,80}?\bis\b\s+([^.?!]{3,80}?)(?:[.?!]|\band\b|\bum\b|\buh\b)/i,
-    /\bmy\s+message\s+(?:today|tonight|this\s+(?:morning|evening))\s*,?\s*is\s+([^.?!]{3,80}?)(?:[.?!]|\band\b|\bum\b|\buh\b)/i,
-  ];
-  for (const re of patterns) {
-    const m = flat.match(re);
-    if (m) return cleanTitle(m[1], true);
-  }
-  return null;
+  return extractTitlePhrase(flat);
 }
 
 function resolveTitle(
@@ -335,8 +408,8 @@ function resolveTitle(
     };
   }
 
-  // Case 4 — exact generic title ("The Table Live")
-  if (GENERIC_TITLE_RE.test(ytTitle.trim())) {
+  // Case 4 — exact generic title ("The Table Live", "Easter Sunday 2021")
+  if (isGenericTitle(ytTitle)) {
     if (infoJsonText) {
       const fromDesc = detectTitleFromDescription(infoJsonText);
       if (fromDesc) return { title: fromDesc, series: null, source: "description" };
@@ -448,6 +521,41 @@ async function main() {
         text = setQuotedField(text, "title", result.title);
         titleUpdated++;
         if (result.series) pipeSeries = result.series;
+      }
+    }
+
+    // --- Late split: if a previous run (or earlier extraction) left the
+    //     title in "Series | Episode" or "Series - Episode" form and we
+    //     never set a series, split it now. Catches the early-2021 stubs
+    //     where the description-extracted title still embeds the series.
+    if (seriesIsNull && !pipeSeries) {
+      const liveTitle = getField(text, "title")!;
+      const liveKey = seriesKey(liveTitle);
+      const piped = splitPipeTitle(liveTitle);
+      if (piped) {
+        text = setQuotedField(text, "title", cleanTitle(piped.title));
+        pipeSeries = piped.series;
+      } else if (recurringPrefixes.has(liveKey)) {
+        // The title equals a known series name (kickoff sermon). Set
+        // series, then look in VTT/description for a more specific
+        // sermon title — title and series shouldn't be the same.
+        if (!vttText || verifySeriesInVtt(recurringPrefixes.get(liveKey)!, vttText)) {
+          pipeSeries = recurringPrefixes.get(liveKey)!;
+          const realTitle =
+            (vttText && detectTitleFromVtt(vttText)) ||
+            (infoText && detectTitleFromDescription(infoText)) ||
+            null;
+          if (realTitle) {
+            text = setQuotedField(text, "title", realTitle);
+            titleUpdated++;
+          }
+        }
+      } else {
+        const split = splitByRecurringPrefix(liveTitle, recurringPrefixes);
+        if (split && vttText && verifySeriesInVtt(split.series, vttText)) {
+          text = setQuotedField(text, "title", cleanTitle(split.title));
+          pipeSeries = split.series;
+        }
       }
     }
 
