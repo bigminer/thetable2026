@@ -1,0 +1,262 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import { fallbackSlug, resolveAsset, safeGetCollection } from '../../lib/content';
+import { formatMessageDate, getMessageSlug, getMessagesForSeries } from '../../lib/podcast';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+	const entries = await safeGetCollection(() => getCollection('series', ({ data }) => !data.draft));
+	const messages = await safeGetCollection(() => getCollection('messages', ({ data }) => !data.draft));
+	return entries.map((entry) => ({
+		params: { slug: fallbackSlug(entry.data.slug, entry.id) },
+		props: { entry, messages: getMessagesForSeries(messages, fallbackSlug(entry.data.slug, entry.id)) },
+	}));
+}
+
+// getStaticPaths is ignored in server mode — look up entry by slug at request time.
+let entry = Astro.props.entry;
+let messages = Astro.props.messages;
+if (!entry) {
+	const slug = Astro.params.slug ?? '';
+	const entries = await safeGetCollection(() => getCollection('series', ({ data }) => !data.draft));
+	entry = entries.find((e) => fallbackSlug(e.data.slug, e.id) === slug);
+	if (!entry) return Astro.redirect('/404', 302);
+	const allMessages = await safeGetCollection(() => getCollection('messages', ({ data }) => !data.draft));
+	messages = getMessagesForSeries(allMessages, slug);
+}
+const { Content } = await render(entry);
+const siteConfig = await getEntry('site', 'homepage');
+const podcastLinks = siteConfig?.data.podcastLinks?.filter((l) => l.url?.trim()) ?? [];
+---
+
+<Layout title={`${entry.data.title} | The Table Church`} description={entry.data.description}>
+	<article class="series-entry">
+		<div class="hero">
+			{entry.data.featuredImage && (
+				<img src={resolveAsset(entry.data.featuredImage)} alt={entry.data.featuredImageAlt ?? entry.data.title} />
+			)}
+			<div class="hero-copy">
+				<p class="eyebrow">Series</p>
+				<h1>{entry.data.title}</h1>
+				<p class="lede">{entry.data.description}</p>
+				{entry.data.speaker && <p class="meta">Speaker: {entry.data.speaker}</p>}
+				{entry.data.scripture && <p class="meta">Scripture: {entry.data.scripture}</p>}
+				{podcastLinks.length > 0 && (
+					<div class="podcast-links">
+						<p class="podcast-label">Subscribe</p>
+						{podcastLinks.map((link) => (
+							<a class="podcast-btn" href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
+						))}
+					</div>
+				)}
+			</div>
+		</div>
+
+		<div class="content-grid">
+			<div class="body">
+				<Content />
+
+				{messages.length > 0 && (
+					<section class="episodes">
+						<h2>Messages in this series</h2>
+						<div class="episode-list">
+							{messages.map((message) => (
+								<article class="episode-row">
+									<div class="episode-date">{formatMessageDate(message.data.date)}</div>
+									<div class="episode-copy">
+										<h3>
+											<a href={`/podcast/${getMessageSlug(message)}/`}>{message.data.title}</a>
+										</h3>
+										{message.data.speaker && <p>{message.data.speaker}</p>}
+									</div>
+									{message.data.sourceUrl ? (
+										<a class="watch-link" href={message.data.sourceUrl} target="_blank" rel="noreferrer">Watch</a>
+									) : (
+										<span class="watch-link watch-link-disabled">Unavailable</span>
+									)}
+								</article>
+							))}
+						</div>
+					</section>
+				)}
+			</div>
+		</div>
+	</article>
+</Layout>
+
+<style>
+	.series-entry {
+		display: grid;
+		gap: 2rem;
+	}
+
+	.hero {
+		display: grid;
+		grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+		gap: 1.5rem;
+		align-items: stretch;
+	}
+
+	.hero img {
+		width: 100%;
+		height: 100%;
+		min-height: 18rem;
+		object-fit: cover;
+		border-radius: 28px;
+		box-shadow: 0 18px 40px rgba(33, 48, 52, 0.12);
+	}
+
+	.hero-copy {
+		background: rgba(255, 252, 247, 0.82);
+		border: 1px solid rgba(33, 48, 52, 0.12);
+		border-radius: 28px;
+		padding: 1.5rem;
+	}
+
+	.eyebrow,
+	.meta {
+		font-family: 'Trebuchet MS', sans-serif;
+	}
+
+	.eyebrow {
+		margin: 0 0 0.5rem;
+		color: #9e3f31;
+		font-size: 0.82rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		margin: 0 0 0.75rem;
+		font-size: clamp(2.2rem, 5vw, 4rem);
+		line-height: 0.95;
+	}
+
+	.lede {
+		margin: 0 0 1rem;
+		font-size: 1.08rem;
+		line-height: 1.7;
+		color: #4e5d5c;
+	}
+
+	.meta {
+		margin: 0.35rem 0 0;
+		color: #5f6b69;
+		font-weight: 600;
+	}
+
+	.podcast-links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6rem;
+		margin-top: 1.25rem;
+	}
+
+	.podcast-label {
+		margin: 0;
+		font: 700 0.8rem/1 'Trebuchet MS', sans-serif;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #9e3f31;
+	}
+
+	.podcast-btn {
+		padding: 0.55rem 0.9rem;
+		border-radius: 999px;
+		background: #efe2ca;
+		color: #213034;
+		font: 700 0.88rem/1 'Trebuchet MS', sans-serif;
+		text-decoration: none;
+	}
+
+	.content-grid {
+		max-width: 58rem;
+	}
+
+	.body {
+		line-height: 1.75;
+	}
+
+	.episodes {
+		margin-top: 2rem;
+	}
+
+	.episodes h2 {
+		margin-bottom: 1rem;
+	}
+
+	.episode-list {
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.episode-row {
+		display: grid;
+		grid-template-columns: 84px minmax(0, 1fr) auto;
+		gap: 1rem;
+		align-items: center;
+		padding: 1rem;
+		border: 1px solid rgba(33, 48, 52, 0.12);
+		border-radius: 20px;
+		background: rgba(255, 252, 247, 0.82);
+	}
+
+	.episode-date {
+		color: #9e3f31;
+		font: 700 0.95rem/1.2 'Trebuchet MS', sans-serif;
+		text-transform: uppercase;
+	}
+
+	.episode-copy h3 {
+		margin: 0 0 0.25rem;
+		font-size: 1.08rem;
+	}
+
+	.episode-copy h3 a {
+		text-decoration: none;
+	}
+
+	.episode-copy p {
+		margin: 0;
+		color: #5f6b69;
+		font-family: 'Trebuchet MS', sans-serif;
+		font-size: 0.92rem;
+	}
+
+	.watch-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.8rem 0.95rem;
+		border-radius: 999px;
+		background: #d65a42;
+		color: #fff8f2;
+		font: 700 0.88rem/1 'Trebuchet MS', sans-serif;
+		text-decoration: none;
+	}
+
+	.watch-link-disabled {
+		background: rgba(78, 93, 92, 0.16);
+		color: #4e5d5c;
+	}
+
+	.body :global(p),
+	.body :global(li) {
+		color: #334446;
+	}
+
+	@media (max-width: 880px) {
+		.hero {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 620px) {
+		.episode-row {
+			grid-template-columns: 1fr;
+			align-items: start;
+		}
+	}
+</style>

@@ -1,37 +1,30 @@
-# build output
-dist/
-# generated types
-.astro/
-
-# dependencies
-node_modules/
-
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-
-# environment variables
-.env
-.env.production
-
-# sermon-chatbot prototype scratch
-scripts/transcripts/embeddings.json
-
-# yt-dlp info dumps (regenerable metadata)
-scripts/transcripts/raw/*.info.json
-
-# macOS-specific files
 .DS_Store
-
-# jetbrains setting folder
-.idea/
-
-# Obsidian app config (local only)
+.playwright-cli/
+.playwright-mcp/
+.astro/
 .obsidian/
+dist/
 
-# Playwright test output
-test-results/
-playwright-report/
+inspect-*.png
+.claude/settings.json
+
+site/node_modules/
+site/dist/
+site/.astro/
+site/public/attachments/
+site/scripts/transcripts/embeddings.json
+site/scripts/transcripts/raw/*.info.json
+site/.env
+
+*.log
+output/
+
+# Obsidian personal workspace/session state
+site/src/content/.obsidian/app.json
+site/src/content/.obsidian/appearance.json
+site/src/content/.obsidian/bookmarks.json
+site/src/content/.obsidian/graph.json
+site/src/content/.obsidian/hotkeys.json
+site/src/content/.obsidian/switcher.json
+site/src/content/.obsidian/workspace.json
+site/src/content/.obsidian/workspaces.json

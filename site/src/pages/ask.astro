@@ -1,0 +1,557 @@
+---
+import BaseLayout from "../layouts/Layout.astro";
+import { loadReviewedSermons } from "../lib/sermon-chatbot/corpus.ts";
+import { youtubeLink } from "../lib/sermon-chatbot/vtt.ts";
+
+export const prerender = false;
+
+const sermons = await loadReviewedSermons();
+const feed = [...sermons].sort((a, b) => b.date.localeCompare(a.date));
+
+const sermonCount = feed.filter((s) => s.content_type === "sermon").length;
+const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
+---
+
+<BaseLayout
+  title="Ask The Table"
+  description="Find what Brett has said in his sermons and Table Talk videos."
+  canonicalPath="/ask/"
+  noindex={true}
+>
+  <main class="chat-page">
+    <header class="intro">
+      <h1>Ask The Table</h1>
+      <p class="subhead">
+        Want to know what we believe? Looking for a particular sermon? Ask anything.
+      </p>
+    </header>
+
+    <section class="ask">
+      <form id="ask-form" novalidate>
+        <label for="query">
+          <span class="sr-only">Your question</span>
+          <input
+            id="query"
+            name="query"
+            type="text"
+            placeholder="why does everything feel like my fault?"
+            required
+            autocomplete="off"
+          />
+        </label>
+        <button type="submit" id="ask-button">Ask</button>
+      </form>
+      <div id="response" class="response" aria-live="polite"></div>
+    </section>
+
+    <section class="feed">
+      <h2>
+        <span>Sources</span>
+        <span class="counts">
+          {sermonCount} sermons · {talkCount} Table Talks
+        </span>
+      </h2>
+      <ul class="cards">
+        {
+          feed.map((s) => (
+            <li
+              class="card"
+              data-series={s.series ?? ""}
+              data-content-type={s.content_type}
+            >
+              <div class="card-meta">
+                <span class="date">{s.date}</span>
+                <span class={`badge badge-${s.content_type}`}>
+                  {s.content_type === "table_talk" ? "Table Talk" : "Sermon"}
+                </span>
+                {s.series && s.series !== "Table Talk" && (
+                  <button
+                    type="button"
+                    class="badge badge-series"
+                    data-filter-series={s.series}
+                    aria-label={`Show only sermons in ${s.series} series`}
+                  >
+                    {s.series}
+                  </button>
+                )}
+              </div>
+              <h3>
+                <a
+                  href={youtubeLink(s.youtube_id, s.content_start_seconds)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {s.title}
+                </a>
+              </h3>
+              {s.description && <p class="description">{s.description}</p>}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    type ApiChunk = {
+      content_id: string;
+      source_title: string;
+      source_date: string;
+      source_type: string;
+      series: string | null;
+      start_seconds: number;
+      end_seconds: number;
+      score: number;
+    };
+
+    type ComposedResponse = {
+      composed_response: string;
+      tier: string;
+      shape: string;
+      top_score: number;
+      chunks: ApiChunk[];
+    };
+
+    const form = document.getElementById("ask-form") as HTMLFormElement;
+    const button = document.getElementById("ask-button") as HTMLButtonElement;
+    const input = document.getElementById("query") as HTMLInputElement;
+    const responseEl = document.getElementById("response") as HTMLDivElement;
+    const feedEl = document.querySelector(".feed") as HTMLElement;
+    const feedHeaderEl = document.querySelector(".feed h2") as HTMLElement;
+    const allCards = Array.from(
+      document.querySelectorAll<HTMLElement>(".card"),
+    );
+
+    const defaultFeedHeaderHTML = feedHeaderEl.innerHTML;
+
+    function applySeriesFilter(
+      series: string | null,
+      options: { updateUrl?: boolean } = {},
+    ): void {
+      for (const card of allCards) {
+        if (series === null) {
+          card.style.display = "";
+        } else {
+          card.style.display = card.dataset.series === series ? "" : "none";
+        }
+      }
+      if (series === null) {
+        feedHeaderEl.innerHTML = defaultFeedHeaderHTML;
+      } else {
+        const visibleCount = allCards.filter(
+          (c) => c.dataset.series === series,
+        ).length;
+        const safeSeries = series
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+        feedHeaderEl.innerHTML = `
+          <span>Filtered: ${safeSeries}</span>
+          <button type="button" class="clear-filter" data-clear-filter>
+            Clear filter (${visibleCount} shown)
+          </button>
+        `;
+      }
+      if (options.updateUrl !== false) {
+        const url = new URL(window.location.href);
+        if (series === null) url.searchParams.delete("series");
+        else url.searchParams.set("series", series);
+        history.pushState({ series }, "", url.toString());
+      }
+    }
+
+    // Apply initial filter from the URL on page load.
+    const initialSeries = new URLSearchParams(window.location.search).get(
+      "series",
+    );
+    if (initialSeries) applySeriesFilter(initialSeries, { updateUrl: false });
+
+    // Back/forward navigation updates the filter without pushing a new entry.
+    window.addEventListener("popstate", () => {
+      const params = new URLSearchParams(window.location.search);
+      applySeriesFilter(params.get("series"), { updateUrl: false });
+    });
+
+    // Event delegation — handles clicks on card series badges AND the
+    // "View all in [series]" suggestions rendered under a chat response.
+    document.addEventListener("click", (e) => {
+      const t = e.target as HTMLElement;
+      const filterButton = t.closest<HTMLElement>("[data-filter-series]");
+      if (filterButton) {
+        e.preventDefault();
+        const series = filterButton.dataset.filterSeries ?? null;
+        applySeriesFilter(series);
+        feedEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      if (t.closest<HTMLElement>("[data-clear-filter]")) {
+        e.preventDefault();
+        applySeriesFilter(null);
+      }
+    });
+
+    function escapeHtml(s: string): string {
+      return s
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function renderMarkdownish(text: string): string {
+      const paragraphs = text.split(/\n{2,}/);
+      return paragraphs
+        .map((p) => {
+          const trimmed = p.trim();
+          if (!trimmed) return "";
+          // Blockquote (lines starting with >)
+          if (/^>\s/m.test(trimmed)) {
+            const inner = trimmed
+              .split("\n")
+              .map((line) => line.replace(/^>\s?/, ""))
+              .join(" ");
+            return `<blockquote>${formatInline(escapeHtml(inner))}</blockquote>`;
+          }
+          // List (lines starting with - or *)
+          if (/^\s*[-*]\s/m.test(trimmed)) {
+            const items = trimmed
+              .split("\n")
+              .filter((line) => /^\s*[-*]\s/.test(line))
+              .map((line) => line.replace(/^\s*[-*]\s/, ""))
+              .map((item) => `<li>${formatInline(escapeHtml(item))}</li>`)
+              .join("");
+            return `<ul>${items}</ul>`;
+          }
+          return `<p>${formatInline(escapeHtml(trimmed))}</p>`;
+        })
+        .join("");
+    }
+
+    function formatInline(s: string): string {
+      return s
+        .replace(
+          /\[([^\]]+)\]\(([^)]+)\)/g,
+          '<a href="$2" target="_blank" rel="noreferrer">$1</a>',
+        )
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const query = input.value.trim();
+      if (!query) return;
+
+      button.disabled = true;
+      button.textContent = "Thinking…";
+      responseEl.innerHTML = '<p class="thinking">Thinking…</p>';
+
+      try {
+        const res = await fetch("/api/ask/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+          throw new Error(err.error ?? `HTTP ${res.status}`);
+        }
+        const data: ComposedResponse = await res.json();
+
+        // Surface series from the top chunks as filter shortcuts.
+        // Skip "Table Talk" — it's redundant with the content_type badge
+        // and not a real thematic series.
+        const topSeries = new Set<string>();
+        for (const chunk of data.chunks.slice(0, 3)) {
+          if (chunk.series && chunk.series !== "Table Talk") {
+            topSeries.add(chunk.series);
+          }
+        }
+        const seriesSuggestions = [...topSeries]
+          .map((s) => {
+            const safe = s
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/"/g, "&quot;");
+            return `<button type="button" class="series-suggestion" data-filter-series="${safe}">View all in ${safe} →</button>`;
+          })
+          .join("");
+
+        responseEl.innerHTML = `
+          <div class="answer-card">
+            ${renderMarkdownish(data.composed_response)}
+            ${seriesSuggestions ? `<div class="series-suggestions">${seriesSuggestions}</div>` : ""}
+            <footer>top score: ${data.top_score.toFixed(3)}</footer>
+          </div>
+        `;
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        responseEl.innerHTML = `<p class="error">Error: ${escapeHtml(message)}</p>`;
+      } finally {
+        button.disabled = false;
+        button.textContent = "Ask";
+      }
+    });
+  </script>
+
+  <style>
+    .chat-page {
+      max-width: 1520px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+    /* Keep everything except the form at the narrower reading width,
+       centered within the wide page. The form alone stretches wide. */
+    .intro,
+    .response,
+    .feed {
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .intro h1 {
+      font-size: 1.75rem;
+      margin: 0 0 0.25rem;
+      letter-spacing: -0.01em;
+    }
+    .subhead {
+      margin: 0 0 1.5rem;
+      font-size: 0.95rem;
+      opacity: 0.7;
+    }
+    .ask {
+      padding-bottom: 2rem;
+      border-bottom: 1px solid currentColor;
+      border-bottom-color: rgba(127, 127, 127, 0.25);
+      margin-bottom: 2rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    #ask-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem;
+      width: 1400px;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #ask-form input {
+      width: 100%;
+      min-width: 0;
+      padding: 1.25rem 1.5rem;
+      font-size: 1.2rem;
+      border: 1px solid rgba(127, 127, 127, 0.35);
+      background: transparent;
+      color: inherit;
+      border-radius: 8px;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    #ask-form input:focus {
+      outline: 2px solid rgba(127, 127, 127, 0.5);
+      outline-offset: -1px;
+    }
+    #ask-form button {
+      padding: 1.25rem 2rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border: 1px solid rgba(127, 127, 127, 0.35);
+      background: rgba(127, 127, 127, 0.1);
+      color: inherit;
+      border-radius: 8px;
+      font-family: inherit;
+    }
+    #ask-form button:hover:not(:disabled) {
+      background: rgba(127, 127, 127, 0.2);
+    }
+    #ask-form button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .response {
+      margin-top: 1.5rem;
+      min-height: 1em;
+    }
+    .answer-card {
+      padding: 1.5rem;
+      background: rgba(127, 127, 127, 0.06);
+      border-radius: 8px;
+      line-height: 1.65;
+    }
+    .answer-card p {
+      margin: 0 0 1em;
+    }
+    .answer-card p:last-of-type {
+      margin-bottom: 0;
+    }
+    .answer-card blockquote {
+      border-left: 3px solid rgba(127, 127, 127, 0.4);
+      padding: 0.25em 0 0.25em 1em;
+      margin: 1em 0;
+      font-style: italic;
+    }
+    .answer-card ul {
+      padding-left: 1.25em;
+      margin: 1em 0;
+    }
+    .answer-card li {
+      margin-bottom: 0.4em;
+    }
+    .answer-card footer {
+      margin-top: 1em;
+      padding-top: 0.75em;
+      border-top: 1px solid rgba(127, 127, 127, 0.2);
+      font-size: 0.8em;
+      opacity: 0.5;
+      font-variant-numeric: tabular-nums;
+    }
+    .thinking {
+      opacity: 0.6;
+      font-style: italic;
+    }
+    .error {
+      color: #c44;
+    }
+    .feed h2 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 0 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .counts {
+      font-weight: 400;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+    .cards {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .card {
+      margin: 0 0 0.75rem;
+      padding: 1rem;
+      background: rgba(127, 127, 127, 0.05);
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .card:hover {
+      background: rgba(127, 127, 127, 0.08);
+    }
+    .card-meta {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-bottom: 0.4rem;
+    }
+    .date {
+      font-variant-numeric: tabular-nums;
+    }
+    .badge {
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .badge-sermon {
+      background: rgba(100, 140, 180, 0.2);
+      color: rgba(100, 140, 180, 1);
+    }
+    .badge-table_talk {
+      background: rgba(180, 130, 80, 0.2);
+      color: rgba(180, 130, 80, 1);
+    }
+    /* .badge-series is a button — reset button chrome, keep the badge look */
+    button.badge-series {
+      background: rgba(140, 100, 180, 0.2);
+      color: rgba(160, 120, 200, 1);
+      border: 1px solid rgba(140, 100, 180, 0.3);
+      font-family: inherit;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    button.badge-series:hover {
+      background: rgba(140, 100, 180, 0.35);
+      border-color: rgba(140, 100, 180, 0.6);
+    }
+    .clear-filter {
+      font-family: inherit;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      background: rgba(127, 127, 127, 0.1);
+      color: inherit;
+      border: 1px solid rgba(127, 127, 127, 0.25);
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 500;
+    }
+    .clear-filter:hover {
+      background: rgba(127, 127, 127, 0.2);
+    }
+    .series-suggestions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(127, 127, 127, 0.2);
+    }
+    .series-suggestion {
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.75rem;
+      background: rgba(140, 100, 180, 0.15);
+      color: inherit;
+      border: 1px solid rgba(140, 100, 180, 0.35);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .series-suggestion:hover {
+      background: rgba(140, 100, 180, 0.3);
+    }
+    .card h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .card h3 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .card h3 a:hover {
+      text-decoration: underline;
+    }
+    .description {
+      margin: 0;
+      opacity: 0.75;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      clip: rect(0, 0, 0, 0);
+      overflow: hidden;
+    }
+  </style>
+</BaseLayout>

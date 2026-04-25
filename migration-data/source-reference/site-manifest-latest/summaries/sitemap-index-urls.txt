@@ -1,9 +1,0 @@
-https://thetabletx.com/wp-sitemap-posts-page-1.xml
-https://thetabletx.com/wp-sitemap-posts-mailpoet_page-1.xml
-https://thetabletx.com/wp-sitemap-posts-staff-1.xml
-https://thetabletx.com/wp-sitemap-posts-podcast-1.xml
-https://thetabletx.com/wp-sitemap-taxonomies-tribe_events_cat-1.xml
-https://thetabletx.com/wp-sitemap-taxonomies-staff-group-1.xml
-https://thetabletx.com/wp-sitemap-taxonomies-series-1.xml
-https://thetabletx.com/wp-sitemap-taxonomies-speaker-1.xml
-https://thetabletx.com/wp-sitemap-users-1.xml
