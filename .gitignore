@@ -20,6 +20,9 @@ pnpm-debug.log*
 # sermon-chatbot prototype scratch
 scripts/transcripts/embeddings.json
 
+# yt-dlp info dumps (regenerable metadata)
+scripts/transcripts/raw/*.info.json
+
 # macOS-specific files
 .DS_Store
 
