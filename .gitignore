@@ -1,13 +1,30 @@
 .DS_Store
+
+# Playwright / browser session dumps
 .playwright-cli/
 .playwright-mcp/
+test-results/
+output/
+
+# Screenshots dumped at repo root
+*.png
+*.jpg
+
+# Build output
 .astro/
-.obsidian/
 dist/
+node_modules/
 
-inspect-*.png
+# Obsidian personal state (shared config lives in .obsidian/)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# Claude / agent tooling
 .claude/settings.json
+.agents/
+.gemini/
 
+# Site-level ignores
 site/node_modules/
 site/dist/
 site/.astro/
@@ -17,7 +34,6 @@ site/scripts/transcripts/raw/*.info.json
 site/.env
 
 *.log
-output/
 
 # Obsidian personal workspace/session state
 site/src/content/.obsidian/app.json
