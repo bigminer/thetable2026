@@ -94,6 +94,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 	</head>
 	<body>
 		<div class="page-shell">
+			<div class="header-wrap">
 			<header class="site-header">
 				<div class="brand-wrap">
 					<a class="brand" href="/">{siteName}</a>
@@ -165,6 +166,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 					))}
 				</ul>
 			</nav>
+			</div><!-- /.header-wrap -->
 
 			<main class="site-main">
 				<slot />
@@ -316,6 +318,12 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 		min-height: 100vh;
 	}
 
+	.header-wrap {
+		position: sticky;
+		top: 0;
+		z-index: 20;
+	}
+
 	.site-header {
 		display: flex;
 		align-items: center;
@@ -324,10 +332,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 		padding: 1.25rem clamp(1.25rem, 3vw, 2.5rem);
 		border-bottom: 1px solid var(--line);
 		backdrop-filter: blur(10px);
-		position: sticky;
-		top: 0;
 		background: rgba(251, 246, 239, 0.88);
-		z-index: 20;
 	}
 
 	.brand-wrap {
@@ -438,9 +443,14 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 	}
 
 	.mobile-nav {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
 		padding: 0 1.25rem 1rem;
 		background: rgba(251, 246, 239, 0.98);
 		border-bottom: 1px solid var(--line);
+		box-shadow: 0 8px 24px rgba(33, 48, 52, 0.1);
 	}
 
 	.mobile-nav[hidden] {
