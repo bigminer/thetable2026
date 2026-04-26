@@ -152,7 +152,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 									<ul class="mobile-submenu">
 										{item.children.map((child) => (
 											<li class:list={[isActive(child.href) && 'is-active']}>
-												<a href={child.href}>{child.label}</a>
+												<a href={base + child.href}>{child.label}</a>
 											</li>
 										))}
 									</ul>
