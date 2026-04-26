@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Layout title="Page Not Found | The Table Church">
+  <div class="not-found">
+    <p class="eyebrow">404</p>
+    <h1>Page not found</h1>
+    <p class="lede">This page doesn't exist or may have moved.</p>
+    <a class="btn" href={base + '/'}>Back to home</a>
+  </div>
+</Layout>
+
+<script>
+  // If a valid route was accessed without a trailing slash, add it and retry.
+  const path = window.location.pathname;
+  if (!path.endsWith('/')) {
+    window.location.replace(path + '/' + window.location.search + window.location.hash);
+  }
+</script>
+
+<style>
+  .not-found {
+    max-width: 36rem;
+    padding: 3rem 0;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.5rem;
+    color: var(--brand-rust);
+    font: 700 0.82rem/1.1 'Trebuchet MS', sans-serif;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 0.95;
+  }
+
+  .lede {
+    margin: 0 0 1.5rem;
+    font-size: 1.08rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.85rem 1.1rem;
+    border-radius: 999px;
+    background: var(--brand-coral);
+    color: #fff8f2;
+    font: 700 0.96rem/1 'Trebuchet MS', sans-serif;
+    text-decoration: none;
+  }
+</style>

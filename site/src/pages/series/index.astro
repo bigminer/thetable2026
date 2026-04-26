@@ -68,7 +68,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 	.eyebrow {
 		margin: 0 0 0.5rem;
-		color: #9e3f31;
+		color: var(--brand-rust);
 		font: 700 0.82rem/1.1 'Trebuchet MS', sans-serif;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
@@ -83,7 +83,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 	.lede {
 		font-size: 1.1rem;
 		line-height: 1.7;
-		color: #4e5d5c;
+		color: var(--text-secondary);
 	}
 
 	.podcast-links {
@@ -99,14 +99,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		font: 700 0.8rem/1 'Trebuchet MS', sans-serif;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: #9e3f31;
+		color: var(--brand-rust);
 	}
 
 	.podcast-btn {
 		padding: 0.55rem 0.9rem;
 		border-radius: 999px;
-		background: #efe2ca;
-		color: #213034;
+		background: var(--brand-cream);
+		color: var(--text-primary);
 		font: 700 0.88rem/1 'Trebuchet MS', sans-serif;
 		text-decoration: none;
 	}
@@ -120,18 +120,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 	.empty-state {
 		margin-top: 1.5rem;
 		padding: 1rem 1.25rem;
-		border: 1px solid rgba(33, 48, 52, 0.12);
-		border-radius: 18px;
-		background: rgba(255, 252, 247, 0.82);
-		color: #4e5d5c;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+		background: var(--bg-surface);
+		color: var(--text-secondary);
 	}
 
 	.series-card {
-		background: rgba(255, 252, 247, 0.82);
-		border: 1px solid rgba(33, 48, 52, 0.12);
+		background: var(--bg-surface);
+		border: 1px solid var(--border);
 		border-radius: 24px;
 		overflow: hidden;
-		box-shadow: 0 16px 40px rgba(33, 48, 52, 0.08);
+		box-shadow: var(--shadow-card);
 	}
 
 	.series-card img {
@@ -157,7 +157,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 	.series-copy p:last-child {
 		margin-bottom: 0;
 		line-height: 1.65;
-		color: #4e5d5c;
+		color: var(--text-secondary);
 	}
 
 	.episode-count {
@@ -167,6 +167,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		font-weight: 700;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: #2f777c;
+		color: var(--brand-teal);
 	}
 </style>
