@@ -10,7 +10,7 @@ draft: false
 
 Rep your church and carry the mission wherever you go. Our t-shirts are printed on demand through [Printful](https://printful.com) — no inventory, no waste, shipped straight to your door.
 
-**[Shop Now →](https://REPLACE-WITH-YOUR-PRINTFUL-STORE-URL)**
+**[Shop Now →](https://the-table-tx.printful.me/)**
 
 ---
 
