@@ -154,10 +154,10 @@ const podcastLabel = podcastUrl?.includes('spotify.com') ? 'Listen on Spotify' :
 	.messages-card,
 	.related-card {
 		width: 100%;
-		border: 1px solid rgba(33, 48, 52, 0.12);
-		border-radius: 28px;
-		background: rgba(255, 252, 247, 0.82);
-		box-shadow: 0 18px 40px rgba(33, 48, 52, 0.08);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-card);
+		background: var(--bg-surface);
+		box-shadow: var(--shadow-card);
 	}
 
 	.podcast-media iframe {
@@ -189,7 +189,7 @@ const podcastLabel = podcastUrl?.includes('spotify.com') ? 'Listen on Spotify' :
 
 	.eyebrow {
 		margin: 0 0 0.5rem;
-		color: #9e3f31;
+		color: var(--brand-rust);
 		font: 700 0.82rem/1.1 'Trebuchet MS', sans-serif;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
@@ -212,7 +212,7 @@ const podcastLabel = podcastUrl?.includes('spotify.com') ? 'Listen on Spotify' :
 		flex-wrap: wrap;
 		gap: 0.8rem 1.2rem;
 		margin-bottom: 1.25rem;
-		color: #4e5d5c;
+		color: var(--text-secondary);
 		font-family: 'Trebuchet MS', sans-serif;
 	}
 
@@ -223,7 +223,7 @@ const podcastLabel = podcastUrl?.includes('spotify.com') ? 'Listen on Spotify' :
 	.media-fallback p {
 		margin: 0;
 		line-height: 1.7;
-		color: #4e5d5c;
+		color: var(--text-secondary);
 	}
 
 	.series-card {
@@ -252,14 +252,14 @@ const podcastLabel = podcastUrl?.includes('spotify.com') ? 'Listen on Spotify' :
 	}
 
 	.media-link.primary {
-		background: #d65a42;
+		background: var(--brand-coral);
 		color: #fff8f2;
 	}
 
 	.media-link.secondary {
 		border: 1px solid rgba(47, 119, 124, 0.35);
 		background: #fff8f2;
-		color: #2f777c;
+		color: var(--brand-teal);
 	}
 
 	.series-card a,
@@ -286,7 +286,7 @@ const podcastLabel = podcastUrl?.includes('spotify.com') ? 'Listen on Spotify' :
 		display: grid;
 		gap: 0.5rem;
 		padding: 1rem;
-		border: 1px solid rgba(33, 48, 52, 0.12);
+		border: 1px solid var(--border);
 		border-radius: 20px;
 		background: rgba(255, 255, 255, 0.58);
 	}

@@ -88,6 +88,8 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 		<link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
 		<link rel="icon" href={base + '/favicon.ico'} />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
 		<meta
 			name="description"
 			content={description ?? homepage?.data.intro?.trim() ?? 'A welcoming, inclusive Christian community in Sachse, Texas.'}
@@ -284,25 +286,67 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 </html>
 
 <style>
+	/* ── Design System Tokens ── */
 	:root {
-		--cream: #f7f0e5;
-		--sand: #eadbc0;
-		--ink: #213034;
-		--muted: #5b6a69;
-		--accent: #d65a42;
-		--accent-dark: #9e3f31;
-		--teal: #2f777c;
-		--card: rgba(255, 252, 247, 0.82);
-		--line: rgba(33, 48, 52, 0.12);
+		/* Brand (mode-agnostic) */
+		--brand-teal:        #2f777c;
+		--brand-teal-dark:   #213034;
+		--brand-teal-deeper: #3d5c64;
+		--brand-rust:        #9e3f31;
+		--brand-coral:       #d65a42;
+		--brand-coral-light: #e07a62;
+		--brand-cream:       #efe2ca;
+
+		/* Light mode UI */
+		--bg:             #f3ede4;
+		--bg-surface:     rgba(255, 252, 247, 0.92);
+		--bg-raised:      #efe8dd;
+		--border:         rgba(33, 48, 52, 0.12);
+		--text-primary:   #213034;
+		--text-body:      #334446;
+		--text-secondary: #4e5d5c;
+		--text-muted:     #7a9090;
+		--link:           #9e3f31;
+		--link-hover:     #d65a42;
+		--radius-card:    28px;
+		--radius-sm:      18px;
+		--shadow-card:    0 18px 40px rgba(33, 48, 52, 0.08);
+		--shadow-sm:      0 16px 34px rgba(33, 48, 52, 0.06);
+
+		/* Legacy aliases — keep existing page code working */
+		--cream:       var(--bg);
+		--sand:        var(--bg-raised);
+		--ink:         var(--text-primary);
+		--muted:       var(--text-secondary);
+		--accent:      var(--brand-coral);
+		--accent-dark: var(--brand-rust);
+		--teal:        var(--brand-teal);
+		--card:        var(--bg-surface);
+		--line:        var(--border);
+	}
+
+	[data-theme='dark'] {
+		--bg:             #1e2022;
+		--bg-surface:     #272a2d;
+		--bg-raised:      #2f3336;
+		--border:         rgba(255, 255, 255, 0.08);
+		--text-primary:   #e8e4de;
+		--text-body:      #c8c4be;
+		--text-secondary: #9da4a8;
+		--text-muted:     #636b70;
+		--link:           #d65a42;
+		--link-hover:     #e07a62;
+		--shadow-card:    0 18px 40px rgba(0, 0, 0, 0.3);
+		--shadow-sm:      0 16px 34px rgba(0, 0, 0, 0.2);
 	}
 
 	html {
 		background:
 			radial-gradient(circle at top left, rgba(214, 90, 66, 0.18), transparent 30%),
 			radial-gradient(circle at top right, rgba(47, 119, 124, 0.18), transparent 32%),
-			linear-gradient(180deg, #fbf6ef 0%, var(--cream) 100%);
-		color: var(--ink);
-		font-family: Georgia, 'Times New Roman', serif;
+			linear-gradient(180deg, #fbf6ef 0%, var(--bg) 100%);
+		color: var(--text-primary);
+		font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
 	}
 
 	body {
@@ -518,7 +562,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 
 	.footer-title {
 		margin: 0;
-		font: 700 clamp(1.15rem, 1.8vw, 1.45rem) / 1.1 Georgia, 'Times New Roman', serif;
+		font: 700 clamp(1.15rem, 1.8vw, 1.45rem) / 1.1 'Trebuchet MS', 'Segoe UI', sans-serif;
 	}
 
 	.footer-tagline {

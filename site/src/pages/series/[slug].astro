@@ -103,14 +103,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		height: 100%;
 		min-height: 18rem;
 		object-fit: cover;
-		border-radius: 28px;
-		box-shadow: 0 18px 40px rgba(33, 48, 52, 0.12);
+		border-radius: var(--radius-card);
+		box-shadow: var(--shadow-card);
 	}
 
 	.hero-copy {
-		background: rgba(255, 252, 247, 0.82);
-		border: 1px solid rgba(33, 48, 52, 0.12);
-		border-radius: 28px;
+		background: var(--bg-surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-card);
 		padding: 1.5rem;
 	}
 
@@ -121,7 +121,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 	.eyebrow {
 		margin: 0 0 0.5rem;
-		color: #9e3f31;
+		color: var(--brand-rust);
 		font-size: 0.82rem;
 		font-weight: 700;
 		letter-spacing: 0.16em;
@@ -138,7 +138,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		margin: 0 0 1rem;
 		font-size: 1.08rem;
 		line-height: 1.7;
-		color: #4e5d5c;
+		color: var(--text-secondary);
 	}
 
 	.meta {
@@ -160,14 +160,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		font: 700 0.8rem/1 'Trebuchet MS', sans-serif;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: #9e3f31;
+		color: var(--brand-rust);
 	}
 
 	.podcast-btn {
 		padding: 0.55rem 0.9rem;
 		border-radius: 999px;
-		background: #efe2ca;
-		color: #213034;
+		background: var(--brand-cream);
+		color: var(--text-primary);
 		font: 700 0.88rem/1 'Trebuchet MS', sans-serif;
 		text-decoration: none;
 	}
@@ -199,13 +199,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		gap: 1rem;
 		align-items: center;
 		padding: 1rem;
-		border: 1px solid rgba(33, 48, 52, 0.12);
+		border: 1px solid var(--border);
 		border-radius: 20px;
-		background: rgba(255, 252, 247, 0.82);
+		background: var(--bg-surface);
 	}
 
 	.episode-date {
-		color: #9e3f31;
+		color: var(--brand-rust);
 		font: 700 0.95rem/1.2 'Trebuchet MS', sans-serif;
 		text-transform: uppercase;
 	}
@@ -232,7 +232,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		justify-content: center;
 		padding: 0.8rem 0.95rem;
 		border-radius: 999px;
-		background: #d65a42;
+		background: var(--brand-coral);
 		color: #fff8f2;
 		font: 700 0.88rem/1 'Trebuchet MS', sans-serif;
 		text-decoration: none;
@@ -240,12 +240,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 	.watch-link-disabled {
 		background: rgba(78, 93, 92, 0.16);
-		color: #4e5d5c;
+		color: var(--text-secondary);
 	}
 
 	.body :global(p),
 	.body :global(li) {
-		color: #334446;
+		color: var(--text-body);
 	}
 
 	@media (max-width: 880px) {
