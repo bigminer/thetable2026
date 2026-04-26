@@ -6,6 +6,7 @@ import Layout from '../layouts/Layout.astro';
 
 const homepage = await getEntry('site', 'homepage');
 const { Content } = homepage ? await render(homepage) : { Content: null };
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const recentSeries = sortSeriesEntries(
 	await safeGetCollection(() => getCollection('series', ({ data }) => !data.draft))
 ).slice(0, 6);
@@ -42,8 +43,8 @@ const welcomeVideoThumbnail = welcomeVideoId ? `https://img.youtube.com/vi/${wel
 					<p class="subtitle">{homepage.data.heroSubtitle}</p>
 					<p class="lede">{homepage.data.intro}</p>
 					<div class="actions">
-						<a class="button primary" href="/our-story/">Who We Are</a>
-						<a class="button secondary" href="/series/">Recent Messages</a>
+						<a class="button primary" href={base + '/our-story/'}>Who We Are</a>
+						<a class="button secondary" href={base + '/series/'}>Recent Messages</a>
 					</div>
 				</div>
 				{heroMediaUrl && (
@@ -167,7 +168,7 @@ const welcomeVideoThumbnail = welcomeVideoId ? `https://img.youtube.com/vi/${wel
 					republished from real migration sources.
 				</p>
 				<div class="actions">
-					<a class="button primary" href="/series/">View Series Section</a>
+					<a class="button primary" href={base + '/series/'}>View Series Section</a>
 				</div>
 			</div>
 		</section>
@@ -183,12 +184,12 @@ const welcomeVideoThumbnail = welcomeVideoId ? `https://img.youtube.com/vi/${wel
 			{recentSeries.map((entry) => (
 				<article class="series-card">
 					{entry.data.featuredImage && (
-						<a href={`/series/${fallbackSlug(entry.data.slug, entry.id)}/`} tabindex="-1" aria-hidden="true">
+						<a href={`${base}/series/${fallbackSlug(entry.data.slug, entry.id)}/`} tabindex="-1" aria-hidden="true">
 							<img src={resolveAsset(entry.data.featuredImage)} alt={entry.data.featuredImageAlt ?? entry.data.title} />
 						</a>
 					)}
 					<div class="series-copy">
-						<h3><a href={`/series/${fallbackSlug(entry.data.slug, entry.id)}/`}>{entry.data.title}</a></h3>
+						<h3><a href={`${base}/series/${fallbackSlug(entry.data.slug, entry.id)}/`}>{entry.data.title}</a></h3>
 						<p>{entry.data.description}</p>
 					</div>
 				</article>

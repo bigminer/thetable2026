@@ -28,8 +28,10 @@ const footerAddressLines = homepage?.data.addressLines?.length
 const footerServiceTime = homepage?.data.serviceTime?.trim() || 'Sundays at 5:00 pm';
 const footerSocialLinks = homepage?.data.socialLinks?.filter((link) => link.url?.trim()) ?? [];
 const footerCopyrightYear = new Date().getFullYear();
-const privacyHref = '/privacy-policy/';
-const currentPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const privacyHref = base + '/privacy-policy/';
+const rawPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const currentPath = base && rawPath.startsWith(base) ? rawPath.slice(base.length) : rawPath;
 
 const navItems: NavItem[] = [
 	{ label: 'New Here?', href: '/new-here/' },
@@ -83,8 +85,8 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
+		<link rel="icon" href={base + '/favicon.ico'} />
 		<meta name="generator" content={Astro.generator} />
 		<meta
 			name="description"
@@ -97,7 +99,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 			<div class="header-wrap">
 			<header class="site-header">
 				<div class="brand-wrap">
-					<a class="brand" href="/">{siteName}</a>
+					<a class="brand" href={base + '/'}>{siteName}</a>
 					<p class="tagline">A church community in Sachse, Texas.</p>
 				</div>
 				<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">
@@ -114,7 +116,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 							>
 								{item.href ? (
 									<a
-										href={item.href}
+										href={item.external ? item.href : base + item.href}
 										target={item.external ? '_blank' : undefined}
 										rel={item.external ? 'noreferrer' : undefined}
 									>
@@ -126,7 +128,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 										<ul class="submenu" id={`submenu-${index}`}>
 											{item.children?.map((child) => (
 												<li class:list={[isActive(child.href) && 'is-active']}>
-													<a href={child.href}>{child.label}</a>
+													<a href={base + child.href}>{child.label}</a>
 												</li>
 											))}
 										</ul>
@@ -155,7 +157,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 								</details>
 							) : (
 								<a
-									href={item.href}
+									href={item.external ? item.href : base + item.href}
 									target={item.external ? '_blank' : undefined}
 									rel={item.external ? 'noreferrer' : undefined}
 								>

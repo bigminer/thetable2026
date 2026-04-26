@@ -1,7 +1,8 @@
 export function resolveAsset(path: string | undefined | null): string | undefined {
 	if (!path) return undefined;
 	if (path.startsWith('attachments/') || path.startsWith('./attachments/')) {
-		return '/' + path.replace(/^\.\//, '');
+		const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+		return base + '/' + path.replace(/^\.\//, '');
 	}
 	return path;
 }
