@@ -1,7 +1,7 @@
 ---
 title: The Table Church
 heroTitle: Come Join Us
-heroSubtitle: Service Each Sunday @ 5PM
+heroSubtitle: Sundays at 5:00 pm
 heroVideo: attachments/video/homepage/Table-B-roll-mp4.mp4
 heroImageAlt: The Table Church gathering together
 intro: An LGBTQ-affirming church committed to embodying a welcoming, inclusive, and beautiful expression of Christian faith.
