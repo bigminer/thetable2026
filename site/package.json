@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:gh-pages": "astro build --config astro.config.gh-pages.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "ask": "node --env-file=.env --import tsx scripts/ask.ts",

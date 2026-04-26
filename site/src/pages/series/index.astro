@@ -11,6 +11,7 @@ const entries = sortSeriesEntries(
 );
 const siteConfig = await getEntry('site', 'homepage');
 const podcastLinks = siteConfig?.data.podcastLinks?.filter((l) => l.url?.trim()) ?? [];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Layout title="Series | The Table Church" description="Browse message series from The Table Church.">
@@ -40,7 +41,7 @@ const podcastLinks = siteConfig?.data.podcastLinks?.filter((l) => l.url?.trim())
 					)}
 					<div class="series-copy">
 						<p class="eyebrow">Series</p>
-						<h2><a href={`/series/${seriesSlug}/`}>{entry.data.title}</a></h2>
+						<h2><a href={`${base}/series/${seriesSlug}/`}>{entry.data.title}</a></h2>
 						<p>{entry.data.description}</p>
 						{messageCount > 0 && (
 							<p class="episode-count">

@@ -27,6 +27,7 @@ if (!entry) {
 const { Content } = await render(entry);
 const siteConfig = await getEntry('site', 'homepage');
 const podcastLinks = siteConfig?.data.podcastLinks?.filter((l) => l.url?.trim()) ?? [];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Layout title={`${entry.data.title} | The Table Church`} description={entry.data.description}>
@@ -65,7 +66,7 @@ const podcastLinks = siteConfig?.data.podcastLinks?.filter((l) => l.url?.trim())
 									<div class="episode-date">{formatMessageDate(message.data.date)}</div>
 									<div class="episode-copy">
 										<h3>
-											<a href={`/podcast/${getMessageSlug(message)}/`}>{message.data.title}</a>
+											<a href={`${base}/podcast/${getMessageSlug(message)}/`}>{message.data.title}</a>
 										</h3>
 										{message.data.speaker && <p>{message.data.speaker}</p>}
 									</div>
