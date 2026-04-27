@@ -249,12 +249,19 @@ async function main() {
   const entries = await readdir(CONTENT_DIR);
   let stubs = entries.filter((f) => f.endsWith(".md")).sort();
 
-  // Identify stubs that actually need work (have null content_description)
+  // Identify stubs that actually need work (have null content_description).
+  // Skip stubs with both bounds null — those are worship-only services or
+  // tech-difficulty videos that explicitly have no discrete sermon content;
+  // the LLM will refuse and we'd retry forever.
   const pending: string[] = [];
   for (const f of stubs) {
     const c = await readFile(join(CONTENT_DIR, f), "utf8");
     const desc = extractYamlValue(c, "content_description");
-    if (desc === null) pending.push(f);
+    if (desc !== null) continue;
+    const start = extractYamlValue(c, "content_start");
+    const end = extractYamlValue(c, "content_end");
+    if (start === null && end === null) continue;
+    pending.push(f);
   }
 
   if (limit !== null && pending.length > limit) {
