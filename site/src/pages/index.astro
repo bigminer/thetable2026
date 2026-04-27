@@ -1,709 +1,118 @@
 ---
-import { getCollection, getEntry, render } from 'astro:content';
-import { fallbackSlug, resolveAsset, safeGetCollection } from '../lib/content';
-import { sortSeriesEntries } from '../lib/podcast';
+// Proposed homepage — v0.
+// Restraint over polish. Specificity over reassurance. Evidence over claim.
+// The existing Layout (nav, footer) is preserved per Brett's approval of nav.
+
 import Layout from '../layouts/Layout.astro';
+import { resolveAsset } from '../lib/content';
 
-const homepage = await getEntry('site', 'homepage');
-const { Content } = homepage ? await render(homepage) : { Content: null };
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const recentSeries = sortSeriesEntries(
-	await safeGetCollection(() => getCollection('series', ({ data }) => !data.draft))
-).slice(0, 6);
-const heroMediaUrl = homepage ? resolveAsset(homepage.data.heroVideo ?? homepage.data.heroImage) : undefined;
-const heroIsVideo = heroMediaUrl ? /\.(mp4|webm|ogg)(\?.*)?$/i.test(heroMediaUrl) : false;
-
-const youtubeVideoId = (value: string | undefined) => {
-	if (!value?.trim()) return undefined;
-	try {
-		const url = new URL(value);
-		const host = url.hostname.replace(/^www\./, '');
-		return host === 'youtu.be'
-			? url.pathname.split('/').filter(Boolean)[0]
-			: url.pathname.startsWith('/embed/')
-				? url.pathname.split('/').filter(Boolean)[1]
-				: url.searchParams.get('v') ?? undefined;
-	} catch {
-		return undefined;
-	}
-};
-
-const welcomeVideoId = youtubeVideoId(homepage?.data.welcomeVideoUrl);
-const welcomeVideoEmbedUrl = welcomeVideoId ? `https://www.youtube-nocookie.com/embed/${welcomeVideoId}` : undefined;
-const welcomeVideoThumbnail = welcomeVideoId ? `https://img.youtube.com/vi/${welcomeVideoId}/hqdefault.jpg` : undefined;
+const heroPhoto = resolveAsset('attachments/homepage/summerrama2023-414.jpg');
 ---
 
-<Layout title="The Table Church" description={homepage?.data.intro ?? 'The Table Church is a welcoming church community in Sachse, Texas.'}>
-	{homepage ? (
-		<>
-			<section class="hero">
-				<div class="hero-copy">
-					<p class="eyebrow">Sunday Gatherings</p>
-					<h1>{homepage.data.heroTitle}</h1>
-					<p class="subtitle">{homepage.data.heroSubtitle}</p>
-					<p class="lede">{homepage.data.intro}</p>
-					<div class="actions">
-						<a class="button primary" href={base + '/our-story/'}>Who We Are</a>
-						<a class="button secondary" href={base + '/series/'}>Recent Messages</a>
-					</div>
-				</div>
-				{heroMediaUrl && (
-					<div class="hero-media">
-						{heroIsVideo ? (
-							<video
-								src={heroMediaUrl}
-								autoplay
-								muted
-								loop
-								playsinline
-								controls={false}
-								aria-label={homepage.data.heroImageAlt ?? homepage.data.title}
-							/>
-						) : (
-							<img src={heroMediaUrl} alt={homepage.data.heroImageAlt ?? homepage.data.title} />
-						)}
-					</div>
-				)}
-			</section>
-
-			<section class="welcome">
-				<div class="card prose">
-					<p class="eyebrow">Welcome</p>
-					<h2>{homepage.data.welcomeTitle}</h2>
-					{Content && <Content />}
-				</div>
-
-				<div class="video-card">
-					<p class="eyebrow">Watch</p>
-					<div class="video-frame" style={welcomeVideoThumbnail ? `background-image: linear-gradient(rgba(33,48,52,0.2),rgba(33,48,52,0.45)), url('${welcomeVideoThumbnail}')` : undefined}>
-						{welcomeVideoEmbedUrl ? (
-							<iframe
-								src={welcomeVideoEmbedUrl}
-								title="Welcome to The Table"
-								loading="lazy"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-								referrerpolicy="strict-origin-when-cross-origin"
-								allowfullscreen
-							/>
-						) : (
-							<a class="play-button" href={homepage.data.welcomeVideoUrl}>Play</a>
-						)}
-					</div>
-					<h2>Welcome to The Table</h2>
-					<p>Watch the current welcome video and explore the latest series updates.</p>
-				</div>
-			</section>
-
-			{homepage.data.values && (
-				<section class="values">
-					<div class="section-heading">
-						<p class="eyebrow">Who We Are</p>
-						<h2>Five guiding values</h2>
-						<p class="section-lede">{homepage.data.valuesIntro}</p>
-					</div>
-					<div class="value-grid">
-						{homepage.data.values.map((value) => (
-							<article class="value-card">
-								<p class="value-kicker">{value.title}</p>
-								<h3>{value.title}</h3>
-								<p>{value.body}</p>
-							</article>
-						))}
-					</div>
-				</section>
-			)}
-
-			{homepage.data.featureSections && (
-				<section class="feature-stack">
-					{homepage.data.featureSections.map((section, index) => (
-						<article class:list={['feature-row', index % 2 === 1 && 'reverse']}>
-							<div class="feature-image-wrap">
-								<img class="feature-image" src={section.image} alt={section.imageAlt ?? section.title} />
-							</div>
-							<div class="feature-copy card">
-								<p class="eyebrow">Community</p>
-								<h2>{section.title}</h2>
-								<p>{section.body}</p>
-								{index === 2 && homepage.data.socialLinks && (
-									<div class="streaming-links">
-										<h3>Join Us In Person or Live Streaming for our Sunday Services</h3>
-										<div class="social-links">
-											{homepage.data.socialLinks.map((link) => (
-												<a href={link.url}>{link.label}</a>
-											))}
-										</div>
-									</div>
-								)}
-							</div>
-						</article>
-					))}
-				</section>
-			)}
-
-			{homepage.data.communityImages && (
-				<section class="community-strip">
-					<div class="section-heading">
-						<p class="eyebrow">Get Involved</p>
-						<h2>{homepage.data.communityTitle}</h2>
-						<p class="section-lede">{homepage.data.communityBody}</p>
-					</div>
-					<div class="community-grid">
-						{homepage.data.communityImages.map((image) => (
-							<figure class="community-card">
-								<img src={resolveAsset(image.src)} alt={image.alt} />
-								<figcaption>{image.alt}</figcaption>
-							</figure>
-						))}
-					</div>
-				</section>
-			)}
-		</>
-	) : (
-		<section class="hero hero-empty">
-			<div class="hero-copy">
-				<p class="eyebrow">Content Reset</p>
-				<h1>The site is ready for migrated content.</h1>
-				<p class="lede">
-					The spike entries have been cleared so the homepage, pages, and series collections can be
-					republished from real migration sources.
-				</p>
-				<div class="actions">
-					<a class="button primary" href={base + '/series/'}>View Series Section</a>
-				</div>
-			</div>
+<Layout
+	title="The Table Church"
+	description="A church in Sachse, Texas, founded for full LGBTQ affirmation."
+>
+	<main class="proposed-home">
+		<section class="hero">
+			<h1>This church exists because <em>"almost affirming"</em> wasn't enough.</h1>
+			<p class="subline">We believe following Jesus should never require hiding who you are.</p>
 		</section>
-	)}
 
-	<section class="recent-series">
-		<div class="section-heading">
-			<p class="eyebrow">Recent Messages</p>
-			<h2>Current series</h2>
-			<p class="section-lede">Explore our recent teaching series and find a message to listen to or share.</p>
-		</div>
-		<div class="series-grid">
-			{recentSeries.map((entry) => (
-				<article class="series-card">
-					{entry.data.featuredImage && (
-						<a href={`${base}/series/${fallbackSlug(entry.data.slug, entry.id)}/`} tabindex="-1" aria-hidden="true">
-							<img src={resolveAsset(entry.data.featuredImage)} alt={entry.data.featuredImageAlt ?? entry.data.title} />
-						</a>
-					)}
-					<div class="series-copy">
-						<h3><a href={`${base}/series/${fallbackSlug(entry.data.slug, entry.id)}/`}>{entry.data.title}</a></h3>
-						<p>{entry.data.description}</p>
-					</div>
-				</article>
-			))}
-		</div>
-		{recentSeries.length === 0 && (
-			<p class="empty-state">No series entries have been migrated yet.</p>
+		{heroPhoto && (
+			<figure class="photo">
+				<img
+					src={heroPhoto}
+					alt="Tie-dye t-shirts hanging on a clothesline at a Table community gathering."
+				/>
+			</figure>
 		)}
-	</section>
 
-	{homepage && (
-		<section class="contact-band">
-			<div class="contact-copy card">
-				<p class="eyebrow">Reach Out</p>
-				<h2>{homepage.data.contactTitle}</h2>
-				<p>{homepage.data.contactBody}</p>
-				{homepage.data.contactActionUrl && (
-					<a class="contact-action" href={homepage.data.contactActionUrl}>
-						{homepage.data.contactActionLabel ?? 'Contact Us'}
-					</a>
-				)}
-			</div>
-			<div class="contact-details card">
-				<h3>The Table</h3>
-				{homepage.data.addressLines && (
-					<ul>
-						{homepage.data.addressLines.map((line) => (
-							<li>{line}</li>
-						))}
-					</ul>
-				)}
-				<p class="service-time">{homepage.data.serviceTime}</p>
-				{homepage.data.meetupsUrl && <a class="meetups-link" href={homepage.data.meetupsUrl}>The Table MeetUps</a>}
-			</div>
-			{homepage.data.mapEmbedUrl && (
-				<div class="map-card">
-					<div class="map-copy">
-						<p class="eyebrow">Our Location</p>
-						<h3>The Table meets inside the First United Methodist Church of Sachse.</h3>
-						<a href={homepage.data.mapEmbedUrl} target="_blank" rel="noreferrer">Open map</a>
-					</div>
-					<iframe
-						src={homepage.data.mapEmbedUrl}
-						title="Map to The Table Church"
-						loading="lazy"
-						referrerpolicy="no-referrer-when-downgrade"
-						allowfullscreen
-					/>
-				</div>
-			)}
+		<section class="logistics">
+			<p>Sundays at 5pm in Sachse, TX.</p>
+			<a href={base + '/our-story/'}>Read why The Table started &rarr;</a>
 		</section>
-	)}
+	</main>
 </Layout>
 
 <style>
-	.hero,
-	.welcome {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 1.5rem;
+	.proposed-home {
+		max-width: 880px;
+		margin: 0 auto;
+		padding: 4rem 1.5rem 6rem;
+		font-family: 'Lora', serif;
+		color: var(--text-primary, #1a1a1a);
 	}
 
 	.hero {
-		align-items: stretch;
-		margin-bottom: 2rem;
+		padding: 3rem 0 4.5rem;
 	}
 
-	.hero-copy,
-	.card {
-		background: var(--bg-surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-card);
-		padding: 1.5rem;
-		box-shadow: var(--shadow-card);
+	.hero h1 {
+		font-weight: 600;
+		font-size: clamp(1.85rem, 4.4vw, 3.4rem);
+		line-height: 1.18;
+		letter-spacing: -0.005em;
+		margin: 0 0 1.5rem;
 	}
 
-	.hero-copy {
-		display: grid;
-		align-content: center;
-		padding-block: 2rem;
-	}
-
-	.eyebrow {
-		margin: 0 0 0.5rem;
-		color: var(--brand-rust);
-		font: 700 0.82rem/1.1 'Trebuchet MS', sans-serif;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-	}
-
-	h1,
-	h2,
-	h3 {
-		margin-top: 0;
-	}
-
-	h1 {
-		margin-bottom: 0.5rem;
-		font-size: clamp(2.6rem, 7vw, 5.2rem);
-		line-height: 0.92;
-	}
-
-	.subtitle {
-		margin: 0 0 1rem;
-		font-size: clamp(1.1rem, 2.4vw, 1.5rem);
-		color: var(--brand-teal);
+	.hero h1 em {
 		font-style: italic;
 	}
 
-	.lede {
-		margin: 0 0 1.25rem;
-		line-height: 1.75;
-		color: var(--text-secondary);
-		max-width: 34rem;
+	.subline {
+		margin: 0;
+		max-width: 38rem;
+		font-size: clamp(1.15rem, 2vw, 1.4rem);
+		line-height: 1.5;
+		color: var(--text-body, #333);
 	}
 
-	.actions {
+	.photo {
+		margin: 0 0 3rem;
+	}
+
+	.photo img {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 4px;
+	}
+
+	.logistics {
 		display: flex;
-		flex-wrap: wrap;
+		flex-direction: column;
 		gap: 0.75rem;
+		padding-top: 1rem;
 	}
 
-	.button {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.85rem 1.1rem;
-		border-radius: 999px;
-		font: 700 0.96rem/1 'Trebuchet MS', sans-serif;
-		text-decoration: none;
-	}
-
-	.primary {
-		background: var(--brand-coral);
-		color: #fff8f2;
-	}
-
-	.secondary {
-		background: var(--brand-cream);
-		color: var(--text-primary);
-	}
-
-	.hero-media img,
-	.hero-media video,
-	.series-card img {
-		display: block;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	.hero-media {
-		min-height: 28rem;
-		border-radius: var(--radius-card);
-		overflow: hidden;
-		box-shadow: var(--shadow-card);
-	}
-
-	.prose :global(p) {
-		line-height: 1.8;
-		color: var(--text-body);
-	}
-
-	.welcome {
-		margin-bottom: 2.5rem;
-	}
-
-	.section-heading {
-		margin-bottom: 1.25rem;
-		max-width: 48rem;
-	}
-
-	.section-heading h2 {
-		margin-bottom: 0;
-		font-size: clamp(1.8rem, 4vw, 3rem);
-	}
-
-	.section-lede {
-		margin: 0.75rem 0 0;
-		color: var(--text-secondary);
-		line-height: 1.7;
-	}
-
-	.video-card {
-		background: linear-gradient(160deg, var(--brand-teal) 0%, var(--brand-teal-dark) 100%);
-		color: #f8f4ed;
-		border-radius: var(--radius-card);
-		padding: 1.5rem;
-		text-decoration: none;
-		box-shadow: var(--shadow-card);
-	}
-
-	.video-frame {
-		display: grid;
-		place-items: center;
-		min-height: 16rem;
-		margin: 0.4rem 0 1rem;
-		border-radius: 20px;
-		background-color: rgba(33, 48, 52, 0.45);
-		background-size: cover;
-		background-position: center;
-		overflow: hidden;
-	}
-
-	.video-frame iframe {
-		display: block;
-		width: 100%;
-		aspect-ratio: 16 / 9;
-		min-height: 16rem;
-		border: 0;
-	}
-
-	.play-button {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.8rem 1.1rem;
-		border-radius: 999px;
-		background: rgba(248, 244, 237, 0.92);
-		color: var(--brand-teal-dark);
-		font: 700 0.92rem/1 'Trebuchet MS', sans-serif;
-	}
-
-	.video-card h2 {
-		margin-bottom: 0.5rem;
-	}
-
-	.video-card p:last-child {
+	.logistics p {
 		margin: 0;
-		line-height: 1.65;
-		color: rgba(248, 244, 237, 0.82);
-	}
-
-	.values,
-	.feature-stack,
-	.recent-series,
-	.community-strip,
-	.contact-band {
-		margin-top: 2.75rem;
-	}
-
-	.value-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 1rem;
-	}
-
-	.value-card {
-		padding: 1.15rem;
-		border-radius: 22px;
-		background: var(--bg-surface);
-		border: 1px solid var(--border);
-		box-shadow: var(--shadow-sm);
-	}
-
-	.value-kicker {
-		margin: 0 0 0.55rem;
-		color: var(--brand-teal);
-		font: 700 0.8rem/1 'Trebuchet MS', sans-serif;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-	}
-
-	.value-card h3 {
-		margin-bottom: 0.5rem;
-	}
-
-	.value-card p:last-child {
-		margin: 0;
-		line-height: 1.65;
-		color: var(--text-secondary);
-	}
-
-	.feature-stack {
-		display: grid;
-		gap: 1.5rem;
-	}
-
-	.feature-row {
-		display: grid;
-		grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-		gap: 1.5rem;
-		align-items: stretch;
-	}
-
-	.feature-row.reverse {
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-	}
-
-	.feature-row.reverse .feature-image-wrap {
-		order: 2;
-	}
-
-	.feature-row.reverse .feature-copy {
-		order: 1;
-	}
-
-	.feature-image-wrap {
-		min-height: 18rem;
-		border-radius: var(--radius-card);
-		overflow: hidden;
-		box-shadow: var(--shadow-card);
-	}
-
-	.feature-image {
-		display: block;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	.feature-copy h2 {
-		margin-bottom: 0.75rem;
-	}
-
-	.feature-copy p {
-		margin: 0;
-		line-height: 1.75;
-		color: var(--text-body);
-	}
-
-	.streaming-links {
-		margin-top: 1.25rem;
-	}
-
-	.streaming-links h3 {
-		margin: 0;
-		color: var(--text-primary);
 		font-size: 1.05rem;
-		line-height: 1.35;
+		color: var(--text-body, #333);
 	}
 
-	.social-links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem;
-		margin-top: 1rem;
-	}
-
-	.social-links a {
-		padding: 0.72rem 0.95rem;
-		border-radius: 999px;
-		background: var(--brand-cream);
-		color: var(--text-primary);
-		font: 700 0.9rem/1 'Trebuchet MS', sans-serif;
-		text-decoration: none;
-	}
-
-	.community-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-		gap: 1rem;
-	}
-
-	.community-card {
-		margin: 0;
-		background: var(--bg-surface);
-		border: 1px solid var(--border);
-		border-radius: 24px;
-		overflow: hidden;
-		box-shadow: var(--shadow-sm);
-	}
-
-	.community-card img {
-		display: block;
-		width: 100%;
-		aspect-ratio: 1 / 1;
-		object-fit: cover;
-	}
-
-	.community-card figcaption {
-		padding: 0.85rem 1rem 1rem;
-		font: 700 0.92rem/1.3 'Trebuchet MS', sans-serif;
-		color: var(--text-body);
-	}
-
-	.series-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-		gap: 1.25rem;
-	}
-
-	.series-card {
-		background: var(--bg-surface);
-		border: 1px solid var(--border);
-		border-radius: 24px;
-		overflow: hidden;
-		box-shadow: var(--shadow-card);
-	}
-
-	.series-card img {
-		aspect-ratio: 4 / 3;
-	}
-
-	.series-copy {
-		padding: 1rem 1rem 1.2rem;
-	}
-
-	.series-copy h3 {
-		margin-bottom: 0.65rem;
-		font-size: 1.4rem;
-	}
-
-	.series-copy h3 a {
-		text-decoration: none;
-	}
-
-	.series-copy p {
-		margin: 0;
-		color: var(--text-secondary);
-		line-height: 1.65;
-	}
-
-	.contact-band {
-		display: grid;
-		grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.75fr);
-		gap: 1.5rem;
-		padding-bottom: 1rem;
-	}
-
-	.contact-copy p:last-child {
-		margin-bottom: 0;
-		line-height: 1.75;
-		color: var(--text-body);
-	}
-
-	.contact-action {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
+	.logistics a {
 		width: fit-content;
-		margin-top: 1rem;
-		padding: 0.8rem 1rem;
-		border-radius: 999px;
-		background: var(--brand-coral);
-		color: #fff8f2;
-		font: 700 0.9rem/1 'Trebuchet MS', sans-serif;
+		font-size: 1.05rem;
+		color: var(--brand-rust, #8b3a2b);
 		text-decoration: none;
+		border-bottom: 1px solid currentColor;
+		padding-bottom: 1px;
 	}
 
-	.contact-details h3 {
-		margin-bottom: 0.85rem;
+	.logistics a:hover {
+		opacity: 0.7;
 	}
 
-	.contact-details ul {
-		margin: 0 0 1rem;
-		padding-left: 1.15rem;
-		line-height: 1.75;
-		color: var(--text-body);
-	}
-
-	.service-time {
-		margin: 0 0 1rem;
-		font-family: 'Trebuchet MS', sans-serif;
-		font-weight: 700;
-		color: var(--brand-rust);
-	}
-
-	.meetups-link {
-		color: var(--brand-rust);
-		font: 700 0.95rem/1 'Trebuchet MS', sans-serif;
-		text-decoration: none;
-	}
-
-	.map-card {
-		grid-column: 1 / -1;
-		border: 1px solid var(--border);
-		border-radius: 24px;
-		overflow: hidden;
-		background: var(--bg-surface);
-		box-shadow: var(--shadow-sm);
-	}
-
-	.map-copy {
-		padding: 1.15rem 1.25rem 0;
-	}
-
-	.map-copy h3 {
-		margin-bottom: 0.75rem;
-		font-size: 1.2rem;
-	}
-
-	.map-copy a {
-		color: var(--brand-rust);
-		font: 700 0.95rem/1 'Trebuchet MS', sans-serif;
-		text-decoration: none;
-	}
-
-	.map-card iframe {
-		display: block;
-		width: 100%;
-		min-height: 340px;
-		border: 0;
-	}
-
-	@media (max-width: 900px) {
-		.hero,
-		.welcome,
-		.feature-row,
-		.contact-band {
-			grid-template-columns: 1fr;
+	@media (max-width: 600px) {
+		.proposed-home {
+			padding: 2rem 1.25rem 4rem;
 		}
 
-		.feature-row.reverse .feature-image-wrap,
-		.feature-row.reverse .feature-copy {
-			order: initial;
-		}
-
-		.feature-row.reverse {
-			grid-template-columns: 1fr;
-		}
-
-		.hero-media {
-			min-height: 20rem;
+		.hero {
+			padding: 1.5rem 0 2.5rem;
 		}
 	}
 </style>
