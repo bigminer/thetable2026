@@ -44,7 +44,14 @@ jobs:
 
       - name: Download new transcripts
         working-directory: site
-        run: npm run fetch -- --cookies /tmp/yt-cookies.txt "${{ vars.YOUTUBE_CHANNEL_URL }}"
+        # yt-dlp exits 101 when --break-on-existing stops the run — that's
+        # expected (it just means we caught up to the archive), not failure.
+        run: |
+          set +e
+          npm run fetch -- --cookies /tmp/yt-cookies.txt "${{ vars.YOUTUBE_CHANNEL_URL }}"
+          code=$?
+          if [ $code -eq 0 ] || [ $code -eq 101 ]; then exit 0; fi
+          exit $code
 
       - name: Whisper fallback for videos without auto-captions
         working-directory: site
