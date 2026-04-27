@@ -22,9 +22,29 @@ function copyAttachments() {
   };
 }
 
+function rehypeRebaseImages(base) {
+  return function () {
+    return function (tree) {
+      function walk(node) {
+        if (node.type === 'element' && node.tagName === 'img') {
+          const src = node.properties?.src;
+          if (typeof src === 'string' && src.startsWith('/') && !src.startsWith(base)) {
+            node.properties.src = base + src;
+          }
+        }
+        if (node.children) node.children.forEach(walk);
+      }
+      walk(tree);
+    };
+  };
+}
+
 export default defineConfig({
   integrations: [copyAttachments()],
   site: 'https://bigminer.github.io',
   base: '/thetable2026',
   output: 'static',
+  markdown: {
+    rehypePlugins: [rehypeRebaseImages('/thetable2026')],
+  },
 });
