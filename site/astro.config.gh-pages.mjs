@@ -28,8 +28,12 @@ function rehypeRebaseImages(base) {
       function walk(node) {
         if (node.type === 'element' && node.tagName === 'img') {
           const src = node.properties?.src;
-          if (typeof src === 'string' && src.startsWith('/') && !src.startsWith(base)) {
-            node.properties.src = base + src;
+          if (typeof src === 'string') {
+            if (src.startsWith('/') && !src.startsWith(base)) {
+              node.properties.src = base + src;
+            } else if (src.startsWith('../attachments/')) {
+              node.properties.src = base + '/attachments/' + src.slice('../attachments/'.length);
+            }
           }
         }
         if (node.children) node.children.forEach(walk);

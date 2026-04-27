@@ -10,7 +10,7 @@ draft: false
 
 At The Table, that's the Jesus we've come to love. That's why in November of 2019 twenty-nine adults from the Collin and Dallas County area set out to create a community committed to a thoughtful, inclusive, eclectic, communal, and vulnerable expression of Christian faith. Our heart was that everyone have a seat at the table: whether black or white, gay or straight, male or female, rich or poor. And our prayer is that in that messy place of community, honesty, and vulnerability Jesus would meet us and that we would never be the same.
 
-![Brett and Maggie Tilford](/attachments/pages/our-story/Brett-and-Maggie-Tilford.jpg)
+![Brett and Maggie Tilford](../attachments/pages/our-story/Brett-and-Maggie-Tilford.jpg)
 
 ### Brett and Maggie Tilford
 
