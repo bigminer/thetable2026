@@ -32,9 +32,36 @@ const heroVideo = resolveAsset('attachments/video/homepage/Table-B-roll-mp4.mp4'
 			<p class="subline">We believe following Jesus<br />should never require hiding who you are.</p>
 		</div>
 		<div class="hero-actions">
-			<p class="service-time">Sundays at 5pm in Sachse, TX.</p>
 			<a class="cta" href={base + '/our-story/'}>Our Story</a>
+			<a class="cta" href={base + '/what-sundays-are-like/'}>What Sundays Are Like</a>
+			<a class="cta" href={base + '/plan-your-visit/'}>Plan Your Visit</a>
 		</div>
+	</section>
+
+	<section class="values">
+		<h2>We try to be</h2>
+		<ul class="values-list">
+			<li>
+				<h3>Thoughtful</h3>
+				<p>We try to do things deliberately, and to say what we mean — even when it's harder.</p>
+			</li>
+			<li>
+				<h3>Inclusive</h3>
+				<p>Everyone belongs here. Including the parts of yourself you've been told to hide.</p>
+			</li>
+			<li>
+				<h3>Eclectic</h3>
+				<p>We're built from different stories, traditions, and questions. There isn't one way to be at this table.</p>
+			</li>
+			<li>
+				<h3>Communal</h3>
+				<p>We try to be present for each other — Sundays, weekdays, easy seasons and hard ones.</p>
+			</li>
+			<li>
+				<h3>Vulnerable</h3>
+				<p>We tell our actual stories. We try to be honest about what we don't yet understand.</p>
+			</li>
+		</ul>
 	</section>
 </Layout>
 
@@ -119,13 +146,6 @@ const heroVideo = resolveAsset('attachments/video/homepage/Table-B-roll-mp4.mp4'
 		box-sizing: border-box;
 	}
 
-	.service-time {
-		margin: 0;
-		font-size: 1.05rem;
-		color: rgba(253, 250, 244, 0.88);
-		font-family: 'Lora', serif;
-	}
-
 	.cta {
 		display: inline-flex;
 		align-items: center;
@@ -158,6 +178,59 @@ const heroVideo = resolveAsset('attachments/video/homepage/Table-B-roll-mp4.mp4'
 		}
 	}
 
+	.values {
+		max-width: 84rem;
+		margin: 8rem auto;
+		padding: 0 clamp(1.25rem, 3vw, 2.5rem);
+		font-family: 'Lora', serif;
+	}
+
+	.values h2 {
+		margin: 0 0 2.5rem;
+		font-weight: 500;
+		font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+		color: var(--text-secondary, #555);
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+	}
+
+	.values-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		gap: 2rem;
+	}
+
+	.values-list li {
+		padding: 2rem 0 0;
+		border-top: 2px solid var(--brand-rust, #8b3a2b);
+	}
+
+	.values-list h3 {
+		margin: 0 0 1rem;
+		font-weight: 600;
+		font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+		line-height: 1.1;
+		letter-spacing: -0.005em;
+		color: var(--text-primary, #1a1a1a);
+	}
+
+	.values-list p {
+		margin: 0;
+		font-size: 1rem;
+		line-height: 1.6;
+		color: var(--text-body, #333);
+	}
+
+	@media (max-width: 900px) {
+		.values-list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 3rem 2rem;
+		}
+	}
+
 	@media (max-width: 600px) {
 		.hero {
 			min-height: 80vh;
@@ -169,6 +242,15 @@ const heroVideo = resolveAsset('attachments/video/homepage/Table-B-roll-mp4.mp4'
 
 		.hero-actions {
 			gap: 1rem;
+		}
+
+		.values {
+			margin: 3rem auto;
+		}
+
+		.values-list {
+			grid-template-columns: 1fr;
+			gap: 2.5rem;
 		}
 	}
 </style>
