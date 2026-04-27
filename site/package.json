@@ -12,7 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "ask": "node --env-file=.env --import tsx scripts/ask.ts",
-    "fetch": "yt-dlp --write-auto-subs --sub-lang en --skip-download --write-info-json --download-archive scripts/transcripts/archive.txt --match-filters \"title !*= 📱\" --output 'scripts/transcripts/raw/%(upload_date>%Y-%m-%d)s-%(id)s.%(ext)s' --convert-subs vtt --extractor-args \"youtube:player_client=mweb\"",
+    "fetch": "yt-dlp --write-auto-subs --sub-lang en --skip-download --write-info-json --download-archive scripts/transcripts/archive.txt --break-on-existing --match-filters \"title !*= 📱\" --output 'scripts/transcripts/raw/%(upload_date>%Y-%m-%d)s-%(id)s.%(ext)s' --convert-subs vtt",
     "transcribe": "node --env-file=.env --import tsx scripts/transcribe-missing.ts",
     "make-stubs": "node --import tsx scripts/make-stubs.ts",
     "enrich-titles": "node --import tsx scripts/enrich-titles.ts",

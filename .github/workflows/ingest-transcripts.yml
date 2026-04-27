@@ -34,9 +34,12 @@ jobs:
         working-directory: site
         run: npm ci
 
+      - name: Write YouTube cookies for yt-dlp
+        run: echo "${{ secrets.YOUTUBE_COOKIES }}" > /tmp/yt-cookies.txt
+
       - name: Download new transcripts
         working-directory: site
-        run: npm run fetch -- "${{ vars.YOUTUBE_CHANNEL_URL }}"
+        run: npm run fetch -- --cookies /tmp/yt-cookies.txt "${{ vars.YOUTUBE_CHANNEL_URL }}"
 
       - name: Whisper fallback for videos without auto-captions
         working-directory: site
