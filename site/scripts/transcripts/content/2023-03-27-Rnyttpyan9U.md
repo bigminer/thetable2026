@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2023-03-27-Rnyttpyan9U.en.vtt
 # Watch: https://www.youtube.com/watch?v=Rnyttpyan9U
 
 # --- REVIEW: confirm defaults or override ---
-title: "Lent - the way of the cross : Rev. Deniece Mason"          # cleaned-up display title; defaults to youtube_title
+title: "The Foolishness of the Cross"          # cleaned-up display title; defaults to youtube_title
 content_description: "Rev. Deniece Mason on the cross as foolishness to worldly power: God defeats sin and death not through force but through Christ's crucified weakness, absorbing humanity's violence and shame to show God stands with the humiliated, not the powerful."
-speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
+speaker: "guest:deniece-mason"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: "00:33:51"     # auto: "prayers of the people" → sermon — verify
+content_start: "00:34:20"     # auto: "prayers of the people" → sermon — verify
 content_end: "00:57:54"       # auto: "in the name of the father...holy spirit" — verify
-series: null                   # leave null if not in a series
+series: "Lent: The Way of the Cross"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

@@ -18,7 +18,7 @@ speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:33:54"     # auto: "grace and peace" — verify
 content_end: "01:01:03"       # auto: "open table" — verify
-series: "Stranger Things"                   # leave null if not in a series
+series: "Stranger Things: When the Bible Gets Weird"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

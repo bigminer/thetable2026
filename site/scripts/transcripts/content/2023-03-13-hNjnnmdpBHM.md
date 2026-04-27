@@ -18,7 +18,7 @@ speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:35:43"     # auto: "grace and peace" — verify
 content_end: "01:05:14"       # auto: "we practice...open table" — verify
-series: "Lent - The Way of the Cross"                   # leave null if not in a series
+series: "Lent: The Way of the Cross"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

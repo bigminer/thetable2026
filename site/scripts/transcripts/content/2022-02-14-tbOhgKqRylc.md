@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2022-02-14-tbOhgKqRylc.en.vtt
 # Watch: https://www.youtube.com/watch?v=tbOhgKqRylc
 
 # --- REVIEW: confirm defaults or override ---
-title: "1 Peter : Wives, Submission, & Finding What You're Looking For"          # cleaned-up display title; defaults to youtube_title
+title: "Wives, Submission, & Finding What You're Looking For"          # cleaned-up display title; defaults to youtube_title
 content_description: "Peter writes to Christian wives in non-Christian Roman households, addressing how their new faith threatens household hierarchy and worship of gods. Rather than defending submission, Brett traces the radical early church—which welcomed women, slaves, and children into leadership, shocking Roman society—and argues we should catch the trajectory toward equality rather than replicate ancient cultural compromises."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:26:11"     # auto: "grace and peace" — verify
 content_end: "00:55:32"       # auto: "in the name of the father...holy spirit" — verify
-series: null                   # leave null if not in a series
+series: "1 Peter"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

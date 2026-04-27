@@ -14,10 +14,10 @@ vtt_path: scripts/transcripts/raw/2022-07-11-fZPbknAGQE0.en.vtt
 # --- REVIEW: confirm defaults or override ---
 title: "The Reason I’m Still Here"          # cleaned-up display title; defaults to youtube_title
 content_description: "Maggie traces how Jesus's call to deny ourselves and take up our crosses runs counter to how churches often encourage believers to \"stand up for Jesus\"—arguing that real life comes through surrender and dying to our need for self-protection, identity, and control, not through defensive posturing."
-speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
+speaker: "guest:maggie-tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: "00:59:00"       # auto: "come to the table" — verify
+content_start: "00:29:13"            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_end: "00:57:41"       # auto: "come to the table" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

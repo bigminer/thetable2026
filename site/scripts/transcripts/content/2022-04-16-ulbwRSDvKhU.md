@@ -15,7 +15,7 @@ vtt_path: scripts/transcripts/raw/2022-04-16-ulbwRSDvKhU.en.vtt
 title: "A Service of Tenebrae"          # cleaned-up display title; defaults to youtube_title
 content_description: "A Tenebrae service that reads Scripture accounts of Jesus's arrest, trial, crucifixion, and burial with hymns and candlelit worship—no sermon, only liturgical proclamation of the Passion narrative."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
-content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
+content_type: "worship"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
 content_end: null              # when the content ends, format "hh:mm:ss"
 series: null                   # leave null if not in a series

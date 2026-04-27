@@ -12,13 +12,13 @@ vtt_path: scripts/transcripts/raw/2023-10-02-FISirBrkFb4.en.vtt
 # Watch: https://www.youtube.com/watch?v=FISirBrkFb4
 
 # --- REVIEW: confirm defaults or override ---
-title: "The Bible Doesn't Say That"          # cleaned-up display title; defaults to youtube_title
+title: "God has a wonderful plan for your life"          # cleaned-up display title; defaults to youtube_title
 content_description: "Brett argues that \"God has a wonderful plan for your life\" often gets misread as a detailed blueprint controlling every decision, which creates anxiety about discernment and catastrophic fear of wrong choices. He proposes instead a partnership model: God gives all things a purpose (telos), and we actively participate in God's redemptive work by aligning our hearts with God's character rather than obsessing over which door to walk through."
 speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:29:41"     # auto: "grace and peace" — verify
 content_end: "00:58:53"       # auto: "come to the table" — verify
-series: "The Bible doesn't say that"                   # leave null if not in a series
+series: "The Bible Doesn't Say That"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted

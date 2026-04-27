@@ -14,9 +14,9 @@ vtt_path: scripts/transcripts/raw/2023-07-31-mEzcDtwBVZg.en.vtt
 # --- REVIEW: confirm defaults or override ---
 title: "A Gray Hering Marital Debate : Pickles and Batman"          # cleaned-up display title; defaults to youtube_title
 content_description: "Christian and Megan Gray Herring debate whether God is primarily transcendent (powerful and distant) or immanent (intimate and present), tracing both pictures through Scripture and their own marriage to argue God is both—mighty enough to break what's broken, close enough to sit with us in pain."
-speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
+speaker: "guest:gray-herings"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_start: "00:31:48"            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
 content_end: "00:55:25"       # auto: "come to the table" — verify
 series: null                   # leave null if not in a series
 

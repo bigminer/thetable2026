@@ -12,12 +12,12 @@ vtt_path: scripts/transcripts/raw/2022-07-25-Ae7pByqLFJQ.en.vtt
 # Watch: https://www.youtube.com/watch?v=Ae7pByqLFJQ
 
 # --- REVIEW: confirm defaults or override ---
-title: "Guest Speaker Dr. Aaron Brown"          # cleaned-up display title; defaults to youtube_title
+title: "Your Racist-ass Amygdala"          # cleaned-up display title; defaults to youtube_title
 content_description: "Dr. Aaron Brown examines racism as a neurological pattern stored in the amygdala rather than a character flaw, using brain studies to show how implicit bias operates automatically and how accountability and exposure to other races can reshape these automatic responses."
-speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
+speaker: "guest:aaron-brownbrook"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
-content_start: null            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
-content_end: "00:59:28"       # auto: "communion" — verify
+content_start: "00:29:26"            # when the content begins in the video, format "hh:mm:ss" (e.g. "00:28:15")
+content_end: "01:01:05"       # auto: "communion" — verify
 series: null                   # leave null if not in a series
 
 # --- defaults ok as-is ---

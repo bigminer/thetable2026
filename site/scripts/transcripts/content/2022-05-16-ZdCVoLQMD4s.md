@@ -18,7 +18,7 @@ speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:29:45"     # auto: "grace and peace" — verify
 content_end: "01:00:22"       # auto: "come to the table" — verify
-series: "1 Peter- Part 3"                   # leave null if not in a series
+series: "1 Peter"                   # leave null if not in a series
 
 # --- defaults ok as-is ---
 consent_status: granted
