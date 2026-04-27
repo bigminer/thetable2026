@@ -40,7 +40,9 @@ jobs:
         run: npm ci
 
       - name: Write YouTube cookies for yt-dlp
-        run: echo "${{ secrets.YOUTUBE_COOKIES }}" > /tmp/yt-cookies.txt
+        env:
+          YT_COOKIES: ${{ secrets.YOUTUBE_COOKIES }}
+        run: printf '%s' "$YT_COOKIES" > /tmp/yt-cookies.txt
 
       - name: Download new transcripts
         working-directory: site
