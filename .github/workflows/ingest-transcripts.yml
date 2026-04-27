@@ -23,6 +23,11 @@ jobs:
       - name: Install yt-dlp
         run: pipx install yt-dlp
 
+      - name: Install Deno (JS runtime for yt-dlp's n-challenge solver)
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
