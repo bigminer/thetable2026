@@ -7,14 +7,14 @@
  * src/lib/sermon-chatbot/.
  */
 
-import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import { compose } from "../src/lib/sermon-chatbot/composition.ts";
-import { getOrLoadCorpus } from "../src/lib/sermon-chatbot/corpus.ts";
+import { getOrLoadCorpus, getOrLoadRawCorpus } from "../src/lib/sermon-chatbot/corpus.ts";
 import {
   classifyShape,
   classifyTier,
   retrieveTopK,
+  retrieveTopKLexical,
 } from "../src/lib/sermon-chatbot/retrieval.ts";
 import { formatTime } from "../src/lib/sermon-chatbot/vtt.ts";
 
@@ -24,23 +24,24 @@ async function main() {
     console.error('Usage: npm run ask -- "your question"');
     process.exit(1);
   }
-  if (!process.env.OPENAI_API_KEY) {
-    console.error("OPENAI_API_KEY is not set.");
-    process.exit(1);
-  }
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error("ANTHROPIC_API_KEY is not set.");
-    process.exit(1);
-  }
+  const openai = process.env.OPENAI_API_KEY
+    ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    : null;
+  const localLlm = {
+    baseURL: process.env.ASK_LLM_BASE_URL ?? "http://127.0.0.1:8080/v1",
+    apiKey: process.env.ASK_LLM_API_KEY,
+    model: process.env.ASK_LLM_MODEL ?? "Qwen3-8B-Q4_K_M.gguf",
+  };
 
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
-  console.error("[corpus] loading reviewed stubs + embeddings...");
-  const { corpus, sermons } = await getOrLoadCorpus(openai);
+  console.error(
+    `[corpus] loading reviewed stubs ${openai ? "+ embeddings" : "+ local lexical index"}...`,
+  );
+  const { corpus, sermons } = openai
+    ? await getOrLoadCorpus(openai)
+    : await getOrLoadRawCorpus();
   console.error(`[corpus] ${corpus.length} chunks across ${sermons.length} sources`);
 
-  const top = await retrieveTopK(openai, corpus, query, 5);
+  const top = openai ? await retrieveTopK(openai, corpus, query, 5) : retrieveTopKLexical(corpus, query, 5);
   const topScore = top[0]?.score ?? 0;
   const tier = classifyTier(topScore);
   const shape = classifyShape(top);
@@ -58,7 +59,7 @@ async function main() {
   }
   console.error("");
 
-  const response = await compose(anthropic, query, top, tier, shape);
+  const response = await compose(localLlm, query, top, tier, shape);
   console.log(response);
 }
 

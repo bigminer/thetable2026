@@ -1,8 +1,11 @@
-import Anthropic from "@anthropic-ai/sdk";
 import type { ScoredChunk, Shape, Tier } from "./types.ts";
 import { formatTime, youtubeLink } from "./vtt.ts";
 
-const CLAUDE_MODEL = "claude-sonnet-4-6";
+export type LocalLlmConfig = {
+  baseURL: string;
+  apiKey?: string;
+  model: string;
+};
 
 export const SYSTEM_PROMPT = `You answer questions using Brett's sermons at The Table.
 
@@ -38,7 +41,7 @@ Rules:
   lives.`;
 
 export async function compose(
-  anthropic: Anthropic,
+  llm: LocalLlmConfig,
   query: string,
   chunks: ScoredChunk[],
   tier: Tier,
@@ -123,13 +126,31 @@ ${contextBlock}
 
 Compose the response.`;
 
-  const res = await anthropic.messages.create({
-    model: CLAUDE_MODEL,
-    max_tokens: 800,
-    system: SYSTEM_PROMPT,
-    messages: [{ role: "user", content: userMessage }],
+  const res = await fetch(`${llm.baseURL.replace(/\/$/, "")}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(llm.apiKey ? { Authorization: `Bearer ${llm.apiKey}` } : {}),
+    },
+    body: JSON.stringify({
+      model: llm.model,
+      max_tokens: 800,
+      temperature: 0.2,
+      chat_template_kwargs: { enable_thinking: false },
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: userMessage },
+      ],
+    }),
   });
 
-  const textBlock = res.content.find((b) => b.type === "text");
-  return textBlock && textBlock.type === "text" ? textBlock.text : "(empty response)";
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Local LLM request failed (${res.status}): ${errText.slice(0, 500)}`);
+  }
+
+  const json = (await res.json()) as {
+    choices?: Array<{ message?: { content?: string } }>;
+  };
+  return json.choices?.[0]?.message?.content?.trim() || "(empty response)";
 }

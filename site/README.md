@@ -18,9 +18,20 @@ Run these from [/Users/gary/Dev/table-cms-vault/site](/Users/gary/Dev/table-cms-
 | Command | Action |
 | :------ | :----- |
 | `npm install` | Install dependencies |
-| `npm run dev -- --host 127.0.0.1` | Start the local dev server |
+| `npm run dev` | Start the local dev server for same-machine testing |
+| `npm run dev:tailscale` | Start the dev server bound to this machine's Tailscale IPv4 address for remote access over Tailnet |
+| `PORT=4322 npm run dev:tailscale` | Same as above, but on a custom port |
 | `npm run build` | Build the static site into `dist/` |
 | `npm run preview` | Preview the production build locally |
+
+Ask page answer composition uses the local OpenAI-compatible LLM by default:
+
+```text
+ASK_LLM_BASE_URL=http://127.0.0.1:8080/v1
+ASK_LLM_MODEL=Qwen3-8B-Q4_K_M.gguf
+```
+
+`OPENAI_API_KEY` is optional. If it is set, Ask uses OpenAI embeddings for semantic retrieval. If it is missing, Ask falls back to local keyword retrieval over the transcript archive, then still composes the final answer with the local LLM.
 
 ## Content Locations
 

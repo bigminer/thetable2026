@@ -78,7 +78,7 @@ export async function loadReviewedSermons(): Promise<Sermon[]> {
   return sermons;
 }
 
-function buildChunksForSermon(sermon: Sermon, vtt: string): RawChunk[] {
+export function buildChunksForSermon(sermon: Sermon, vtt: string): RawChunk[] {
   const cues = parseVtt(vtt);
   const bounded = cues.filter(
     (c) =>
@@ -127,6 +127,23 @@ function buildChunksForSermon(sermon: Sermon, vtt: string): RawChunk[] {
     i += Math.max(1, stepWords);
   }
   return chunks;
+}
+
+export async function buildRawCorpus(
+  sermons: Sermon[],
+  log: (msg: string) => void = () => {},
+): Promise<RawChunk[]> {
+  const allChunks: RawChunk[] = [];
+  for (const sermon of sermons) {
+    if (!existsSync(sermon.vtt_path)) {
+      log(`  skip ${sermon.content_id}: VTT missing at ${sermon.vtt_path}`);
+      continue;
+    }
+    const vtt = await readFile(sermon.vtt_path, "utf8");
+    const raw = buildChunksForSermon(sermon, vtt);
+    allChunks.push(...raw);
+  }
+  return allChunks;
 }
 
 async function embedTexts(openai: OpenAI, texts: string[]): Promise<number[][]> {
@@ -236,6 +253,8 @@ export async function buildCorpus(
 // embeddings.json file or calling invalidateInMemoryCorpus().
 let inMemoryCorpus: Chunk[] | null = null;
 let inMemorySermons: Sermon[] | null = null;
+let inMemoryRawCorpus: RawChunk[] | null = null;
+let inMemoryRawSermons: Sermon[] | null = null;
 
 export async function getOrLoadCorpus(
   openai: OpenAI,
@@ -250,7 +269,23 @@ export async function getOrLoadCorpus(
   return { corpus, sermons };
 }
 
+export async function getOrLoadRawCorpus(): Promise<{
+  corpus: RawChunk[];
+  sermons: Sermon[];
+}> {
+  if (inMemoryRawCorpus && inMemoryRawSermons) {
+    return { corpus: inMemoryRawCorpus, sermons: inMemoryRawSermons };
+  }
+  const sermons = await loadReviewedSermons();
+  const corpus = await buildRawCorpus(sermons);
+  inMemoryRawCorpus = corpus;
+  inMemoryRawSermons = sermons;
+  return { corpus, sermons };
+}
+
 export function invalidateInMemoryCorpus(): void {
   inMemoryCorpus = null;
   inMemorySermons = null;
+  inMemoryRawCorpus = null;
+  inMemoryRawSermons = null;
 }

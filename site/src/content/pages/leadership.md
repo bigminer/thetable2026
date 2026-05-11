@@ -34,14 +34,23 @@ staffCards:
     image: attachments/pages/leadership/maggie-tilford.jpg
     imageAlt: Maggie Tilford smiling in front of a stone wall
   - name: Megan Gray Hering
-    role: MeetUps Leader
+    role: Elder Team/MeetUps Leader
     pronouns: she/her
     image: attachments/pages/leadership/megan-gray-hering.jpg
     imageAlt: Megan Gray Hering portrait
+  - name: Christian Gray Hering
+    role: Elder Team
+    image: attachments/pages/leadership/christian-gray-hering.jpg
+    imageAlt: Christian Gray Hering portrait
+  - name: Marisa Martinez
+    role: Elder Team
+    pronouns: she/her
+    image: attachments/pages/leadership/marisa-martinez.jpg
+    imageAlt: Marisa Martinez portrait
   - name: Jesse Watts
     role: Digital Media Leader
     pronouns: he/him
-    image: attachments/pages/leadership/jesse-watts.jpg
+    image: attachments/pages/leadership/jesse-watts-2026.jpg
     imageAlt: Jesse Watts portrait
   - name: Mindie Runnels
     role: Worship Director

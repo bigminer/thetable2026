@@ -9,6 +9,9 @@ output/
 # Screenshots dumped at repo root
 *.png
 *.jpg
+!site/src/content/attachments/**/*.png
+!site/src/content/attachments/**/*.jpg
+!site/src/content/attachments/**/*.jpeg
 
 # Build output
 .astro/
@@ -23,6 +26,9 @@ node_modules/
 .claude/settings.json
 .agents/
 .gemini/
+
+# Keep durable project plans/roadmaps, but do not commit copied chat transcripts
+.hermes/session-history/
 
 # Site-level ignores
 site/node_modules/

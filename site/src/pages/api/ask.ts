@@ -3,30 +3,27 @@
 // env vars come from the platform and dotenv finds no file, which is
 // fine — it's a no-op.
 import "dotenv/config";
-import Anthropic from "@anthropic-ai/sdk";
 import type { APIRoute } from "astro";
 import OpenAI from "openai";
 import { compose } from "../../lib/sermon-chatbot/composition.ts";
-import { getOrLoadCorpus } from "../../lib/sermon-chatbot/corpus.ts";
+import { getOrLoadCorpus, getOrLoadRawCorpus } from "../../lib/sermon-chatbot/corpus.ts";
 import {
   classifyShape,
   classifyTier,
   retrieveTopK,
+  retrieveTopKLexical,
 } from "../../lib/sermon-chatbot/retrieval.ts";
 import type { AskResponse } from "../../lib/sermon-chatbot/types.ts";
 import { youtubeLink } from "../../lib/sermon-chatbot/vtt.ts";
 
 export const prerender = false;
 
+const LOCAL_LLM_BASE_URL = process.env.ASK_LLM_BASE_URL ?? "http://127.0.0.1:8080/v1";
+const LOCAL_LLM_MODEL = process.env.ASK_LLM_MODEL ?? "Qwen3-8B-Q4_K_M.gguf";
+const LOCAL_LLM_API_KEY = process.env.ASK_LLM_API_KEY;
+
 export const POST: APIRoute = async ({ request }) => {
   const openaiKey = process.env.OPENAI_API_KEY;
-  const anthropicKey = process.env.ANTHROPIC_API_KEY;
-  if (!openaiKey || !anthropicKey) {
-    return new Response(
-      JSON.stringify({ error: "Server missing OPENAI_API_KEY or ANTHROPIC_API_KEY" }),
-      { status: 500, headers: { "Content-Type": "application/json" } },
-    );
-  }
 
   let body: { query?: unknown };
   try {
@@ -46,16 +43,31 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
 
-  const openai = new OpenAI({ apiKey: openaiKey });
-  const anthropic = new Anthropic({ apiKey: anthropicKey });
-
   try {
-    const { corpus } = await getOrLoadCorpus(openai);
-    const top = await retrieveTopK(openai, corpus, query, 5);
+    const top = openaiKey
+      ? await (async () => {
+          const openai = new OpenAI({ apiKey: openaiKey });
+          const { corpus } = await getOrLoadCorpus(openai);
+          return retrieveTopK(openai, corpus, query, 5);
+        })()
+      : await (async () => {
+          const { corpus } = await getOrLoadRawCorpus();
+          return retrieveTopKLexical(corpus, query, 5);
+        })();
     const topScore = top[0]?.score ?? 0;
     const tier = classifyTier(topScore);
     const shape = classifyShape(top);
-    const composed = await compose(anthropic, query, top, tier, shape);
+    const composed = await compose(
+      {
+        baseURL: LOCAL_LLM_BASE_URL,
+        apiKey: LOCAL_LLM_API_KEY,
+        model: LOCAL_LLM_MODEL,
+      },
+      query,
+      top,
+      tier,
+      shape,
+    );
 
     const response: AskResponse = {
       tier,
