@@ -1,6 +1,7 @@
 // @ts-check
 import { cpSync, existsSync, rmSync } from 'node:fs';
 import node from '@astrojs/node';
+import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
 function copyAttachments() {
@@ -25,7 +26,8 @@ function copyAttachments() {
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [copyAttachments()],
+  site: 'https://thetabletx.com',
+  integrations: [copyAttachments(), sitemap()],
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   vite: {

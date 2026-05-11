@@ -16,7 +16,17 @@ import {
   retrieveTopK,
   retrieveTopKLexical,
 } from "../src/lib/sermon-chatbot/retrieval.ts";
+import {
+  getOrLoadSiteContexts,
+  retrieveTopSiteContexts,
+} from "../src/lib/sermon-chatbot/site-content.ts";
 import { formatTime } from "../src/lib/sermon-chatbot/vtt.ts";
+
+function asksForSermonContext(query: string): boolean {
+  return /\b(brett|sermon|sermons|preach|preached|preaches|taught|teach|teaches|said|says|quote|table talk)\b/i.test(
+    query,
+  );
+}
 
 async function main() {
   const query = process.argv.slice(2).join(" ").trim();
@@ -45,6 +55,10 @@ async function main() {
   const topScore = top[0]?.score ?? 0;
   const tier = classifyTier(topScore);
   const shape = classifyShape(top);
+  const siteContexts = retrieveTopSiteContexts(await getOrLoadSiteContexts(), query, 3);
+  const compositionChunks = siteContexts.length > 0 && !asksForSermonContext(query) ? [] : top;
+  const compositionTier = compositionChunks.length > 0 ? tier : "low";
+  const compositionShape = compositionChunks.length > 0 ? shape : "single";
 
   console.error(
     `\n[retrieval] tier=${tier} shape=${shape} top_score=${topScore.toFixed(3)}`,
@@ -58,8 +72,22 @@ async function main() {
     );
   }
   console.error("");
+  console.error(`[site-context] top ${siteContexts.length}:`);
+  for (let i = 0; i < siteContexts.length; i++) {
+    const c = siteContexts[i];
+    const preview = c.text.slice(0, 70).replace(/\s+/g, " ");
+    console.error(`  ${i + 1}. ${c.score.toFixed(3)} "${c.title}" (${c.collection}): "${preview}..."`);
+  }
+  console.error("");
 
-  const response = await compose(localLlm, query, top, tier, shape);
+  const response = await compose(
+    localLlm,
+    query,
+    compositionChunks,
+    compositionTier,
+    compositionShape,
+    siteContexts,
+  );
   console.log(response);
 }
 

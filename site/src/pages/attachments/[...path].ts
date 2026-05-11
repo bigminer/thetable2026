@@ -3,6 +3,12 @@ import { createReadStream, existsSync } from 'node:fs';
 import { extname, normalize, resolve, sep } from 'node:path';
 import { Readable } from 'node:stream';
 
+export const prerender = import.meta.env.ASTRO_GH_PAGES === 'true';
+
+export function getStaticPaths() {
+  return [];
+}
+
 const CONTENT_ATTACHMENTS_ROOT = resolve(process.cwd(), 'src/content/attachments');
 const PUBLIC_ATTACHMENTS_ROOT = resolve(process.cwd(), 'public/attachments');
 

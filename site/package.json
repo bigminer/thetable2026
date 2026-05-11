@@ -9,7 +9,7 @@
     "dev": "astro dev",
     "dev:tailscale": "bash scripts/dev-tailscale.sh",
     "build": "astro build",
-    "build:gh-pages": "astro build --config astro.config.gh-pages.mjs",
+    "build:gh-pages": "ASTRO_GH_PAGES=true astro build --config astro.config.gh-pages.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "ask": "node --env-file-if-exists=.env --import tsx scripts/ask.ts",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@astrojs/node": "^10.0.6",
+    "@astrojs/sitemap": "^3.7.2",
     "tsx": "^4.21.0"
   }
 }

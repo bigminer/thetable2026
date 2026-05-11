@@ -13,14 +13,36 @@ import {
   retrieveTopK,
   retrieveTopKLexical,
 } from "../../lib/sermon-chatbot/retrieval.ts";
+import {
+  getOrLoadSiteContexts,
+  retrieveTopSiteContexts,
+} from "../../lib/sermon-chatbot/site-content.ts";
 import type { AskResponse } from "../../lib/sermon-chatbot/types.ts";
 import { youtubeLink } from "../../lib/sermon-chatbot/vtt.ts";
 
-export const prerender = false;
+export const prerender = import.meta.env.ASTRO_GH_PAGES === "true";
+
+export const GET: APIRoute = async () => {
+  return new Response(
+    JSON.stringify({
+      error: "Live Ask requires the production server build. The GitHub Pages demo is static.",
+    }),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+};
 
 const LOCAL_LLM_BASE_URL = process.env.ASK_LLM_BASE_URL ?? "http://127.0.0.1:8080/v1";
 const LOCAL_LLM_MODEL = process.env.ASK_LLM_MODEL ?? "Qwen3-8B-Q4_K_M.gguf";
 const LOCAL_LLM_API_KEY = process.env.ASK_LLM_API_KEY;
+
+function asksForSermonContext(query: string): boolean {
+  return /\b(brett|sermon|sermons|preach|preached|preaches|taught|teach|teaches|said|says|quote|table talk)\b/i.test(
+    query,
+  );
+}
 
 export const POST: APIRoute = async ({ request }) => {
   const openaiKey = process.env.OPENAI_API_KEY;
@@ -57,6 +79,10 @@ export const POST: APIRoute = async ({ request }) => {
     const topScore = top[0]?.score ?? 0;
     const tier = classifyTier(topScore);
     const shape = classifyShape(top);
+    const siteContexts = retrieveTopSiteContexts(await getOrLoadSiteContexts(), query, 3);
+    const compositionChunks = siteContexts.length > 0 && !asksForSermonContext(query) ? [] : top;
+    const compositionTier = compositionChunks.length > 0 ? tier : "low";
+    const compositionShape = compositionChunks.length > 0 ? shape : "single";
     const composed = await compose(
       {
         baseURL: LOCAL_LLM_BASE_URL,
@@ -64,9 +90,10 @@ export const POST: APIRoute = async ({ request }) => {
         model: LOCAL_LLM_MODEL,
       },
       query,
-      top,
-      tier,
-      shape,
+      compositionChunks,
+      compositionTier,
+      compositionShape,
+      siteContexts,
     );
 
     const response: AskResponse = {
@@ -86,6 +113,14 @@ export const POST: APIRoute = async ({ request }) => {
         score: c.score,
         text: c.text,
         youtube_deep_link: youtubeLink(c.youtube_id, c.start_seconds),
+      })),
+      site_contexts: siteContexts.map((c) => ({
+        id: c.id,
+        collection: c.collection,
+        title: c.title,
+        path: c.path,
+        score: c.score,
+        text: c.text,
       })),
       composed_response: composed,
     };

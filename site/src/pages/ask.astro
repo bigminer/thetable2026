@@ -3,7 +3,9 @@ import BaseLayout from "../layouts/Layout.astro";
 import { loadReviewedSermons } from "../lib/sermon-chatbot/corpus.ts";
 import { youtubeLink } from "../lib/sermon-chatbot/vtt.ts";
 
-export const prerender = false;
+export const prerender = import.meta.env.ASTRO_GH_PAGES === "true";
+
+const isGitHubPagesDemo = import.meta.env.ASTRO_GH_PAGES === "true";
 
 const sermons = await loadReviewedSermons();
 const feed = [...sermons].sort((a, b) => b.date.localeCompare(a.date));
@@ -26,7 +28,14 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
       </p>
     </header>
 
-    <section class="ask">
+    <section class="ask" data-static-demo={isGitHubPagesDemo ? "true" : "false"}>
+      {
+        isGitHubPagesDemo && (
+          <div class="demo-notice" role="status">
+            <strong>Static demo mode:</strong> GitHub Pages can show this Ask page and its source list, but it cannot run the live Ask API. Deploy the production server build to use interactive answers.
+          </div>
+        )
+      }
       <form id="ask-form" novalidate>
         <label for="query">
           <span class="sr-only">Your question</span>
@@ -37,9 +46,12 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
             placeholder="why does everything feel like my fault?"
             required
             autocomplete="off"
+            disabled={isGitHubPagesDemo}
           />
         </label>
-        <button type="submit" id="ask-button">Ask</button>
+        <button type="submit" id="ask-button" disabled={isGitHubPagesDemo}>
+          {isGitHubPagesDemo ? "Server required" : "Ask"}
+        </button>
       </form>
       <div id="response" class="response" aria-live="polite"></div>
     </section>
@@ -116,6 +128,8 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
     const button = document.getElementById("ask-button") as HTMLButtonElement;
     const input = document.getElementById("query") as HTMLInputElement;
     const responseEl = document.getElementById("response") as HTMLDivElement;
+    const askSectionEl = document.querySelector(".ask") as HTMLElement;
+    const isStaticDemo = askSectionEl.dataset.staticDemo === "true";
     const feedEl = document.querySelector(".feed") as HTMLElement;
     const feedHeaderEl = document.querySelector(".feed h2") as HTMLElement;
     const allCards = Array.from(
@@ -239,6 +253,10 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (isStaticDemo) {
+        responseEl.innerHTML = '<p class="error">Live Ask requires the production server build. This GitHub Pages demo is static.</p>';
+        return;
+      }
       const query = input.value.trim();
       if (!query) return;
 
@@ -327,6 +345,15 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
       margin-bottom: 2rem;
       width: 100%;
       box-sizing: border-box;
+    }
+    .demo-notice {
+      max-width: 760px;
+      margin: 0 auto 1rem;
+      padding: 1rem;
+      border: 1px solid rgba(127, 127, 127, 0.25);
+      border-radius: 8px;
+      background: rgba(127, 127, 127, 0.08);
+      line-height: 1.5;
     }
     #ask-form {
       display: grid;

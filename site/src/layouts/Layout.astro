@@ -4,6 +4,9 @@ import { getEntry } from 'astro:content';
 interface Props {
 	title: string;
 	description?: string;
+	canonicalPath?: string;
+	image?: string;
+	noindex?: boolean;
 }
 
 type ChildItem = {
@@ -18,20 +21,64 @@ type NavItem = {
 	external?: boolean;
 };
 
-const { title, description } = Astro.props;
+const { title, description, canonicalPath, image, noindex = false } = Astro.props;
 const homepage = await getEntry('site', 'homepage');
 const siteName = homepage?.data.title?.trim() || 'The Table Church';
 const siteTagline = 'A church community in Sachse, Texas.';
+const fallbackDescription = homepage?.data.intro?.trim() || 'A welcoming, inclusive Christian community in Sachse, Texas.';
+const metaDescription = description ?? fallbackDescription;
 const footerAddressLines = homepage?.data.addressLines?.length
 	? homepage.data.addressLines
 	: ['1520 Blackburn Rd', 'Sachse, TX 75048'];
 const footerServiceTime = homepage?.data.serviceTime?.trim() || 'Sundays at 5:00 pm';
 const footerSocialLinks = homepage?.data.socialLinks?.filter((link) => link.url?.trim()) ?? [];
 const footerCopyrightYear = new Date().getFullYear();
+const googleTagManagerId = import.meta.env.PUBLIC_GTM_ID?.trim();
+const googleAnalyticsId = import.meta.env.PUBLIC_GA4_ID?.trim();
+const directGoogleAnalyticsId = googleTagManagerId ? undefined : googleAnalyticsId;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteUrl = Astro.site ?? new URL('https://thetabletx.com');
+const brandLogoSrc = `${base}/attachments/branding/the-table-written-logo.png`;
 const privacyHref = base + '/privacy-policy/';
 const rawPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
 const currentPath = base && rawPath.startsWith(base) ? rawPath.slice(base.length) : rawPath;
+const normalizePath = (path: string) => {
+	const withLeadingSlash = path.startsWith('/') ? path : `/${path}`;
+	return withLeadingSlash.endsWith('/') ? withLeadingSlash : `${withLeadingSlash}/`;
+};
+const withBase = (path: string) => `${base}${path.startsWith('/') ? path : `/${path}`}`.replace(/\/\/+/g, '/');
+const absoluteUrl = (pathOrUrl: string) => {
+	try {
+		return new URL(pathOrUrl).toString();
+	} catch {
+		return new URL(pathOrUrl, siteUrl).toString();
+	}
+};
+const canonicalUrl = absoluteUrl(withBase(normalizePath(canonicalPath ?? currentPath)));
+const socialImagePath = image
+	? image.startsWith('http://') || image.startsWith('https://')
+		? image
+		: withBase(image)
+	: brandLogoSrc;
+const socialImageUrl = absoluteUrl(socialImagePath);
+const organizationJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': ['Organization', 'Church'],
+	name: siteName,
+	url: absoluteUrl(base + '/'),
+	logo: absoluteUrl(brandLogoSrc),
+	description: metaDescription,
+	address: {
+		'@type': 'PostalAddress',
+		streetAddress: footerAddressLines[0],
+		addressLocality: 'Sachse',
+		addressRegion: 'TX',
+		postalCode: '75048',
+		addressCountry: 'US',
+	},
+	openingHours: footerServiceTime,
+	sameAs: footerSocialLinks.map((link) => link.url),
+};
 
 const navItems: NavItem[] = [
 	{ label: 'New Here?', href: '/new-here/' },
@@ -93,16 +140,57 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 		<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
 		<meta
 			name="description"
-			content={description ?? homepage?.data.intro?.trim() ?? 'A welcoming, inclusive Christian community in Sachse, Texas.'}
+			content={metaDescription}
 		/>
+		<link rel="canonical" href={canonicalUrl} />
+		{noindex && <meta name="robots" content="noindex, nofollow" />}
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={metaDescription} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={socialImageUrl} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={metaDescription} />
+		<meta name="twitter:image" content={socialImageUrl} />
+		<script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+		{googleTagManagerId && (
+			<script
+				is:inline
+				set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',${JSON.stringify(googleTagManagerId)});`}
+			/>
+		)}
+		{directGoogleAnalyticsId && (
+			<>
+				<script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(directGoogleAnalyticsId)}`} />
+				<script
+					is:inline
+					set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config',${JSON.stringify(directGoogleAnalyticsId)});`}
+				/>
+			</>
+		)}
 		<title>{title}</title>
 	</head>
 	<body>
+		{googleTagManagerId && (
+			<noscript>
+				<iframe
+					src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(googleTagManagerId)}`}
+					height="0"
+					width="0"
+					style="display:none;visibility:hidden"
+					title="Google Tag Manager"
+				></iframe>
+			</noscript>
+		)}
 		<div class="page-shell">
 			<div class="header-wrap">
 			<header class="site-header">
 				<div class="brand-wrap">
-					<a class="brand" href={base + '/'}>{siteName}</a>
+					<a class="brand brand-logo-link" href={base + '/'} aria-label={siteName}>
+						<img class="brand-logo" src={brandLogoSrc} alt={siteName} width="720" height="236" />
+					</a>
 					<p class="tagline">A church community in Sachse, Texas.</p>
 				</div>
 				<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">
@@ -179,7 +267,9 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 
 			<footer class="site-footer" aria-labelledby="site-footer-title">
 				<div class="footer-brand">
-					<p class="footer-title" id="site-footer-title">{siteName}</p>
+					<p class="footer-title" id="site-footer-title">
+						<img class="footer-logo" src={brandLogoSrc} alt={siteName} width="720" height="236" />
+					</p>
 					<p class="footer-tagline">{siteTagline}</p>
 				</div>
 				<div class="footer-grid">
@@ -213,7 +303,7 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 					</div>
 				</div>
 				<div class="footer-meta">
-					<p>Copyright {footerCopyrightYear} {siteName}</p>
+					<p aria-label={`Copyright ${footerCopyrightYear} ${siteName}`}>Copyright {footerCopyrightYear}</p>
 					<a href={privacyHref}>Privacy</a>
 				</div>
 			</footer>
@@ -394,6 +484,24 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 		text-decoration: none;
 	}
 
+	.brand-logo-link {
+		display: inline-flex;
+		align-items: center;
+		width: min(15rem, 48vw);
+		line-height: 0;
+	}
+
+	.brand-logo,
+	.footer-logo {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.footer-logo {
+		max-width: 12rem;
+	}
+
 	.tagline {
 		margin: 0;
 		font-size: 0.85rem;
@@ -564,6 +672,8 @@ const hasActiveChild = (item: NavItem) => item.children?.some((child) => isActiv
 	.footer-title {
 		margin: 0;
 		font: 700 clamp(1.15rem, 1.8vw, 1.45rem) / 1.1 'Trebuchet MS', 'Segoe UI', sans-serif;
+		line-height: 0;
+		width: min(12rem, 60vw);
 	}
 
 	.footer-tagline {

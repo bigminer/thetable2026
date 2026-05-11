@@ -1,5 +1,6 @@
 // @ts-check
 import { cpSync, existsSync, rmSync } from 'node:fs';
+import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
 function copyAttachments() {
@@ -44,7 +45,7 @@ function rehypeRebaseImages(base) {
 }
 
 export default defineConfig({
-  integrations: [copyAttachments()],
+  integrations: [copyAttachments(), sitemap()],
   site: 'https://bigminer.github.io',
   base: '/thetable2026',
   output: 'static',

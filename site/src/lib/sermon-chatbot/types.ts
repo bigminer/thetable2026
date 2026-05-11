@@ -33,6 +33,17 @@ export type Chunk = RawChunk & { embedding: number[] };
 
 export type ScoredChunk = Chunk & { score: number };
 
+export type SiteContext = {
+  id: string;
+  source_type: "site_content";
+  collection: "pages" | "series" | "site";
+  title: string;
+  description: string | null;
+  path: string;
+  text: string;
+  score: number;
+};
+
 export type CacheEntry = {
   bounds_start: number;
   bounds_end: number;
@@ -63,6 +74,14 @@ export type AskResponse = {
     score: number;
     text: string;
     youtube_deep_link: string;
+  }>;
+  site_contexts: Array<{
+    id: string;
+    collection: "pages" | "series" | "site";
+    title: string;
+    path: string;
+    score: number;
+    text: string;
   }>;
   composed_response: string;
 };

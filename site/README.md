@@ -21,8 +21,11 @@ Run these from [/Users/gary/Dev/table-cms-vault/site](/Users/gary/Dev/table-cms-
 | `npm run dev` | Start the local dev server for same-machine testing |
 | `npm run dev:tailscale` | Start the dev server bound to this machine's Tailscale IPv4 address for remote access over Tailnet |
 | `PORT=4322 npm run dev:tailscale` | Same as above, but on a custom port |
-| `npm run build` | Build the static site into `dist/` |
+| `npm run build` | Build the production server app into `dist/` |
+| `npm run build:gh-pages` | Build the static GitHub Pages demo with `site: https://bigminer.github.io` and `base: /thetable2026` |
 | `npm run preview` | Preview the production build locally |
+
+The GitHub Pages build is static-only. It prerenders `/ask/` as a demo page with the source list and a notice that live Ask answers require the production server build; GitHub Pages cannot run `/api/ask/` server routes or use secret LLM/API credentials.
 
 Ask page answer composition uses the local OpenAI-compatible LLM by default:
 
@@ -32,6 +35,17 @@ ASK_LLM_MODEL=Qwen3-8B-Q4_K_M.gguf
 ```
 
 `OPENAI_API_KEY` is optional. If it is set, Ask uses OpenAI embeddings for semantic retrieval. If it is missing, Ask falls back to local keyword retrieval over the transcript archive, then still composes the final answer with the local LLM.
+
+## Analytics
+
+Analytics are disabled by default. Configure public Google IDs at build/deploy time only when tracking should be enabled:
+
+```text
+PUBLIC_GTM_ID=GTM-XXXXXXX
+PUBLIC_GA4_ID=G-XXXXXXXXXX
+```
+
+Prefer `PUBLIC_GTM_ID` for production so GA4 and other tags can be managed in Google Tag Manager. When `PUBLIC_GTM_ID` is set, the shared layout renders the GTM head script and body `noscript` iframe. When `PUBLIC_GTM_ID` is unset and `PUBLIC_GA4_ID` is set, the layout renders direct GA4 `gtag.js` tracking instead. If neither value is set, no Google tracking tags are rendered and local development/builds continue without analytics.
 
 ## Content Locations
 

@@ -47,6 +47,11 @@ staffCards:
     pronouns: she/her
     image: attachments/pages/leadership/marisa-martinez.jpg
     imageAlt: Marisa Martinez portrait
+  - name: Marsie Clark
+    role: Elder
+    pronouns: she/her
+    image: attachments/pages/leadership/marsie-clark.jpg
+    imageAlt: Marsie Clark portrait
   - name: Jesse Watts
     role: Digital Media Leader
     pronouns: he/him
