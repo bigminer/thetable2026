@@ -185,8 +185,18 @@ const sectionLabel = (() => {
 
 	.body :global(img) {
 		display: block;
-		max-width: min(100%, 320px);
+		max-width: min(100%, 480px);
 		border-radius: var(--radius-sm);
+		box-shadow: var(--shadow-sm);
+		margin: 1.5rem 0;
+	}
+
+	.body :global(.content-map-embed) {
+		display: block;
+		width: 100%;
+		min-height: 320px;
+		border: 0;
+		border-radius: var(--radius-card);
 		box-shadow: var(--shadow-sm);
 		margin: 1.5rem 0;
 	}
