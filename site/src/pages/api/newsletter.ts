@@ -33,7 +33,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const apiKey = process.env.RESEND_API_KEY;
   const toEmail = process.env.CONTACT_TO_EMAIL;
-  const fromEmail = process.env.CONTACT_FROM_EMAIL ?? 'noreply@thetabletx.com';
+  const fromEmail = process.env.CONTACT_FROM_EMAIL ?? 'onboarding@resend.dev';
 
   if (!apiKey || !toEmail) {
     console.error('[/api/newsletter] RESEND_API_KEY or CONTACT_TO_EMAIL not configured');
