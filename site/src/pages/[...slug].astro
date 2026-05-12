@@ -59,6 +59,15 @@ const sectionLabel = (() => {
 			<section class="body">
 				<Content />
 
+				{entry.data.googleFormEmbedUrl && (
+					<iframe
+						src={entry.data.googleFormEmbedUrl}
+						title={`${entry.data.title} form`}
+						class="google-form-embed"
+						loading="lazy"
+					/>
+				)}
+
 				{entry.data.staffCards && entry.data.staffCards.length > 0 && (
 					<section class="staff-section">
 						<h2>Leadership Team</h2>
@@ -189,6 +198,15 @@ const sectionLabel = (() => {
 		border-radius: var(--radius-sm);
 		box-shadow: var(--shadow-sm);
 		margin: 1.5rem 0;
+	}
+
+	.google-form-embed {
+		display: block;
+		width: 100%;
+		min-height: 640px;
+		border: 0;
+		border-radius: var(--radius-card);
+		margin-top: 1.5rem;
 	}
 
 	.body :global(.content-map-embed) {

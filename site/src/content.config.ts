@@ -39,6 +39,7 @@ const pages = defineCollection({
 		heroImage: optionalUrl,
 		heroImageAlt: z.string().optional(),
 		showSidebar: z.boolean().optional(),
+		googleFormEmbedUrl: optionalUrl,
 		staffCards: z
 			.array(
 				z.object({
