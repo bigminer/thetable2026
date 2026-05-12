@@ -179,7 +179,7 @@ Compose the response.`;
   const isLocalLlm =
     llm.baseURL.includes("127.0.0.1") || llm.baseURL.includes("localhost");
 
-  const res = await fetch(`${llm.baseURL.replace(/\/$/, "")}/chat/completions`, {
+  const res = await fetch(`${llm.baseURL.trim().replace(/\/$/, "")}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
