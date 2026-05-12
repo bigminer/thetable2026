@@ -206,7 +206,6 @@ Files live in:
 Use message entries for:
 
 - individual sermons
-- podcast detail pages
 - launch-visible message metadata
 - external watch/listen destinations
 
@@ -220,7 +219,7 @@ Message frontmatter should stay flat:
 - `podcastUrl`, the specific Spotify or podcast-platform episode URL when available
 - `draft`
 
-Message files publish under `/podcast/`, with filename-derived paths such as `/podcast/<filename>/`. The `series` field should link to a series note, such as `[Lent 2025](../series/lent-2025.md)`; Astro normalizes Obsidian links to a validated series collection reference. The YouTube URL belongs in `sourceUrl`; the platform-specific audio episode belongs in `podcastUrl`. Current live podcast pages use Spotify episode embeds when that episode is available there.
+Message files are listed on their series page. The `series` field should link to a series note, such as `[Lent 2025](../series/lent-2025.md)`; Astro normalizes Obsidian links to a validated series collection reference. The YouTube URL belongs in `sourceUrl`; the platform-specific audio episode belongs in `podcastUrl`. Watch and Listen buttons appear directly on the series page for each message.
 
 ### Homepage
 
@@ -335,7 +334,6 @@ For new message entries:
 - set `series` with Obsidian's link picker by choosing the related note in `series/`
 - set `date` using `YYYY-MM-DD`
 - add `speaker`, `sourceUrl`, or `podcastUrl` only when needed
-- rely on the filename for the `/podcast/<filename>/` route
 - change `draft` to `false` when the message should render on the site
 
 For new page entries:

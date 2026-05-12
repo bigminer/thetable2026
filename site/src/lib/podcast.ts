@@ -4,33 +4,6 @@ import { fallbackSlug, safeGetCollection } from './content';
 type SeriesEntry = CollectionEntry<'series'>;
 type MessageEntry = CollectionEntry<'messages'>;
 
-export type PodcastEpisodeRecord = {
-	slug: string;
-	title: string;
-	date: Date;
-	dateLabel: string;
-	speaker?: string;
-	sourceUrl?: string;
-	podcastUrl?: string;
-	seriesSlug: string;
-	seriesTitle: string;
-	seriesDescription: string;
-	seriesImage?: string;
-	seriesImageAlt?: string;
-	seriesMessages: MessageEntry[];
-};
-
-export type PodcastPageData = {
-	title: string;
-	dateLabel: string;
-	speaker?: string;
-	seriesTitle: string;
-	seriesDescription: string;
-	sourceUrl?: string;
-	podcastUrl?: string;
-	embedUrl?: string;
-};
-
 function parseTimestamp(value: string | Date | undefined) {
 	if (!value) return undefined;
 
@@ -59,25 +32,6 @@ export function formatMessageDate(value: Date) {
 		year: 'numeric',
 		timeZone: 'UTC',
 	}).format(value);
-}
-
-function youtubeEmbedUrl(value: string | undefined) {
-	if (!value?.trim()) return undefined;
-
-	try {
-		const url = new URL(value);
-		const host = url.hostname.replace(/^www\./, '');
-		const videoId =
-			host === 'youtu.be'
-				? url.pathname.split('/').filter(Boolean)[0]
-				: url.pathname.startsWith('/embed/')
-					? url.pathname.split('/').filter(Boolean)[1]
-					: url.searchParams.get('v') ?? undefined;
-
-		return videoId ? `https://www.youtube-nocookie.com/embed/${videoId}` : undefined;
-	} catch {
-		return undefined;
-	}
 }
 
 function getSeriesRecencyTimestamp(entry: SeriesEntry, messages: MessageEntry[]) {
@@ -140,54 +94,4 @@ export async function getSeriesEntries() {
 
 export async function getMessageEntries() {
 	return safeGetCollection(() => getCollection('messages', ({ data }) => !data.draft));
-}
-
-export function collectPodcastEpisodes(
-	seriesEntries: SeriesEntry[],
-	messageEntries: MessageEntry[],
-): PodcastEpisodeRecord[] {
-	const seriesBySlug = new Map(seriesEntries.map((entry) => [getSeriesSlug(entry), entry]));
-
-	return sortMessages(messageEntries)
-		.map((message) => {
-			const messageSeriesSlug = getMessageSeriesSlug(message);
-			if (!messageSeriesSlug) return null;
-
-			const seriesEntry = seriesBySlug.get(messageSeriesSlug);
-			if (!seriesEntry) return null;
-
-			const seriesSlug = getSeriesSlug(seriesEntry);
-
-			return {
-				slug: getMessageSlug(message),
-				title: message.data.title,
-				date: message.data.date,
-				dateLabel: formatMessageDate(message.data.date),
-				speaker: message.data.speaker,
-				sourceUrl: message.data.sourceUrl?.trim() || undefined,
-				podcastUrl: message.data.podcastUrl?.trim() || undefined,
-				seriesSlug,
-				seriesTitle: seriesEntry.data.title,
-				seriesDescription: seriesEntry.data.description,
-				seriesImage: seriesEntry.data.featuredImage || undefined,
-				seriesImageAlt: seriesEntry.data.featuredImageAlt,
-				seriesMessages: getMessagesForSeries(messageEntries, seriesSlug),
-			};
-		})
-		.filter((episode): episode is PodcastEpisodeRecord => Boolean(episode));
-}
-
-export async function loadPodcastPage(
-	fallback: PodcastEpisodeRecord,
-): Promise<PodcastPageData> {
-	return {
-		title: fallback.title,
-		dateLabel: fallback.dateLabel,
-		speaker: fallback.speaker,
-		seriesTitle: fallback.seriesTitle,
-		seriesDescription: fallback.seriesDescription,
-		sourceUrl: fallback.sourceUrl,
-		podcastUrl: fallback.podcastUrl,
-		embedUrl: youtubeEmbedUrl(fallback.sourceUrl),
-	};
 }

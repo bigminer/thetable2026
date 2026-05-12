@@ -23,7 +23,7 @@ When Vault CMS opens:
 - `series/`
   Use for sermon series entries like `the-good-book.md`. These entries describe the series only.
 - `messages/`
-  Use for individual sermon, message, and podcast items. These publish under `/podcast/`.
+  Use for individual sermon, message, and podcast items. These display on their series page.
 - `site/`
   Use for homepage and other singleton-style site content like `homepage.md`.
 
@@ -57,7 +57,7 @@ Message fields worth knowing:
 - `sourceUrl` is the YouTube video URL when available.
 - `podcastUrl` is the specific Spotify or podcast-platform episode URL when available.
 - `speaker` is optional and should be added only when needed.
-- Message files publish at `/podcast/<filename>/`.
+- Message files are listed on their series page.
 
 This follows the Vault CMS model documented for Astro: content stays as plain Markdown in the repo, content types line up with folders under `src/content`, and flat frontmatter works better with Obsidian properties than deeply nested YAML.
 

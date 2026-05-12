@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: thetabletx
+    runtime: node
+    buildCommand: cd site && npm ci && npm run build
+    startCommand: cd site && HOST=0.0.0.0 node dist/server/entry.mjs
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ASK_LLM_BASE_URL
+        sync: false
+      - key: ASK_LLM_MODEL
+        sync: false
+      - key: ASK_LLM_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false

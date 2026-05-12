@@ -176,6 +176,9 @@ ${contextBlock || "(no sermon/table-talk chunks retrieved)"}
 
 Compose the response.`;
 
+  const isLocalLlm =
+    llm.baseURL.includes("127.0.0.1") || llm.baseURL.includes("localhost");
+
   const res = await fetch(`${llm.baseURL.replace(/\/$/, "")}/chat/completions`, {
     method: "POST",
     headers: {
@@ -186,7 +189,7 @@ Compose the response.`;
       model: llm.model,
       max_tokens: 800,
       temperature: 0.2,
-      chat_template_kwargs: { enable_thinking: false },
+      ...(isLocalLlm ? { chat_template_kwargs: { enable_thinking: false } } : {}),
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userMessage },

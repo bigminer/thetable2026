@@ -7,7 +7,7 @@ formulas:
     if(file.folder == "pages",
       "/" + file.name.replace(".md", ""),
       if(file.folder == "messages",
-        "/podcast/" + file.name.replace(".md", ""),
+        "(series page) " + file.name.replace(".md", ""),
         if(file.folder == "series",
           "/series/" + file.name.replace(".md", ""),
           if(file.folder == "site",
