@@ -47,6 +47,16 @@ PUBLIC_GA4_ID=G-XXXXXXXXXX
 
 Prefer `PUBLIC_GTM_ID` for production so GA4 and other tags can be managed in Google Tag Manager. When `PUBLIC_GTM_ID` is set, the shared layout renders the GTM head script and body `noscript` iframe. When `PUBLIC_GTM_ID` is unset and `PUBLIC_GA4_ID` is set, the layout renders direct GA4 `gtag.js` tracking instead. If neither value is set, no Google tracking tags are rendered and local development/builds continue without analytics.
 
+## Form bot protection
+
+The contact and newsletter forms use a lightweight free stack:
+
+- honeypot field
+- server-side basic validation
+- best-effort IP-based rate limiting
+
+No extra bot-protection service keys are required for this setup. The rate limiter is in-memory and per server process, so it is meant as a simple first-pass defense rather than distributed abuse protection.
+
 ## Content Locations
 
 The spike currently uses Astro content collections from:

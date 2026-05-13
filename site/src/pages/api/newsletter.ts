@@ -1,19 +1,30 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
+import { checkRateLimit } from '../../lib/rate-limit';
 
 function esc(s: string) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-function json(data: object, status: number) {
+function json(data: object, status: number, headers: HeadersInit = {}) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...headers },
   });
 }
 
-export const POST: APIRoute = async ({ request }) => {
-  let body: Record<string, string>;
+function field(body: Record<string, unknown>, name: string, maxLength: number) {
+  const value = body[name];
+  if (typeof value !== 'string') return '';
+  return value.trim().slice(0, maxLength);
+}
+
+function isValidEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+export const POST: APIRoute = async ({ request, clientAddress }) => {
+  let body: Record<string, unknown>;
   try {
     body = await request.json();
   } catch {
@@ -23,12 +34,21 @@ export const POST: APIRoute = async ({ request }) => {
   // Honeypot
   if (body.hp_name) return json({ ok: true }, 200);
 
-  const firstName = body.firstName?.trim() ?? '';
-  const lastName = body.lastName?.trim() ?? '';
-  const email = body.email?.trim() ?? '';
+  const firstName = field(body, 'firstName', 100);
+  const lastName = field(body, 'lastName', 100);
+  const email = field(body, 'email', 254);
 
   if (!firstName || !lastName || !email) {
     return json({ error: 'Please fill in all required fields.' }, 400);
+  }
+
+  if (!isValidEmail(email)) {
+    return json({ error: 'Please enter a valid email address.' }, 400);
+  }
+
+  const rateLimit = checkRateLimit({ request, clientAddress, key: 'newsletter-form' });
+  if (!rateLimit.ok) {
+    return json({ error: rateLimit.error }, rateLimit.status, { 'Retry-After': String(rateLimit.retryAfterSeconds) });
   }
 
   const apiKey = process.env.RESEND_API_KEY;
