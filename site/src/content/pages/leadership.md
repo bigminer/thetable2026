@@ -45,7 +45,7 @@ staffCards:
   - name: Marisa Martinez
     role: Elder Team
     pronouns: she/her
-    image: attachments/pages/leadership/marisa-martinez.jpg
+    image: attachments/pages/leadership/marisa-martinez-2026.jpg
     imageAlt: Marisa Martinez portrait
   - name: Marsie Clark
     role: Elder
