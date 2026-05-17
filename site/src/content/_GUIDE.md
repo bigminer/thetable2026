@@ -59,6 +59,19 @@ Message fields worth knowing:
 - `speaker` is optional and should be added only when needed.
 - Message files are listed on their series page.
 
+## One-series media automation
+
+The first media-ingestion automation pass is intentionally limited to one series:
+
+- scope slug: `the-good-book`
+- config file: `site/scripts/automation.config.json`
+- dry-run summary: `npm run automation:dry-run`
+- scoped pairing report: `npm run automation:ingest-one-series`
+
+The ingest script reads the scoped YouTube + podcast feeds, reports matches and gaps, and stays dry-run-safe until both `defaults.writeContentFiles` is explicitly changed and the operator runs `npm run automation:ingest-one-series -- --write`.
+
+Because `yt-dlp` is unavailable here and the live YouTube uploads RSS feed is shallow, historical Good Book backfill also falls back to the repo transcript archive at `site/scripts/transcripts/content`, still bounded to this one series.
+
 This follows the Vault CMS model documented for Astro: content stays as plain Markdown in the repo, content types line up with folders under `src/content`, and flat frontmatter works better with Obsidian properties than deeply nested YAML.
 
 ## Publishing Notes

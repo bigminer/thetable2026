@@ -18,7 +18,9 @@
     "make-stubs": "node --import tsx scripts/make-stubs.ts",
     "enrich-titles": "node --import tsx scripts/enrich-titles.ts",
     "detect-bounds": "node --import tsx scripts/detect-bounds.ts",
-    "make-descriptions": "node --env-file-if-exists=.env --import tsx scripts/make-descriptions.ts"
+    "make-descriptions": "node --env-file-if-exists=.env --import tsx scripts/make-descriptions.ts",
+    "automation:dry-run": "node --import tsx scripts/automation-dry-run.ts",
+    "automation:ingest-one-series": "node --import tsx scripts/ingest-new-media.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
