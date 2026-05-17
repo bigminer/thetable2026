@@ -18,7 +18,7 @@ speaker: "brett_tilford"       # "brett_tilford" or "guest:first-last"
 content_type: "sermon"         # sermon | guest_sermon | worship | story_sunday | announcements
 content_start: "00:34:16"     # auto: "prayers of the people" → sermon — verify
 content_end: "01:16:56"       # auto: "we practice...open table" — verify
-series: null                   # leave null if not in a series
+series: "Enchanted: Reclaiming Sacred Ground in a Disenchanted World"
 
 # --- defaults ok as-is ---
 consent_status: granted
