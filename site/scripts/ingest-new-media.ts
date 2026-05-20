@@ -464,7 +464,8 @@ async function loadScopedTranscriptArchive(scope: SeriesScope): Promise<YouTubeI
 
     const inScopeBySeries = normalizeTitle(series ?? "") === normalizeTitle(scope.title);
     const inScopeByRange = withinRange(uploadDate, scope);
-    const inScopeByTitle = titleMatchesScope(title, scope);
+    const requireTitleHint = (scope.titleHints?.length ?? 0) > 0;
+    const inScopeByTitle = !requireTitleHint || titleMatchesScope(title, scope);
     if (!inScopeBySeries && !(inScopeByRange && inScopeByTitle)) continue;
 
     items.push({
