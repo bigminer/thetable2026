@@ -4,6 +4,35 @@
 
 Describe how the current Astro spike should be edited so the project can be evaluated as a plausible Obsidian + Vault CMS workflow, not just a developer-only prototype.
 
+## Content Promotion Workflow
+
+This project uses a demo-first promotion model:
+
+1. Non-technical contributors send the requested content update in WhatsApp.
+2. A maintainer records the request and opens a short-lived working branch, usually `content/<topic>`.
+3. Once the change is ready for review, it is promoted into the `demo` branch.
+4. `demo` is the preview branch deployed to the GitHub Pages demo site.
+5. Reviewers compare the demo branch against the live GitHub Pages demo site.
+6. If the demo is approved, merge `demo` into `main` for production deployment. If this repository ever uses `master` instead of `main`, treat `master` as the production branch name.
+7. If the demo is not approved, either rework the `demo` branch and review again, or revert the demo commit(s), return to the working branch, and try again with a clean promotion.
+
+Branch roles are intentionally simple:
+
+- `content/<topic>` = working branch for the actual edit
+- `demo` = shared preview branch for approval
+- `main` = production branch
+
+The important rule is that nothing reaches production until it has been reviewed on the demo site.
+
+## Deployment Split
+
+The repo already separates the two deploy targets:
+
+- `site/astro.config.gh-pages.mjs` builds the static GitHub Pages demo with the `/thetable2026` base path.
+- `site/astro.config.mjs` builds the production server app for the live site.
+
+That means the demo branch can stay on a static review path while `main` keeps the production deploy path isolated.
+
 ## Vault Root
 
 The intended Obsidian vault root is:

@@ -7,6 +7,50 @@ export type LocalLlmConfig = {
   model: string;
 };
 
+const LOCAL_LLM_TIMEOUT_MS = 8000;
+
+function normalizeBaseURL(baseURL: string): string {
+  return baseURL.trim().replace(/\/$/, "");
+}
+
+function clipText(text: string, max = 160): string {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (normalized.length <= max) return normalized;
+  return `${normalized.slice(0, max - 1)}…`;
+}
+
+function fallbackResponse(
+  query: string,
+  chunks: ScoredChunk[],
+  siteContexts: SiteContext[],
+  reason: string,
+): string {
+  const lines: string[] = [
+    "I couldn't reach the local answer engine just now, so I'm giving you the closest source matches instead.",
+  ];
+
+  if (siteContexts.length > 0) {
+    const bestSite = siteContexts[0];
+    lines.push("");
+    lines.push(`Closest site page: ${bestSite.title}.`);
+    if (bestSite.description) lines.push(bestSite.description);
+    lines.push(clipText(bestSite.text, 220));
+  } else if (chunks.length > 0) {
+    lines.push("");
+    lines.push("Closest sermon sources:");
+    for (const chunk of chunks.slice(0, 3)) {
+      lines.push(
+        `- ${chunk.source_title} (${chunk.source_date}) @ ${formatTime(chunk.start_seconds)} — ${clipText(chunk.text, 150)}`,
+      );
+    }
+  } else {
+    lines.push("");
+    lines.push("I didn't find a strong source match for that question.");
+  }
+
+  return lines.join("\n");
+}
+
 export const SYSTEM_PROMPT = `You answer questions using The Table website and Brett's sermons.
 
 You are speaking on behalf of a real church to real people,
@@ -176,34 +220,44 @@ ${contextBlock || "(no sermon/table-talk chunks retrieved)"}
 
 Compose the response.`;
 
-  const isLocalLlm =
-    llm.baseURL.includes("127.0.0.1") || llm.baseURL.includes("localhost");
+  const baseURL = normalizeBaseURL(llm.baseURL);
+  const isLocalLlm = baseURL.includes("127.0.0.1") || baseURL.includes("localhost");
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), LOCAL_LLM_TIMEOUT_MS);
 
-  const res = await fetch(`${llm.baseURL.trim().replace(/\/$/, "")}/chat/completions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(llm.apiKey ? { Authorization: `Bearer ${llm.apiKey}` } : {}),
-    },
-    body: JSON.stringify({
-      model: llm.model,
-      max_tokens: 800,
-      temperature: 0.2,
-      ...(isLocalLlm ? { chat_template_kwargs: { enable_thinking: false } } : {}),
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: userMessage },
-      ],
-    }),
-  });
+  try {
+    const res = await fetch(`${baseURL}/chat/completions`, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        ...(llm.apiKey ? { Authorization: `Bearer ${llm.apiKey}` } : {}),
+      },
+      body: JSON.stringify({
+        model: llm.model,
+        max_tokens: 800,
+        temperature: 0.2,
+        ...(isLocalLlm ? { chat_template_kwargs: { enable_thinking: false } } : {}),
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: userMessage },
+        ],
+      }),
+    });
 
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Local LLM request failed (${res.status}): ${errText.slice(0, 500)}`);
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`Local LLM request failed (${res.status}): ${errText.slice(0, 500)}`);
+    }
+
+    const json = (await res.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+    };
+    return json.choices?.[0]?.message?.content?.trim() || "(empty response)";
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    return fallbackResponse(query, chunks, siteContexts, reason);
+  } finally {
+    clearTimeout(timer);
   }
-
-  const json = (await res.json()) as {
-    choices?: Array<{ message?: { content?: string } }>;
-  };
-  return json.choices?.[0]?.message?.content?.trim() || "(empty response)";
 }

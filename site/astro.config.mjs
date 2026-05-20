@@ -26,7 +26,7 @@ function copyAttachments() {
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://thetabletx.com',
+  site: 'https://thetabletx.org',
   integrations: [copyAttachments(), sitemap()],
   output: 'server',
   adapter: node({ mode: 'standalone' }),

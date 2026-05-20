@@ -2,17 +2,22 @@
  * scripts/ingest-new-media.ts
  *
  * Bounded first-pass media ingestion for a single series. Default mode is dry-run.
- * It fetches The Table podcast RSS and YouTube uploads RSS, filters to the scoped
- * series window, pairs weekly items by normalized title/date, detects existing
- * message files, and can optionally write draft message files for confirmed gaps.
+ * It can read a podcast RSS feed directly, and it still understands the broader
+ * YouTube + podcast ingestion workflow used elsewhere in the pipeline.
+ *
+ * D4 note: the podcast RSS URL is a live rollout decision and should be supplied
+ * in automation.config.json (or via --feed) before this is treated as production.
  *
  * Usage:
  *   npm run automation:ingest-one-series
  *   npm run automation:ingest-one-series -- --write
+ *   AUTOMATION_DRY_RUN=1 npm run automation:ingest-one-series
  */
 
-import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { resolve, basename } from "node:path";
+import { makeSlug } from "./lib/slug.ts";
+import { checkDuplicate, DuplicateStatus } from "./lib/duplicate-detection.ts";
 
 type AutomationSource = {
   id: string;
@@ -57,6 +62,7 @@ type PodcastItem = {
   normalizedTitle: string;
   publishedDate: string;
   link: string;
+  guid: string;
   spotifyEpisodeUrl: string;
 };
 
@@ -91,8 +97,66 @@ type MatchedPair = {
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const args = new Set(process.argv.slice(2));
-const writeMode = args.has("--write");
+
+type CliOptions = {
+  writeMode: boolean;
+  dryRun: boolean;
+  feedUrl?: string;
+  limit: number;
+};
+
+function isTruthyEnv(value: string | undefined): boolean {
+  if (!value) return false;
+  return ["1", "true", "yes", "on"].includes(value.toLowerCase());
+}
+
+function parseCliArgs(argv: string[]): CliOptions {
+  let feedUrl: string | undefined;
+  let limit = 5;
+  let dryRun = isTruthyEnv(process.env.AUTOMATION_DRY_RUN);
+  let writeMode = false;
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+
+    if (arg === "--write") {
+      writeMode = true;
+      continue;
+    }
+
+    if (arg === "--dry-run") {
+      dryRun = true;
+      continue;
+    }
+
+    if (arg === "--feed") {
+      feedUrl = argv[index + 1];
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith("--feed=")) {
+      feedUrl = arg.slice("--feed=".length);
+      continue;
+    }
+
+    if (arg === "--limit") {
+      const rawLimit = Number.parseInt(argv[index + 1] ?? "", 10);
+      if (Number.isFinite(rawLimit) && rawLimit > 0) limit = rawLimit;
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith("--limit=")) {
+      const rawLimit = Number.parseInt(arg.slice("--limit=".length), 10);
+      if (Number.isFinite(rawLimit) && rawLimit > 0) limit = rawLimit;
+    }
+  }
+
+  return { writeMode, dryRun, feedUrl, limit };
+}
+
+const cli = parseCliArgs(process.argv.slice(2));
 
 function decodeEntities(input: string): string {
   return input
@@ -221,17 +285,81 @@ function parsePodcastFeed(xml: string): PodcastItem[] {
       const title = getTagValue(block, "title");
       const pubDate = getTagValue(block, "pubDate");
       const link = getTagValue(block, "link") ?? getTagValue(block, "guid");
-      if (!title || !pubDate || !link) return null;
-      const spotifyEpisodeUrl = link;
+      const guid = getTagValue(block, "guid") ?? link;
+      if (!title || !pubDate || !link || !guid) return null;
+      const resolvedLink = link as string;
+      const resolvedGuid = guid as string;
+      const spotifyEpisodeUrl = resolvedLink;
       return {
         title,
         normalizedTitle: normalizeTitle(title),
         publishedDate: parseDate(pubDate),
-        link,
+        link: resolvedLink,
+        guid: resolvedGuid,
         spotifyEpisodeUrl,
       } satisfies PodcastItem;
     })
     .filter((item): item is PodcastItem => item !== null);
+}
+
+const SAMPLE_PODCAST_FEED = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>The Table Podcast (sample feed)</title>
+    <item>
+      <title>Sample episode one</title>
+      <pubDate>Sun, 14 Sep 2025 09:00:00 GMT</pubDate>
+      <link>https://example.com/podcast/sample-episode-one</link>
+      <guid>sample-episode-one</guid>
+    </item>
+    <item>
+      <title>Sample episode two</title>
+      <pubDate>Sun, 21 Sep 2025 09:00:00 GMT</pubDate>
+      <link>https://example.com/podcast/sample-episode-two</link>
+      <guid>sample-episode-two</guid>
+    </item>
+  </channel>
+</rss>`;
+
+function isPlaceholderFeedUrl(feedUrl: string | undefined | null): boolean {
+  if (!feedUrl) return true;
+  const trimmed = feedUrl.trim();
+  return (
+    trimmed.length === 0 ||
+    trimmed === "placeholder" ||
+    trimmed === "mock" ||
+    trimmed === "sample" ||
+    trimmed.startsWith("placeholder:") ||
+    trimmed.startsWith("mock:") ||
+    trimmed.startsWith("sample:")
+  );
+}
+
+async function getPodcastFeedXml(feedUrl: string | undefined, dryRun: boolean): Promise<{ xml: string; sourceLabel: string }> {
+  if (dryRun || isPlaceholderFeedUrl(feedUrl)) {
+    return {
+      xml: SAMPLE_PODCAST_FEED,
+      sourceLabel: dryRun ? "sample feed (dry-run)" : "sample feed (placeholder)",
+    };
+  }
+
+  return {
+    xml: await fetchText(feedUrl!),
+    sourceLabel: feedUrl!,
+  };
+}
+
+function printPodcastItems(items: PodcastItem[], limit: number): void {
+  const sorted = [...items].sort((a, b) => b.publishedDate.localeCompare(a.publishedDate));
+  const latest = sorted.slice(0, limit);
+
+  console.log(`Podcast items: ${latest.length} of ${items.length}`);
+  for (const item of latest) {
+    console.log(`- title: ${item.title}`);
+    console.log(`  date: ${item.publishedDate}`);
+    console.log(`  link: ${item.link}`);
+    console.log(`  guid: ${item.guid}`);
+  }
 }
 
 function parseYoutubeFeed(xml: string, scope?: SeriesScope): YouTubeItem[] {
@@ -473,6 +601,7 @@ function renderMessageFrontmatter(scope: SeriesScope, pair: MatchedPair): string
 
   const lines = [
     "---",
+    "generated: true",
     `title: \"${title.replaceAll('"', '\\"')}\"`,
     `series: \"${scope.seriesLink.replaceAll('"', '\\"')}\"`,
     `date: ${date}`,
@@ -493,15 +622,18 @@ async function writeMissingDrafts(scope: SeriesScope, pairs: MatchedPair[]): Pro
     const title = pair.youtube?.title ?? pair.podcast?.title;
     if (!title) continue;
 
-    const slug = slugify(title);
+    const date = pair.youtube?.publishedDate ?? pair.podcast?.publishedDate ?? new Date().toISOString().slice(0, 10);
+    const slug = makeSlug(date, title);
     const path = resolve(messageDir, `${slug}.md`);
 
-    try {
-      await stat(path);
-      throw new Error(`Refusing to overwrite existing file: ${path}`);
-    } catch (error) {
-      const err = error as NodeJS.ErrnoException;
-      if (err.code !== "ENOENT") throw error;
+    const status = await checkDuplicate(messageDir, slug);
+    if (status === DuplicateStatus.EXISTS_DRAFT) {
+      console.log(`[SKIP] ${slug}: already exists (draft)`);
+      continue;
+    }
+    if (status === DuplicateStatus.EXISTS_HAND_EDITED) {
+      console.log(`[SKIP] ${slug}: skipping hand-edited file`);
+      continue;
     }
 
     await writeFile(path, renderMessageFrontmatter(scope, pair), "utf8");
@@ -521,17 +653,36 @@ async function main() {
   const scope = config.seriesScope;
   const youtubeSource = config.sources.find((source) => source.id === "youtube");
   const podcastSource = config.sources.find((source) => source.id === "podcast");
+  const feedUrl = cli.feedUrl ?? podcastSource?.feedUrl ?? undefined;
+  const feedIsPlaceholder = isPlaceholderFeedUrl(feedUrl);
 
   if (!scope) throw new Error("automation.config.json is missing seriesScope");
   if (!youtubeSource) throw new Error("automation.config.json is missing the youtube source");
-  if (!podcastSource?.feedUrl) throw new Error("automation.config.json is missing the podcast feedUrl");
+
+  if (cli.feedUrl) {
+    const { xml, sourceLabel } = await getPodcastFeedXml(cli.feedUrl, cli.dryRun);
+    const podcastItems = parsePodcastFeed(xml);
+    console.log(`Podcast feed reader: ${sourceLabel}`);
+    console.log(`Mode: ${cli.dryRun ? "DRY-RUN" : "READ-ONLY"}`);
+    printPodcastItems(podcastItems, cli.limit);
+    if (feedIsPlaceholder || cli.dryRun) {
+      console.log("Note: D4 still needs the live podcast RSS URL before production rollout.");
+    }
+    return;
+  }
 
   const youtubeFeedUrl = deriveYoutubeFeedUrl(youtubeSource);
   if (!youtubeFeedUrl) throw new Error("Could not determine a YouTube feed URL from the configured source");
 
-  const [youtubeXml, podcastXml, existingMessages, scopedTranscriptArchive] = await Promise.all([
-    fetchText(youtubeFeedUrl),
-    fetchText(podcastSource.feedUrl),
+  const youtubeXml = await fetchText(youtubeFeedUrl).catch((error) => {
+    if (cli.dryRun) {
+      console.log(`Note: YouTube feed fetch failed in dry-run; continuing with transcript archive only (${error instanceof Error ? error.message : error}).`);
+      return "";
+    }
+    throw error;
+  });
+  const [podcastXml, existingMessages, scopedTranscriptArchive] = await Promise.all([
+    getPodcastFeedXml(feedUrl, cli.dryRun).then((result) => result.xml),
     loadExistingMessages(scope),
     loadScopedTranscriptArchive(scope),
   ]);
@@ -542,11 +693,11 @@ async function main() {
   const pairs = pairItems(scopedYoutubeItems, scopedPodcastItems, existingMessages);
 
   console.log(`Automation config: ${config.name}`);
-  console.log(`Mode: ${writeMode ? "WRITE" : "DRY-RUN"}`);
+  console.log(`Mode: ${cli.writeMode ? "WRITE" : "DRY-RUN"}`);
   console.log(`Series scope: ${scope.slug} — ${scope.title}`);
   console.log(`Scope window: ${scope.dateRange?.start ?? "?"} .. ${scope.dateRange?.end ?? "?"}`);
   console.log(`YouTube feed: ${youtubeFeedUrl}`);
-  console.log(`Podcast feed: ${podcastSource.feedUrl}`);
+  console.log(`Podcast feed: ${feedUrl ?? "(missing; sample feed used)"}`);
   console.log(`Existing messages in scope: ${existingMessages.length}`);
   console.log(`Scoped transcript archive items: ${scopedTranscriptArchive.length}`);
   console.log(`Scoped live YouTube feed items: ${scopedYoutubeFeedItems.length}`);
@@ -573,7 +724,12 @@ async function main() {
   console.log(`- missing: ${missingPairs.length}`);
   console.log(`- ambiguous_or_unpaired: ${ambiguousPairs.length}`);
 
-  if (!writeMode) {
+  if (missingPairs.length === 0 && ambiguousPairs.length === 0) {
+    console.log("Nothing to do.");
+    return;
+  }
+
+  if (!cli.writeMode) {
     console.log("Dry-run safety: no content files are written.");
     return;
   }

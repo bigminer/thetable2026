@@ -147,6 +147,32 @@ Recommended order:
 4. Patch highest-visibility routes first: homepage, navigation, footer, `new-here`, `our-story`, `our-vision`, `leadership`, `series`, and podcast detail pages.
 5. Keep checking that every change remains editable through the Vault CMS workflow.
 
+## Planning Gate
+
+Use a strict progression for new ideas and proposed changes:
+
+1. **Roadmap first**
+   - New ideas, possible improvements, and future work belong in `.hermes/roadmap/` or `.hermes/plans/` first.
+   - Do not turn brainstorming directly into repo implementation work.
+
+2. **Kanban second**
+   - Promote roadmap items into kanban only when they become a concrete task.
+   - Use triage for decisions/spec work.
+   - Use ready/running only for work that is explicitly approved and actionable.
+
+3. **Implementation third**
+   - Do not change code, docs, scripts, or config for a new idea unless there is a matching kanban card or the user explicitly asked for direct implementation.
+   - If code reality shows something is already partly done, update the roadmap and split the remaining work into a follow-up card instead of blurring idea/spec/implementation into one card.
+
+4. **Status and handoff discipline**
+   - Status reports should show both the roadmap and the kanban board, and explain their relationship.
+   - `handoff.md` should capture the next approved step so later sessions do not resume from half-formed ideas.
+
+Default interpretation:
+- If the user is discussing ideas, strategy, or possibilities, stay in roadmap/planning mode.
+- If the user wants a task shaped, create or refine a kanban card.
+- Only move to implementation when the work has clearly crossed that gate.
+
 ## Build And Verification
 
 Run from:

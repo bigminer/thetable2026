@@ -32,6 +32,16 @@ type SeriesScope = {
   transcriptArchiveDir?: string;
 };
 
+function describeSourceUrls(source: AutomationSource): string[] {
+  const urls: string[] = [];
+
+  if (isConfigured(source.channelUrl)) urls.push(`channel: ${source.channelUrl}`);
+  if (isConfigured(source.playlistUrl)) urls.push(`playlist: ${source.playlistUrl}`);
+  if (isConfigured(source.feedUrl)) urls.push(`feed: ${source.feedUrl}`);
+
+  return urls;
+}
+
 type AutomationConfig = {
   name: string;
   description?: string;
@@ -78,7 +88,8 @@ async function main() {
   console.log(`Run mode: ${config.runMode}`);
   if (config.seriesScope) {
     const { slug, title, dateRange, titleHints, messageDir, transcriptArchiveDir } = config.seriesScope;
-    console.log(`Series scope: ${slug} — ${title}`);
+    console.log(`Active series scope: ${slug}`);
+    console.log(`Series title: ${title}`);
     if (dateRange?.start || dateRange?.end) {
       console.log(`Scope window: ${dateRange?.start ?? "?"} .. ${dateRange?.end ?? "?"}`);
     }
@@ -99,6 +110,12 @@ async function main() {
   console.log("Sources:");
   for (const source of config.sources) {
     console.log(`  - ${summarizeSource(source)}`);
+    const urls = describeSourceUrls(source);
+    if (urls.length) {
+      for (const url of urls) {
+        console.log(`    ${url}`);
+      }
+    }
     if (source.notes) {
       console.log(`    ${source.notes}`);
     }

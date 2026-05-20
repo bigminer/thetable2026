@@ -1,22 +1,27 @@
 # The Table Website Roadmap
 
 > Generated 2026-05-11 from existing plans, repo state, and AGENTS.md context.
-> Planning only — no implementation in this task.
+> Audited and updated 2026-05-15 against current repo code and `table-website` kanban state.
+> Planning artifact — update when code/board reality changes.
 
 ---
 
 ## Executive Summary
 
-The Table Astro site is post-launch parity and entering growth mode. The immediate priority is hardening the technical foundation (SEO, analytics, bot protection) so later content and automation work ships on stable ground. Content automation and the Ask page refinements are ready to execute once a few source URLs and service decisions are locked. WhatsApp and multilingual are later-phase; they depend on simpler integrations that should not block core improvements.
+The Table Astro site is post-launch parity and entering growth mode. The early hardening pass has largely landed: SEO foundations, analytics hooks, form protection, demo workflow, and Ask response tuning are now in place. The remaining near-term priority is to finish the next layer of operational work: weekly YouTube/podcast ingestion beyond the config skeleton, local LLM hardening/verification, real newsletter-provider integration, and final production/deployment decisions that go beyond the demo path. WhatsApp and multilingual remain later-phase and should not block the core site.
 
 **Current state at a glance:**
 - Site: Astro + Vault CMS, content collections for pages/series/messages/site
 - Repo: `git@github.com:bigminer/thetable2026`
 - Dev server: `npm run dev:tailscale` (Tailscale IP bound)
 - Existing plans: YouTube/podcast automation, SEO/Google Ads
-- Build passes, homepage + nav + core pages exist
-- Ask page exists at `src/pages/ask.astro` with API at `src/pages/api/ask.ts`
-- No sitemap, robots.txt, GA/GTM, or form bot protection yet
+- Build passes; homepage + nav + core pages exist
+- Ask page exists at `src/pages/ask.astro` with API at `src/pages/api/ask.ts`; response tuning work is done
+- SEO foundation exists: canonical URLs, OG/Twitter metadata, `noindex` support, organization JSON-LD, sitemap integration, and `robots.txt`
+- Analytics hooks exist: GTM preferred, direct GA4 fallback when GTM is unset
+- Contact and newsletter forms use a lightweight free anti-spam stack (honeypot + validation + in-memory IP rate limiting)
+- Weekly media ingestion config skeleton and dry-run script exist, but real source URLs and parser/discovery follow-up work remain
+- Demo branch workflow is documented; GitHub Pages demo and Render production config both exist in-repo
 
 ---
 
@@ -24,14 +29,14 @@ The Table Astro site is post-launch parity and entering growth mode. The immedia
 
 | Epic | Status | Priority | Notes |
 |------|--------|----------|-------|
-| E1. Foundation & Discoverability | Not started | P0 | SEO, analytics, sitemap, structured data |
-| E2. Content Automation | Planned | P1 | YouTube + podcast ingestion pipeline |
-| E3. Ask Page / Local LLM | Needs adjustment | P1 | Already built; needs context tuning |
-| E4. Forms & Bot Protection | Not started | P1 | Contact + newsletter forms |
+| E1. Foundation & Discoverability | Mostly done | P0 | SEO/analytics foundation is in code; Search Console + Ads work remains |
+| E2. Content Automation | In progress | P1 | Config skeleton landed; parser/discovery/writer still open |
+| E3. Ask Page / Local LLM | Partial / blocked | P1 | Ask tuning done; local endpoint hardening still blocked |
+| E4. Forms & Bot Protection | Partial | P1 | Contact + newsletter intake forms exist; real newsletter provider integration remains |
 | E5. Editorial Workflow | Partial | P2 | Vault CMS aligned; needs final polish |
-| E6. Dev / Demo / Hosting | In progress | P1 | GitHub Pages demo exists; needs cutover plan |
+| E6. Dev / Demo / Hosting | Partial | P1 | Demo workflow and hosting-path clarification landed; production cutover remains |
 | E7. Social & Messaging Integrations | Not started | P2 | WhatsApp channels |
-| E8. Multilingual | Not started | P3 | Spanish likely first |
+| E8. Multilingual | Triage | P3 | Spanish likely first |
 
 ---
 
@@ -46,6 +51,7 @@ The Table Astro site is post-launch parity and entering growth mode. The immedia
 - Add `noindex` guard for experimental pages
 - Acceptance: every public page has canonical + OG + title + description; sitemap builds; robots.txt exists
 - Assignee: mac-code or web-worker
+- Status: done in code (`Layout.astro`, `astro.config.mjs`, `public/robots.txt`)
 
 **E1-C2: Google Analytics 4 + Tag Manager**
 - Add optional GTM/GA config hook via env/site config
@@ -53,6 +59,7 @@ The Table Astro site is post-launch parity and entering growth mode. The immedia
 - Do not hardcode secrets
 - Acceptance: `npm run build` passes with and without IDs set; tracking loads on preview when configured
 - Assignee: mac-code or web-worker
+- Status: done in code (`PUBLIC_GTM_ID` preferred, `PUBLIC_GA4_ID` fallback)
 
 **E1-C3: Google Search Console + landing page copy pass**
 - Verify site ownership
@@ -70,24 +77,26 @@ The Table Astro site is post-launch parity and entering growth mode. The immedia
 
 ### E2. Content Automation
 
-**E2-C1: Automation config skeleton**
-- Create `site/scripts/automation.config.json` with TODO source URLs
+**E2-C1: Automation config skeleton for weekly YouTube + podcast ingestion**
+- Create `site/scripts/automation.config.json` with TODO source URLs for The Table's weekly videos and podcasts
 - Set `messages.defaultDraft: true`
-- Acceptance: config parses; `npm run ingest-media -- --dry-run` prints config summary
+- Acceptance: config parses; `npm run automation:dry-run` prints config summary
 - Assignee: mac-code
+- Status: done in code (`site/scripts/automation.config.json`, `site/scripts/automation-dry-run.ts`)
 
-**E2-C2: Podcast RSS parsing**
+**E2-C2: Weekly podcast RSS parsing**
 - Add `fast-xml-parser` dependency
 - Implement minimal feed reader in `site/scripts/ingest-new-media.ts`
 - Acceptance: given a feed URL, script prints latest 5 items with title/date/link/guid
 - Assignee: mac-code
 
-**E2-C3: YouTube discovery wrapper**
+**E2-C3: Weekly YouTube discovery wrapper**
 - Use `yt-dlp --dump-json --flat-playlist` for discovery
 - Normalize youtubeId, title, uploadDate, sourceUrl
 - Ignore configured exclude patterns
 - Acceptance: dry run prints recent items without writing files
 - Assignee: mac-code
+- Status: done in code (`site/scripts/youtube-discovery.ts`, `site/scripts/automation.config.json`, `site/package.json`)
 
 **E2-C4: Message matching and file writing**
 - Match YouTube + podcast by date/title
@@ -98,10 +107,11 @@ The Table Astro site is post-launch parity and entering growth mode. The immedia
 - Assignee: mac-code
 
 **E2-C5: Scheduled runner**
-- Hermes cron or GitHub Actions to run ingestion
+- GitHub Actions scheduled workflow to run ingestion
 - Sundays post-service + daily catch-up
 - Acceptance: scheduled run completes; reports no-op cleanly when nothing is new
 - Assignee: bob or devops
+- Status: done in code (`.github/workflows/weekly-media-ingestion.yml`, `SCHEDULER.md`)
 
 ### E3. Ask Page / Local LLM
 
@@ -110,27 +120,32 @@ The Table Astro site is post-launch parity and entering growth mode. The immedia
 - Inject website content context so answers reference current pages/series/vision
 - Acceptance: sample queries feel like site-aware answers, not transcript recitations
 - Assignee: mac-code or content-worker
+- Status: done in code; composition prompt now uses website context and softer church-aware answer framing
 
 **E3-C2: Local LLM integration hardening**
 - Ensure Ask API uses local OpenAI-compatible endpoint with safe env defaults
 - Add graceful fallback if local LLM is down
 - Acceptance: Ask endpoint returns 200 with context-aware answer when LLM is up; returns friendly fallback when down
 - Assignee: mac-code
+- Status: still active/blocked — config and fallback assumptions are documented, but this remains the open hardening/verification card
 
 ### E4. Forms & Bot Protection
 
 **E4-C1: Contact us form with bot protection**
 - Add honeypot field
-- Consider Cloudflare Turnstile or reCAPTCHA v3 (decision needed)
+- Keep the current lightweight free stack unless real abuse proves it insufficient; only add Turnstile/reCAPTCHA if needed later
 - Wire to email/notification destination
 - Acceptance: form submits; bot submissions are filtered; human submissions reach destination
 - Assignee: mac-code
+- Status: done in code
 
 **E4-C2: Newsletter signup with bot protection**
 - Same protection strategy as contact form
-- Integrate with mailing list provider (Mailchimp, Buttondown, etc. — decision needed)
-- Acceptance: signup works; bots blocked; subscriber appears in list
+- Current implementation is a protected local intake form that emails staff; it does not yet add subscribers to a real mailing list
+- Split the remaining work into provider selection + true subscription integration
+- Acceptance: protected signup form works; chosen provider receives real subscribers in-list
 - Assignee: mac-code
+- Status: partial — intake/protection work done, provider integration still open
 
 ### E5. Editorial Workflow
 
@@ -156,17 +171,31 @@ The Table Astro site is post-launch parity and entering growth mode. The immedia
 - Review `https://bigminer.github.io/thetable2026/` for parity against local build
 - Acceptance: demo renders correctly; assets load; routes resolve
 - Assignee: mac-code or qa-worker
+- Status: done
 
-**E6-C2: Production hosting plan**
-- Define target host (Cloudflare Pages, Vercel, Netlify, self-hosted — decision needed)
+**E6-C2: Demo branch promotion workflow**
+- Keep the GitHub Pages demo on its own branch
+- Non-technical contributors send content updates through the WhatsApp channel
+- Approved updates are merged into the demo branch first, reviewed there, then merged from demo into main/master for production deployment
+- If a change is not approved, either rework the demo branch until approved or revert the demo work and try again
+- Acceptance: workflow documented with clear branch names, WhatsApp intake, review step, and approve/rework/revert loop
+- Assignee: devops or bob
+- Status: done/documented in repo guidance
+
+**E6-C3: Production hosting plan**
+- Define target host (current repo evidence points to Render for production, GitHub Pages for demo)
 - Document build + deploy pipeline
 - Acceptance: deploy pipeline documented; at least one successful production-like deploy
 - Assignee: devops or bob
+- Status: planning/clarification card completed; production cutover execution still remains in E6-C4
 
-**E6-C3: SSL + domain cutover**
+**E6-C4: SSL + domain cutover**
 - Plan DNS cutover from WordPress to Astro
 - Plan redirect rules for old WordPress URLs
-- Acceptance: `thetabletx.com` serves Astro site with valid SSL; old URLs redirect or 404 gracefully
+- Canonical domain: `thetabletx.org`
+- Secondary domain: `thetabletx.com` redirects to the canonical domain
+- Render origin: `https://thetabletx.onrender.com/`
+- Acceptance: `thetabletx.org` serves the Astro site with valid SSL; `thetabletx.com` and old URLs redirect or 404 gracefully
 - Assignee: devops or bob
 
 ### E7. Social & Messaging Integrations
@@ -200,14 +229,14 @@ The Table Astro site is post-launch parity and entering growth mode. The immedia
 
 | # | Decision | Blocks | Current Best Guess |
 |---|----------|--------|-------------------|
-| D1 | Final canonical domain | E1-C1, E1-C3, E6-C3 | `https://thetabletx.com` |
-| D2 | Hosting provider | E6-C2, E6-C3 | Cloudflare Pages or Vercel |
+| D1 | Final canonical domain | E1-C1, E1-C3, E6-C4 | `https://thetabletx.org` |
+| D2 | Hosting provider | E6-C4 | Render for production; GitHub Pages for demo appears to be the current repo path |
 | D3 | YouTube channel/playlist URL for ingestion | E2-C1, E2-C3 | Unknown — need source |
 | D4 | Podcast RSS feed URL | E2-C1, E2-C2 | Unknown — need source |
 | D5 | Default series for auto-messages | E2-C4 | `null` / require review |
-| D6 | Bot protection provider | E4-C1, E4-C2 | Cloudflare Turnstile (free, privacy-friendly) |
-| D7 | Newsletter provider | E4-C2 | Unknown — Mailchimp, Buttondown, Substack? |
-| D8 | GTM vs direct GA4/Ads tags | E1-C2 | GTM for flexibility |
+| D6 | Bot protection provider | none for current intake forms | Current implemented stack is honeypot + validation + in-memory IP rate limiting; Turnstile remains optional later |
+| D7 | Newsletter provider | E4-C2 | Unknown — Buttondown, Beehiiv, Mailchimp, ConvertKit, etc. |
+| D8 | GTM vs direct GA4/Ads tags | E1-C4 | Resolved in code: prefer GTM, allow direct GA4 fallback |
 | D9 | Monthly ad budget + radius | E1-C4 | Unknown — likely small, local |
 | D10 | Primary editorial workflow | E5-C3 | Vault CMS + Obsidian |
 | D11 | WhatsApp Business API access | E7-C1 | Needs Meta developer account |
@@ -217,17 +246,17 @@ The Table Astro site is post-launch parity and entering growth mode. The immedia
 
 ## Recommended Next 3 Cards to Execute
 
-1. **E1-C1: Technical SEO foundation**
-   - This is pure web work, well-scoped, and unblocks all discoverability efforts.
-   - No external decisions needed; canonical domain can default to `thetabletx.com` and be updated later.
+1. **E3-C2: Local LLM integration hardening**
+   - Ask response tuning is done, so the main remaining Ask risk is endpoint hardening and live verification.
+   - This is already on the board as the main blocked card and should either be unblocked or re-scoped.
 
-2. **E1-C2: Google Analytics 4 + Tag Manager**
-   - Pairs naturally with E1-C1; once layout accepts measurement IDs, tracking is ready.
-   - Need decision D8 (GTM vs direct), but defaulting to GTM is reasonable.
+2. **E2-C2 + E2-C3: Podcast RSS parser + YouTube discovery wrapper**
+   - The config skeleton already exists, so the next useful automation step is real source ingestion.
+   - These depend on D3 and D4 (source URLs), but implementation can proceed with dry-run-safe behavior.
 
-3. **E2-C1 + E2-C2: Automation config + podcast RSS parser**
-   - These are small, safe setup tasks that unblock the content automation pipeline.
-   - Need decisions D3 and D4 (source URLs), but the config skeleton can ship with TODO placeholders.
+3. **Newsletter provider selection + real subscription flow**
+   - The intake form and protection exist now; the remaining gap is choosing and wiring the actual mailing-list provider.
+   - This is now a separate follow-up card from the completed local intake work.
 
 ---
 
@@ -246,15 +275,16 @@ E2-C1 (Config)
         └── E2-C5 (Scheduled runner)
 
 E6-C1 (Demo review)
-  └── E6-C2 (Hosting plan)
-        └── E6-C3 (Domain cutover)
+  └── E6-C2 (Demo workflow)
+        └── E6-C3 (Hosting plan)
+              └── E6-C4 (Domain cutover)
 
 E4-C1 (Contact form)
-  └── E4-C2 (Newsletter signup)
+  └── E4-C2 (Newsletter intake + provider integration split)
         └── E1-C4 (conversion tracking)
 
 E5-C1 (Vault CMS alignment) can run in parallel with everything.
-E3-C1 (Ask tuning) depends on local LLM endpoint availability.
+E3-C2 (Local LLM hardening) depends on local LLM endpoint availability.
 E7-C1 (WhatsApp) depends on Meta API access.
 E8-C1 (i18n planning) is independent until E8-C2.
 ```
@@ -264,6 +294,7 @@ E8-C1 (i18n planning) is independent until E8-C2.
 ## Notes
 
 - The prior attempt on this task crashed without completion. This roadmap replaces it.
+- This file was audited on 2026-05-15 and now reflects current code/kanban state more closely than the original generated version.
 - All file references assume working directory `/home/gary/dev/github/thetable2026/site` unless noted.
-- Do not start E6-C3 (domain cutover) until E1 and E6-C1/C2 are complete and the demo has been reviewed.
+- Do not start E6-C4 (domain cutover) until E1 and E6-C1/C2/C3 are complete and the demo has been reviewed.
 - Keep `draft: true` as the default for all automated content until the pipeline has been verified through several real-world cycles.

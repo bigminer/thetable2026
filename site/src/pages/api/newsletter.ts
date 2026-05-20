@@ -68,7 +68,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     replyTo: email,
     subject: `Newsletter signup: ${firstName} ${lastName}`,
     html: `
-      <p>A new newsletter signup was submitted from thetabletx.com.</p>
+      <p>A new newsletter signup was submitted from thetabletx.org.</p>
       <p><strong>Name:</strong> ${esc(firstName)} ${esc(lastName)}</p>
       <p><strong>Email:</strong> <a href="mailto:${esc(email)}">${esc(email)}</a></p>
     `,

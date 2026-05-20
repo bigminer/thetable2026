@@ -20,6 +20,7 @@
     "detect-bounds": "node --import tsx scripts/detect-bounds.ts",
     "make-descriptions": "node --env-file-if-exists=.env --import tsx scripts/make-descriptions.ts",
     "automation:dry-run": "node --import tsx scripts/automation-dry-run.ts",
+    "youtube:dry-run": "node --import tsx scripts/youtube-discovery.ts",
     "automation:ingest-one-series": "node --import tsx scripts/ingest-new-media.ts"
   },
   "dependencies": {
