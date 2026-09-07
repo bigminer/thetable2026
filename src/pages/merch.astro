@@ -6,11 +6,26 @@ export const prerender = true;
  * wordmark sits inside the open doorway of the photograph. The source is a
  * 1200x1600 portrait; the banner crops to the torso band so both tees read at
  * size, and scales past `cover` for the zoom.
+ *
+ * The photo replaces the slate masthead the other pages open with, so the lede
+ * gets its own slate band underneath it. Without that the page ran cream from
+ * the hero to the footer and lost the two-ground rhythm the rest of the site
+ * keeps.
+ *
+ * "How it works" is a genuinely ordinal three-step sequence, so it takes the
+ * ledger treatment — the same numeral-left / label-right rhythm as the series
+ * index and the homepage values, instead of a default ordered list.
  */
 import Layout from '../layouts/Layout.astro';
 import { resolveAsset } from '../lib/content';
 
 const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg');
+
+const steps = [
+	{ verb: 'Browse', rest: ' the store and pick your size and color.' },
+	{ verb: 'Order', rest: ' directly — Printful handles printing and shipping.' },
+	{ verb: 'Receive', rest: ' your shirt, usually within a week or two.' },
+];
 ---
 
 <Layout
@@ -31,22 +46,27 @@ const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg')
 			<h1 class="merch-hero-title">Shop<br />the Table</h1>
 		</header>
 
+		<div class="merch-lede-band band band-slate">
+			<p class="merch-lede">Wear the mission. Every order supports The Table community.</p>
+		</div>
+
 		<div class="longform band band-cream">
 			<div class="longform-inner">
-				<p class="merch-lede">Wear the mission. Every order supports The Table community.</p>
-
 				<p>Rep your church and carry the mission wherever you go. Our t-shirts are printed on demand through <a href="https://printful.com">Printful</a> — no inventory, no waste, shipped straight to your door.</p>
 
 				<p class="cta-row"><a class="chip" href="https://the-table-tx.printful.me/">Shop now</a></p>
 
 				<section>
 					<h2 id="how-it-works">How It Works</h2>
-					<ol>
-						<li><strong>Browse</strong> the store and pick your size and color.</li>
-						<li><strong>Order</strong> directly — Printful handles printing and shipping.</li>
-						<li><strong>Receive</strong> your shirt, usually within a week or two.</li>
+					<ol class="ledger merch-steps">
+						{steps.map((step, i) => (
+							<li>
+								<p class="ledger-key">{String(i + 1).padStart(2, '0')}</p>
+								<p class="ledger-value"><strong>{step.verb}</strong>{step.rest}</p>
+							</li>
+						))}
 					</ol>
-					<p>No need to pick up anything at church. Questions? <a href="/contact-us/">Contact us</a>.</p>
+					<p class="merch-close">No need to pick up anything at church. Questions? <a href="/contact-us/">Contact us</a>.</p>
 				</section>
 			</div>
 		</div>
@@ -59,8 +79,8 @@ const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg')
 		isolation: isolate;
 		overflow: hidden;
 		padding-inline: 0;
-		aspect-ratio: 21 / 9;
-		max-height: 60vh;
+		aspect-ratio: 2 / 1;
+		max-height: 66vh;
 	}
 
 	.merch-hero-img {
@@ -70,10 +90,11 @@ const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg')
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		/* The doorway sits right of centre; the tees sit just below the midline. */
-		object-position: 54% 40%;
-		transform: scale(1.28);
-		transform-origin: 54% 40%;
+		/* No transform. `cover` on a 1200x1600 portrait in a wide band already
+		   scales to the full width, so the crop is vertical only — the whole scene
+		   spans the page and just the ceiling and pavement are trimmed. A scale()
+		   here would crop the sides and cut the two of them out of frame. */
+		object-position: 50% 38%;
 	}
 
 	.merch-hero-scrim {
@@ -83,7 +104,7 @@ const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg')
 		/* Legibility scrim, not decoration: an ellipse over the doorway only, so the
 		   wordmark holds contrast while both tees keep their colour. */
 		background: radial-gradient(
-			ellipse 34% 62% at 54% 50%,
+			ellipse 30% 60% at 57% 52%,
 			var(--scrim-band) 0%,
 			var(--scrim-band-soft) 55%,
 			transparent 100%
@@ -94,8 +115,8 @@ const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg')
 	.merch-hero-title {
 		position: absolute;
 		z-index: 2;
-		left: 54%;
-		top: 50%;
+		left: 57%;
+		top: 52%;
 		transform: translate(-50%, -50%);
 		margin: 0;
 		text-align: center;
@@ -105,20 +126,81 @@ const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg')
 		color: var(--color-ink-on-band);
 	}
 
-	.merch-lede {
-		max-width: 46ch;
-		font-size: var(--text-lg);
-		line-height: 1.35;
-		color: var(--color-ink);
+	/* Carries the slate ground the photo displaced. */
+	.merch-lede-band {
+		padding-block: var(--space-2xl);
 	}
 
+	.merch-lede {
+		margin: 0;
+		max-width: 24ch;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--text-2xl);
+		line-height: var(--leading-display);
+		letter-spacing: var(--track-display);
+		text-transform: uppercase;
+		color: var(--color-ink-on-band);
+	}
+
+	/* The next section's h2 carries a top rule; without clearance the chip's
+	   border and that rule collide. */
 	.cta-row {
+		margin: var(--space-xl) 0 var(--space-2xl);
+	}
+
+	.cta-row .chip {
+		font-size: var(--text-md);
+		padding-inline: var(--space-2xl);
+	}
+
+	.merch-steps {
+		margin-top: var(--space-lg);
+	}
+
+	/* Narrow key column — these are two-digit numerals, not words.
+	   `max-width: none` because `.longform li` caps rows at the prose measure,
+	   which left them narrower than the heading rule above. */
+	.merch-steps > li {
+		grid-template-columns: minmax(0, 4.5rem) minmax(0, 1fr);
+		gap: var(--space-xs) var(--space-xl);
+		padding-block: var(--space-lg);
+		max-width: none;
+	}
+
+	.merch-steps .ledger-key {
+		margin: 0;
+		max-width: none;
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: var(--text-xl);
+		line-height: 1.04;
+		letter-spacing: var(--track-display);
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
+	}
+
+	.merch-steps .ledger-value {
+		margin: 0;
+		max-width: var(--measure);
+	}
+
+	.merch-steps .ledger-value strong {
+		color: var(--color-ink);
+		font-weight: 600;
+	}
+
+	.merch-close {
 		margin-top: var(--space-xl);
 	}
 
 	@media (max-width: 60rem) {
 		.merch-hero {
 			aspect-ratio: 16 / 10;
+		}
+
+		.merch-lede-band {
+			padding-block: var(--space-xl);
 		}
 	}
 
@@ -127,8 +209,13 @@ const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg')
 			aspect-ratio: 4 / 3;
 		}
 
-		.merch-hero-img {
-			transform: scale(1.15);
+		.merch-lede {
+			max-width: none;
+			font-size: var(--text-xl);
+		}
+
+		.merch-steps > li {
+			grid-template-columns: minmax(0, 1fr);
 		}
 	}
 </style>
