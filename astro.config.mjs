@@ -8,5 +8,8 @@ export default defineConfig({
 	site: canonicalOrigin,
 	output: 'server',
 	adapter: node({ mode: 'standalone' }),
+	redirects: {
+		'/plan-your-visit': '/service-times-locations',
+	},
 	integrations: [sitemap()],
 });

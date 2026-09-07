@@ -14,7 +14,7 @@ The Table Church is an LGBTQ-affirming Christian community committed to creating
 
 ## Important Pages
 
-- /new-here/ - Plan your first visit and learn what to expect at The Table
+- /new-here/ - Start here for a welcome and ways to take a next step at The Table
 - /our-story/ - The story, mission, and founding of The Table Church
 - /our-vision/ - Beliefs, values, and commitments that shape the community
 - /leadership/ - Meet the pastors, elders, and ministry leaders
@@ -22,7 +22,8 @@ The Table Church is an LGBTQ-affirming Christian community committed to creating
 - /ask/ - Ask questions about The Table Church and its beliefs
 - /privacy-policy/ - Privacy policy and data practices
 - /contact-us/ - Get in touch with the church
-- /service-times-locations/ - When and where The Table gathers each week
+- /service-times-locations/ - Service time, location, parking, directions, and first-visit details
+- /welcome-to-the-table-class/ - Learn more about The Table and how to join the community
 - /meetups/ - Small groups and community gatherings
 
 ## External Links
