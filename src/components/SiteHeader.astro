@@ -1,13 +1,14 @@
 ---
-/* Nav archetype: N6 newspaper masthead. Previous build shipped the AI-nav shape
-   (pill links, right-grouped, sticky). The masthead reads as printed matter, which
-   is what the brand's own graphics are. See design.md. */
+/* A compact masthead with wide editorial menus. It keeps the print-poster voice
+   while making the visitor journeys easier to scan. See design.md. */
 import { site } from '../config/site';
 import { navigation as navItems } from '../config/navigation';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteName = site.title;
 const brandLogoSrc = base + '/attachments/branding/the-table-written-logo.png';
 const mastLine = `${site.serviceTime} · ${site.addressLines[0]}, ${site.addressLines[1]}`;
+const featuredItem = navItems.find((item) => item.featured);
+const primaryItems = navItems.filter((item) => !item.featured);
 const rawPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.url.pathname + '/';
 const currentPath = base && rawPath.startsWith(base) ? rawPath.slice(base.length) : rawPath;
 const isActive = (href: string) => currentPath === href;
@@ -16,19 +17,16 @@ const hasActiveChild = (item: (typeof navItems)[number]) => item.children?.some(
 
 <div class="header-wrap">
 	<header class="site-header">
-		<p class="mast-line">{mastLine}</p>
-
-		<a class="brand-logo-link" href={base + '/'} aria-label={siteName}>
-			<img class="brand-logo" src={brandLogoSrc} alt={siteName} width="720" height="236" fetchpriority="high" />
-		</a>
-
-		<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">
-			Menu
-		</button>
+		<div class="brand-lockup">
+			<a class="brand-logo-link" href={base + '/'} aria-label={`${siteName} home`}>
+				<img class="brand-logo" src={brandLogoSrc} alt={siteName} width="720" height="236" fetchpriority="high" />
+			</a>
+			<p class="mast-line">{mastLine}</p>
+		</div>
 
 		<nav class="site-nav desktop-nav" aria-label="Primary">
 			<ul>
-				{navItems.map((item, index) => (
+				{primaryItems.map((item, index) => (
 					<li
 						class:list={[
 							item.children && 'has-children',
@@ -46,10 +44,13 @@ const hasActiveChild = (item: (typeof navItems)[number]) => item.children?.some(
 						) : (
 							<details class="desktop-group">
 								<summary class="nav-trigger">{item.label}</summary>
-								<ul class="submenu" id={`submenu-${index}`}>
+								<ul class="submenu" id={`submenu-${index}`} aria-label={`${item.label} links`}>
 									{item.children?.map((child) => (
 										<li class:list={[isActive(child.href) && 'is-active']}>
-											<a href={base + child.href}>{child.label}</a>
+											<a href={base + child.href}>
+												<span class="submenu-label">{child.label}</span>
+												<span class="submenu-description">{child.description}</span>
+											</a>
 										</li>
 									))}
 								</ul>
@@ -60,12 +61,23 @@ const hasActiveChild = (item: (typeof navItems)[number]) => item.children?.some(
 			</ul>
 		</nav>
 
-		<hr class="mast-rule" aria-hidden="true" />
+		<div class="header-actions">
+			{featuredItem?.href && (
+				<a
+					class:list={['giving-link', isActive(featuredItem.href) && 'is-active']}
+					href={base + featuredItem.href}
+				>{featuredItem.label}</a>
+			)}
+			<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">
+				<span class="menu-toggle-label">Menu</span>
+				<span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+			</button>
+		</div>
 	</header>
 
 	<nav id="mobile-nav" class="mobile-nav" aria-label="Mobile Primary" hidden>
 		<ul>
-			{navItems.map((item) => (
+			{primaryItems.map((item) => (
 				<li>
 					{item.children ? (
 						<details open={hasActiveChild(item)}>
@@ -102,12 +114,17 @@ const hasActiveChild = (item: (typeof navItems)[number]) => item.children?.some(
 		toggle.setAttribute('aria-expanded', 'false');
 		mobileNav.hidden = true;
 	};
+	const openMobileNav = () => {
+		if (!toggle || !mobileNav) return;
+		toggle.setAttribute('aria-expanded', 'true');
+		mobileNav.hidden = false;
+	};
 
 	toggle?.addEventListener('click', () => {
 		if (!mobileNav) return;
 		const next = toggle.getAttribute('aria-expanded') !== 'true';
-		toggle.setAttribute('aria-expanded', String(next));
-		mobileNav.hidden = !next;
+		if (next) openMobileNav();
+		else closeMobileNav();
 	});
 
 	mobileNav?.querySelectorAll('a').forEach((link) => {
@@ -121,40 +138,42 @@ const hasActiveChild = (item: (typeof navItems)[number]) => item.children?.some(
 	});
 
 	const desktopGroups = Array.from(document.querySelectorAll('.desktop-group'));
-	const syncDesktopGroup = (group) => {
-		const submenu = group.querySelector('.submenu');
-		if (submenu instanceof HTMLElement) submenu.style.display = group.open ? 'block' : 'none';
-	};
 
 	const closeDesktopGroups = () => {
 		desktopGroups.forEach((group) => {
 			group.open = false;
-			syncDesktopGroup(group);
 		});
 	};
 
 	desktopGroups.forEach((group) => {
-		syncDesktopGroup(group);
-		group.addEventListener('toggle', () => syncDesktopGroup(group));
-		const summary = group.querySelector('summary');
-		summary?.addEventListener('click', (event) => {
-			event.preventDefault();
-			const next = !group.open;
-			closeDesktopGroups();
-			group.open = next;
-			syncDesktopGroup(group);
+		group.addEventListener('toggle', () => {
+			if (!group.open) return;
+			desktopGroups.forEach((otherGroup) => {
+				if (otherGroup !== group) otherGroup.open = false;
+			});
 		});
 		group.addEventListener('mouseenter', () => {
 			if (window.matchMedia('(hover: none)').matches) return;
 			if (window.innerWidth <= NAV_BREAKPOINT) return;
-			closeDesktopGroups();
 			group.open = true;
-			syncDesktopGroup(group);
 		});
 	});
 
 	document.addEventListener('click', (event) => {
 		if (event.target instanceof Element && event.target.closest('.desktop-nav')) return;
 		closeDesktopGroups();
+	});
+
+	document.addEventListener('keydown', (event) => {
+		if (event.key !== 'Escape') return;
+		if (toggle?.getAttribute('aria-expanded') === 'true') {
+			closeMobileNav();
+			toggle.focus();
+			return;
+		}
+		const openGroup = desktopGroups.find((group) => group.open);
+		if (!openGroup) return;
+		openGroup.open = false;
+		openGroup.querySelector('summary')?.focus();
 	});
 </script>

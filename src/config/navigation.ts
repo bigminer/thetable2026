@@ -1,6 +1,7 @@
 type ChildItem = {
 	label: string;
 	href: string;
+	description: string;
 };
 
 type NavItem = {
@@ -8,43 +9,71 @@ type NavItem = {
 	href?: string;
 	children?: ChildItem[];
 	external?: boolean;
+	featured?: boolean;
 };
 
 export const navigation: NavItem[] = [
-	{ label: 'New Here?', href: '/new-here/' },
+	{ label: 'Home', href: '/' },
+	{
+		label: 'New Here',
+		children: [
+			{ label: 'Start Here', href: '/new-here/', description: 'A welcome and a simple place to begin.' },
+			{
+				label: 'Plan Your Visit',
+				href: '/plan-your-visit/',
+				description: 'The practical details for your first Sunday.',
+			},
+			{
+				label: 'What Sundays Are Like',
+				href: '/what-sundays-are-like/',
+				description: 'What to expect when we gather.',
+			},
+		],
+	},
 	{
 		label: 'Who We Are',
 		children: [
-			{ label: 'Our Story', href: '/our-story/' },
-			{ label: 'Our Vision & Values', href: '/our-vision/' },
-			{ label: 'Our Leadership', href: '/leadership/' },
+			{ label: 'Our Story', href: '/our-story/', description: 'How The Table came to be.' },
+			{
+				label: 'Our Vision & Values',
+				href: '/our-vision/',
+				description: 'The convictions that shape our life together.',
+			},
+			{ label: 'Our Leadership', href: '/leadership/', description: 'Meet the people who serve our church.' },
 		],
 	},
 	{
-		label: 'Service',
+		label: 'Sundays',
 		children: [
-			{ label: 'Service Time & Location', href: '/service-times-locations/' },
-			{ label: 'Message Series', href: '/series/' },
+			{
+				label: 'Time & Location',
+				href: '/service-times-locations/',
+				description: 'When we meet and how to find us.',
+			},
+			{ label: 'Message Series', href: '/series/', description: 'Listen to recent teaching from The Table.' },
 		],
 	},
 	{
-		label: 'Join In!',
+		label: 'Join In',
 		children: [
-			{ label: 'MeetUps', href: '/meetups/' },
-			{ label: 'Kids & Youth', href: '/kids-youth/' },
-			{ label: 'Community Meals', href: '/community-meal/' },
-			{ label: 'Get Involved', href: '/get-involved/' },
+			{ label: 'MeetUps', href: '/meetups/', description: 'Find people and rhythms beyond Sunday.' },
+			{ label: 'Kids & Youth', href: '/kids-youth/', description: 'A place for children and students to belong.' },
+			{ label: 'Community Meals', href: '/community-meal/', description: 'Share a table with our wider community.' },
+			{ label: 'Get Involved', href: '/get-involved/', description: 'Take a next step in the life of the church.' },
 		],
 	},
-	{ label: 'Giving', href: '/giving/' },
-	{ label: 'Merch', href: '/merch/' },
 	{
-		label: 'Connect With Us',
+		label: 'Connect',
 		children: [
-			{ label: 'Sign Up for Our Newsletter', href: '/sign-up-for-our-newsletter/' },
-			{ label: 'Contact Us', href: '/contact-us/' },
+			{
+				label: 'Newsletter',
+				href: '/sign-up-for-our-newsletter/',
+				description: 'Get church news and upcoming dates by email.',
+			},
+			{ label: 'Contact Us', href: '/contact-us/', description: 'Ask a question or start a conversation.' },
+			{ label: 'Merch', href: '/merch/', description: 'Wear and share The Table.' },
 		],
 	},
-	{ label: 'Get Involved', href: '/get-involved/' },
+	{ label: 'Giving', href: '/giving/', featured: true },
 ];
 
