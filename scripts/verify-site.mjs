@@ -54,6 +54,8 @@ async function waitForServer() {
 }
 
 const failures = [];
+const pageHtml = new Map();
+let checks = 0;
 
 try {
 	await waitForServer();
@@ -68,7 +70,9 @@ try {
 		if (route.endsWith('/') && !body.includes('</html>')) {
 			failures.push(`incomplete HTML ${route}`);
 		}
+		if (route.endsWith('/')) pageHtml.set(route, body);
 	}
+	checks += routes.length;
 
 	// At least one series detail page must render.
 	const seriesIndex = await (await fetch(`${base}/series/`)).text();
@@ -79,9 +83,53 @@ try {
 		const detail = await fetch(base + seriesLink);
 		if (!detail.ok) failures.push(`${detail.status} ${seriesLink}`);
 	}
+	checks += 2;
 
 	const missing = await fetch(`${base}/definitely-not-a-page/`);
 	if (missing.status !== 404) failures.push(`expected 404, got ${missing.status} /definitely-not-a-page/`);
+
+	// Form endpoints are wired. Neither probe sends mail: malformed JSON is
+	// rejected at parse, and the honeypot returns early. This proves the routes
+	// exist and their handlers run — it cannot prove SMTP is configured, since
+	// reaching that check requires a valid submission, which would send real
+	// email to the church.
+	for (const endpoint of ['/api/contact', '/api/newsletter']) {
+		const malformed = await fetch(base + endpoint, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: 'not json',
+		});
+		if (malformed.status !== 400) {
+			failures.push(`expected 400 for malformed body, got ${malformed.status} ${endpoint}`);
+		}
+
+		const honeypot = await fetch(base + endpoint, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ hp_name: 'bot' }),
+		});
+		if (honeypot.status !== 200) {
+			failures.push(`expected 200 for honeypot, got ${honeypot.status} ${endpoint}`);
+		}
+	}
+	checks += 4;
+
+	// Every internal link on every crawled page resolves. Catches typos and
+	// links left behind when a page is renamed or removed.
+	const links = new Map();
+	for (const [route, html] of pageHtml) {
+		for (const match of html.matchAll(/href="(\/[^"#?]*)/g)) {
+			const target = match[1];
+			if (target.startsWith('//') || target.startsWith('/api/')) continue;
+			// keep the first page that linked here, so a failure names its source
+			if (!links.has(target)) links.set(target, route);
+		}
+	}
+	for (const [target, from] of links) {
+		const response = await fetch(base + target);
+		if (!response.ok) failures.push(`${response.status} ${target} (linked from ${from})`);
+	}
+	checks += links.size;
 } finally {
 	server.kill();
 	await once(server, 'exit').catch(() => {});
@@ -92,4 +140,4 @@ if (failures.length > 0) {
 	process.exit(1);
 }
 
-console.log(`Smoke test passed: ${routes.length + 2} checks.`);
+console.log(`Smoke test passed: ${checks} checks.`);

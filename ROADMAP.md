@@ -89,10 +89,9 @@ The current work queue, taken one item at a time.
    `content_end` in `hh:mm:ss`. Check every instruction against the scripts before
    editing.
 
-3. **Reassess smoke coverage.**
-   `scripts/verify-site.mjs` passes 26 checks and now covers `/giving/`. It samples one
-   series-detail route and asserts HTTP and HTML behavior, not layout. Propose only
-   coverage that would catch a real regression.
+3. ~~**Reassess smoke coverage.**~~ Done. Form-endpoint wiring and internal-link
+   integrity added; what is covered, what is deliberately not, and the known weaknesses
+   are recorded in [`docs/smoke-coverage.md`](docs/smoke-coverage.md).
 
 4. **Reconcile `design.md` with the accepted merch exceptions.**
    It says Long Document pages are typography-only and that Giving is the sole
