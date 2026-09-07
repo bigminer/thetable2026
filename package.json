@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "dev:tailscale": "bash scripts/dev-tailscale.sh",
     "build": "astro build",
+    "build:gh-pages": "astro build --config astro.config.gh-pages.mjs",
     "preview": "node scripts/start.mjs",
     "astro": "astro",
     "ask": "node --env-file-if-exists=.env --import tsx scripts/ask.ts",

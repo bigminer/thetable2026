@@ -1,6 +1,6 @@
 # Design — The Table Church
 
-A locked design system for thetabletx.com. Every page redesign reads this file before
+A locked design system for thetabletx.org. Every page redesign reads this file before
 emitting code. Do not regenerate per page — extend or amend this file when the system
 needs to grow.
 

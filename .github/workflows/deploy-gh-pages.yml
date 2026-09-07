@@ -1,0 +1,60 @@
+name: Deploy preview to GitHub Pages
+
+# Visual QA only: a static build at https://bigminer.github.io/thetable2026/ so
+# content changes can be looked at before they merge. Production is Render.
+#
+# Run it by hand from any branch (Actions → this workflow → Run workflow) to
+# preview that branch; main redeploys on push. There is one Pages site, so the
+# most recent run wins.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # A static build cannot serve these. Forms still render; they just do not
+      # submit, and /ask returns no answer.
+      - name: Remove server-only routes
+        run: rm -rf src/pages/api
+
+      - name: Build static preview
+        run: npm run build:gh-pages
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
