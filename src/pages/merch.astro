@@ -1,24 +1,134 @@
 ---
 export const prerender = true;
-import ContentPage from '../layouts/ContentPage.astro';
+/* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
+ *
+ * Photographic hero rather than the shared ContentPage figure, because the
+ * wordmark sits inside the open doorway of the photograph. The source is a
+ * 1200x1600 portrait; the banner crops to the torso band so both tees read at
+ * size, and scales past `cover` for the zoom.
+ */
+import Layout from '../layouts/Layout.astro';
+import { resolveAsset } from '../lib/content';
+
+const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg');
 ---
 
-<ContentPage
-	title={"The Table Merch"}
-	description={"Shop official The Table Church merchandise — t-shirts printed on demand and shipped directly to you."}
-	lede={"Wear the mission. Every order supports The Table community."}
-	showSidebar={false}
-	eyebrow={"The Table Merch"}
+<Layout
+	title="The Table Merch | The Table Church"
+	description="Shop official The Table Church merchandise — t-shirts printed on demand and shipped directly to you."
 >
-<h2 id="shop-the-table">Shop The Table</h2>
-<p>Rep your church and carry the mission wherever you go. Our t-shirts are printed on demand through <a href="https://printful.com">Printful</a> — no inventory, no waste, shipped straight to your door.</p>
-<p class="cta-row"><a class="link" href="https://the-table-tx.printful.me/">Shop Now</a></p>
-<hr>
-<h2 id="how-it-works">How It Works</h2>
-<ol>
-<li><strong>Browse</strong> the store and pick your size and color.</li>
-<li><strong>Order</strong> directly — Printful handles printing and shipping.</li>
-<li><strong>Receive</strong> your shirt, usually within a week or two.</li>
-</ol>
-<p>No need to pick up anything at church. Questions? <a href="/contact-us/">Contact us</a>.</p>
-</ContentPage>
+	<article class="merch">
+		<header class="merch-hero band band-deep">
+			<img
+				class="merch-hero-img"
+				src={heroImage}
+				alt="Two people in The Table t-shirts holding open the doors of the church"
+				width="1200"
+				height="1600"
+				fetchpriority="high"
+			/>
+			<div class="merch-hero-scrim" aria-hidden="true"></div>
+			<h1 class="merch-hero-title">Shop<br />the Table</h1>
+		</header>
+
+		<div class="longform band band-cream">
+			<div class="longform-inner">
+				<p class="merch-lede">Wear the mission. Every order supports The Table community.</p>
+
+				<p>Rep your church and carry the mission wherever you go. Our t-shirts are printed on demand through <a href="https://printful.com">Printful</a> — no inventory, no waste, shipped straight to your door.</p>
+
+				<p class="cta-row"><a class="chip" href="https://the-table-tx.printful.me/">Shop now</a></p>
+
+				<section>
+					<h2 id="how-it-works">How It Works</h2>
+					<ol>
+						<li><strong>Browse</strong> the store and pick your size and color.</li>
+						<li><strong>Order</strong> directly — Printful handles printing and shipping.</li>
+						<li><strong>Receive</strong> your shirt, usually within a week or two.</li>
+					</ol>
+					<p>No need to pick up anything at church. Questions? <a href="/contact-us/">Contact us</a>.</p>
+				</section>
+			</div>
+		</div>
+	</article>
+</Layout>
+
+<style>
+	.merch-hero {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		padding-inline: 0;
+		aspect-ratio: 21 / 9;
+		max-height: 60vh;
+	}
+
+	.merch-hero-img {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		/* The doorway sits right of centre; the tees sit just below the midline. */
+		object-position: 54% 40%;
+		transform: scale(1.28);
+		transform-origin: 54% 40%;
+	}
+
+	.merch-hero-scrim {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		/* Legibility scrim, not decoration: an ellipse over the doorway only, so the
+		   wordmark holds contrast while both tees keep their colour. */
+		background: radial-gradient(
+			ellipse 34% 62% at 54% 50%,
+			var(--scrim-band) 0%,
+			var(--scrim-band-soft) 55%,
+			transparent 100%
+		);
+	}
+
+	/* Sits in the open doorway between the two of them. */
+	.merch-hero-title {
+		position: absolute;
+		z-index: 2;
+		left: 54%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		margin: 0;
+		text-align: center;
+		font-size: clamp(1.75rem, 4.2vw, 3.75rem);
+		font-weight: 800;
+		line-height: 1.02;
+		color: var(--color-ink-on-band);
+	}
+
+	.merch-lede {
+		max-width: 46ch;
+		font-size: var(--text-lg);
+		line-height: 1.35;
+		color: var(--color-ink);
+	}
+
+	.cta-row {
+		margin-top: var(--space-xl);
+	}
+
+	@media (max-width: 60rem) {
+		.merch-hero {
+			aspect-ratio: 16 / 10;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.merch-hero {
+			aspect-ratio: 4 / 3;
+		}
+
+		.merch-hero-img {
+			transform: scale(1.15);
+		}
+	}
+</style>

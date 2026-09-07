@@ -114,6 +114,10 @@ const organizationJsonLd = {
 				/>
 			</>
 		)}
+		<!-- Planning Center's supported giving embed. It upgrades any link carrying
+		     ?open-in-church-center-modal=true into an in-page modal; the link still
+		     navigates normally if the script fails to load. -->
+		<script is:inline defer src="https://js.churchcenter.com/modal/v1"></script>
 		<title>{title}</title>
 	</head>
 	<body>

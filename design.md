@@ -160,6 +160,27 @@ exempts targets whose size is governed by the line-height of surrounding text, a
 padding them to 44px destroys the leading. A paragraph whose only content is a link
 counts as standalone, not inline.
 
+## Giving
+
+`/giving/` uses Planning Center's supported embed, which is a **modal, not an
+iframe** — their own guidance tells remaining iframe users to migrate.
+`js.churchcenter.com/modal/v1` loads in `Layout.astro` and upgrades any link
+carrying `?open-in-church-center-modal=true`.
+
+What this system owns: the masthead, the ground, the type, and the bordered chip
+that opens the form. What it does not own: the inside of the modal. That is
+Church Center's own markup on their origin, and it cannot be themed from here —
+it arrives with their button styling and their typeface. Do not try.
+
+**The embed requires HTTPS.** On an http origin the script attaches its click
+handler but renders a 0×0 iframe, so the button silently does nothing. Production
+is https and works; `npm run dev` serves http and will look broken. Test giving
+against a build served over https.
+
+If the script fails to load entirely, no handler is attached and the chip's plain
+`href` navigates to Church Center — so the worst case degrades to the behaviour
+the nav link had before.
+
 ## Known gaps
 
 - `/ask/` (the sermon search tool) was left on its own palette-agnostic CSS. It uses

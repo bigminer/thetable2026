@@ -1,0 +1,89 @@
+---
+export const prerender = true;
+/* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
+ *
+ * Planning Center's supported embed is a modal, not an iframe — their own guidance
+ * tells remaining iframe users to migrate. So the page owns the surround (masthead,
+ * ground, type, the chip that opens it) and Church Center owns the form itself.
+ * The modal's interior is cross-origin and cannot be themed from here.
+ *
+ * The chip is a real <a href>. With js.churchcenter.com/modal/v1 loaded it opens
+ * in place; if the script never loads — blocked, offline, JS off — no handler is
+ * attached and the same link navigates to Church Center. No JavaScript of ours
+ * sits in that path.
+ *
+ * HTTPS IS REQUIRED. Planning Center's script attaches its handler on any origin
+ * but only loads the form over https. On an http origin it swallows the click and
+ * renders a 0x0 iframe, so the button does nothing. Verified: over https the modal
+ * loads the real form; over http it is dead. Production (Render) is https, so this
+ * only affects `npm run dev`, which serves http — test giving against a build
+ * served over https, not the dev server.
+ */
+import Layout from '../layouts/Layout.astro';
+import { site } from '../config/site';
+
+const givingUrl = site.givingUrl;
+/* The same destination without the modal parameter, for people who would rather
+   open Church Center in a full tab. */
+const givingPageUrl = givingUrl.split('?')[0];
+---
+
+<Layout
+	title="Giving | The Table Church"
+	description="Give to The Table Church in Sachse, Texas through Church Center."
+>
+	<article class="giving">
+		<header class="longform-mast band band-slate">
+			<h1>Giving</h1>
+			<p class="lede">Your giving pays for the room, the meals, the kids&rsquo; ministry, and the people who keep this community running.</p>
+		</header>
+
+		<div class="longform band band-cream">
+			<div class="longform-inner">
+				<div class="give-action">
+					<a class="chip" href={givingUrl}>Give now</a>
+					<p class="give-note">
+						Opens a secure Church Center form. One-time or recurring, bank account or card.
+					</p>
+				</div>
+
+				<section>
+					<h2>Other ways</h2>
+					<p>
+						You can also give from the Church Center app, or open the
+						<a href={givingPageUrl} target="_blank" rel="noreferrer">full giving page</a>
+						in a new tab — useful for managing a recurring gift or finding past statements.
+					</p>
+					<p>
+						If you would rather give another way, or have a question about a gift,
+						<a href="/contact-us/">send us a message</a>.
+					</p>
+				</section>
+			</div>
+		</div>
+	</article>
+</Layout>
+
+<style>
+	.give-action {
+		display: grid;
+		justify-items: start;
+		gap: var(--space-md);
+		/* No bottom rule — the next section's h2 already carries a top rule, and
+		   two hairlines a gap apart read as a mistake. */
+		margin-bottom: var(--space-2xl);
+	}
+
+	.give-action .chip {
+		font-size: var(--text-md);
+		padding-inline: var(--space-2xl);
+	}
+
+	.give-note {
+		margin: 0;
+		max-width: 46ch;
+		font-size: var(--text-base);
+		line-height: var(--leading-body);
+		color: var(--color-muted);
+	}
+</style>

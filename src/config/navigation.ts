@@ -36,11 +36,7 @@ export const navigation: NavItem[] = [
 			{ label: 'Get Involved', href: '/get-involved/' },
 		],
 	},
-	{
-				label: 'Giving',
-		href: 'https://thetabletx.churchcenter.com/giving?open-in-church-center-modal=true',
-		external: true,
-	},
+	{ label: 'Giving', href: '/giving/' },
 	{ label: 'Merch', href: '/merch/' },
 	{
 		label: 'Connect With Us',

@@ -574,6 +574,16 @@ p {
 	padding-top: var(--space-xs);
 }
 
+/* design.md: giving is the one CTA that may take a bordered chip rather than a
+   typographic link, because it is a transaction, not a reading action. */
+.chip {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+}
+
+.chip,
 .site-form .submit-btn {
 	justify-self: start;
 	min-height: 44px;
@@ -595,21 +605,25 @@ p {
 		color var(--dur-short) var(--ease-out);
 }
 
+.chip:hover,
 .site-form .submit-btn:hover {
 	background: var(--color-ink);
 	color: var(--color-paper);
 }
 
+.chip:focus-visible,
 .site-form .submit-btn:focus-visible {
 	outline-color: var(--color-focus);
 }
 
+.chip:active,
 .site-form .submit-btn:active {
 	background: var(--color-accent-deep);
 	border-color: var(--color-accent-deep);
 	color: var(--color-accent-ink);
 }
 
+.chip:disabled,
 .site-form .submit-btn:disabled {
 	opacity: 0.55;
 	cursor: not-allowed;
@@ -975,4 +989,27 @@ p {
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
 	}
+}
+
+/* The chip is an affordance, not prose. Declared last, and qualified, so the
+   longform / content-page link rules don't repaint it as an inline link. */
+a.chip,
+.longform a.chip,
+.content-page .body a.chip {
+	color: var(--color-ink);
+	text-decoration: none;
+}
+
+a.chip:hover,
+.longform a.chip:hover,
+.content-page .body a.chip:hover {
+	color: var(--color-paper);
+	text-decoration: none;
+}
+
+a.chip:active,
+.longform a.chip:active,
+.content-page .body a.chip:active {
+	color: var(--color-accent-ink);
+	text-decoration: none;
 }
