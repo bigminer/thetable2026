@@ -9,6 +9,12 @@ on:
 permissions:
   contents: read
 
+# A branch that gets several pushes in a row only needs its newest commit
+# verified; supersede the runs still queued behind it.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
     runs-on: ubuntu-latest

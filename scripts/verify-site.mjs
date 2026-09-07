@@ -22,6 +22,7 @@ const routes = [
 	'/community-meal/',
 	'/get-involved/',
 	'/merch/',
+	'/giving/',
 	'/sign-up-for-our-newsletter/',
 	'/contact-us/',
 	'/privacy-policy/',
@@ -30,6 +31,8 @@ const routes = [
 	'/sitemap-index.xml',
 	'/robots.txt',
 	'/attachments/branding/the-table-written-logo.png',
+	'/attachments/pages/merch/table-tees-doorway.jpg',
+	'/attachments/video/homepage/Table-B-roll-poster.jpg',
 ];
 
 const server = spawn(process.execPath, [fileURLToPath(new URL('./start.mjs', import.meta.url))], {
