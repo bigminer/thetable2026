@@ -1,9 +1,8 @@
 ---
 export const prerender = true;
-// Our Story — proposed-version treatment.
+// Our Story.
 // Click-to-play YouTube thumbnail at top so the page can be watched
-// or read depending on preference. Body copy preserved from the
-// existing markdown content.
+// or read depending on preference.
 
 import Layout from '../layouts/Layout.astro';
 import { resolveAsset } from '../lib/content';
@@ -90,9 +89,9 @@ const brettPhoto = resolveAsset('attachments/pages/our-story/Brett-and-Maggie-Ti
 
 <style>
 	/* Hallmark · macrostructure: Long Document · design-system: design.md
-	 * Slate masthead → cream body. The click-to-play thumbnail, the draft note,
-	 * the Brett quotation and the leadership block all read from the shared
-	 * .longform rules in global.css; only the page-specific pieces live here.
+	 * Slate masthead → cream body. The click-to-play thumbnail, the Brett
+	 * quotation and the leadership block all read from the shared .longform
+	 * rules in global.css; only the page-specific pieces live here.
 	 */
 
 	.welcome-video {
