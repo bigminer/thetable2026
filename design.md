@@ -162,24 +162,37 @@ counts as standalone, not inline.
 
 ## Giving
 
-`/giving/` uses Planning Center's supported embed, which is a **modal, not an
-iframe** — their own guidance tells remaining iframe users to migrate.
-`js.churchcenter.com/modal/v1` loads in `Layout.astro` and upgrades any link
-carrying `?open-in-church-center-modal=true`.
+`/giving/` embeds the Church Center giving form inline.
 
-What this system owns: the masthead, the ground, the type, and the bordered chip
-that opens the form. What it does not own: the inside of the modal. That is
-Church Center's own markup on their origin, and it cannot be themed from here —
-it arrives with their button styling and their typeface. Do not try.
+**This is undocumented, not broken.** Planning Center documents a modal, a
+direct link, per-fund links, and prefill parameters — no inline embed. It works
+because churchcenter.com sends no `X-Frame-Options` and no CSP
+`frame-ancestors`, so the page permits framing; their own modal is an iframe
+pointed at the same URL. Verified against the live response headers. They could
+add a framing policy at any time and this would stop rendering without warning —
+the fallback link below is what keeps that from being an outage.
 
-**The embed requires HTTPS.** On an http origin the script attaches its click
-handler but renders a 0×0 iframe, so the button silently does nothing. Production
-is https and works; `npm run dev` serves http and will look broken. Test giving
-against a build served over https.
+**It does not fit a phone.** Measured: in a 350px frame their layout overflows
+and clips — "General" renders as "neral" — because the form needs roughly 480px.
+This is the same reason Planning Center's own modal opens a new window on
+mobile. So the embed is added only above 544px, by a small inline script. The
+markup ships the link; the script swaps in the iframe where it fits. With no
+JavaScript, a narrow viewport, or a blocked frame, everyone gets the link, and
+the link has always worked. Nothing in the payment path depends on our script.
 
-If the script fails to load entirely, no handler is attached and the chip's plain
-`href` navigates to Church Center — so the worst case degrades to the behaviour
-the nav link had before.
+**Apple Pay does not work in an embedded context.** Planning Center documents
+this for their own modal; it applies to any framed context. Card and bank
+payment are unaffected. Anyone who wants Apple Pay uses the direct link.
+
+**What we own and what we don't.** The masthead, the ground, the type, the chip,
+and the column the form sits in are ours. The form's interior is their markup on
+their origin: it cannot be themed, and its own responsive behaviour is theirs
+too — at this width the frequency options become a horizontal scroller rather
+than wrapping. Do not try to style it.
+
+**One Astro gotcha.** The iframe is created in JS, so it never receives the
+build-time `data-astro-cid` attribute that scopes page styles. `.give-frame`
+must stay `:global()` or it silently loses its height.
 
 ## Known gaps
 

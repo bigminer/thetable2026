@@ -2,35 +2,46 @@
 export const prerender = true;
 /* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
  *
- * Planning Center's supported embed is a modal, not an iframe — their own guidance
- * tells remaining iframe users to migrate. So the page owns the surround (masthead,
- * ground, type, the chip that opens it) and Church Center owns the form itself.
- * The modal's interior is cross-origin and cannot be themed from here.
+ * The giving form is embedded inline in the page.
  *
- * The chip is a real <a href>. With js.churchcenter.com/modal/v1 loaded it opens
- * in place; if the script never loads — blocked, offline, JS off — no handler is
- * attached and the same link navigates to Church Center. No JavaScript of ours
- * sits in that path.
+ * A caveat worth keeping: Planning Center does not document an inline embed.
+ * Their help page offers a modal, a direct link, per-fund links, and prefill
+ * parameters — nothing else. The inline embed works because churchcenter.com
+ * sends no X-Frame-Options and no CSP frame-ancestors, so the page permits
+ * framing; their own modal is an iframe pointed at this same URL. Verified
+ * against the live response headers.
  *
- * HTTPS IS REQUIRED. Planning Center's script attaches its handler on any origin
- * but only loads the form over https. On an http origin it swallows the click and
- * renders a 0x0 iframe, so the button does nothing. Verified: over https the modal
- * loads the real form; over http it is dead. Production (Render) is https, so this
- * only affects `npm run dev`, which serves http — test giving against a build
- * served over https, not the dev server.
+ * What that means in practice:
+ *  - It is unsupported, not broken. Planning Center could add a frame-ancestors
+ *    policy at any time and this would stop rendering without warning.
+ *  - Apple Pay does not work in an embedded context. Planning Center documents
+ *    this for their own modal; the same restriction applies to any framed
+ *    context. Card and bank payment are unaffected.
+ *  - The form's interior is their markup on their origin and cannot be themed,
+ *    and its own responsive behaviour is theirs too — at this width the
+ *    frequency options become a horizontal scroller rather than wrapping.
+ *  - It does not fit a phone. Measured: in a 350px frame their layout overflows
+ *    and clips ("General" renders as "neral"), because the form has a minimum
+ *    width around 480px. This is the same reason Planning Center's own modal
+ *    opens a new window on mobile rather than embedding.
+ *
+ * So the embed is added only where it fits. The markup ships the link; a small
+ * inline script swaps in the iframe above EMBED_MIN_WIDTH. With no JavaScript,
+ * a narrow viewport, or a blocked frame, the link is what everyone gets, and it
+ * has always worked. Nothing in the payment path depends on our script.
+ *
+ * The "open the giving page directly" link is the escape hatch: if the frame is
+ * ever blocked, that path still works and needs no code change.
  */
 import Layout from '../layouts/Layout.astro';
 import { site } from '../config/site';
 
 const givingUrl = site.givingUrl;
-/* The same destination without the modal parameter, for people who would rather
-   open Church Center in a full tab. */
-const givingPageUrl = givingUrl.split('?')[0];
 ---
 
 <Layout
 	title="Giving | The Table Church"
-	description="Give to The Table Church in Sachse, Texas through Church Center."
+	description="Give to The Table Church in Sachse, Texas."
 >
 	<article class="giving">
 		<header class="longform-mast band band-slate">
@@ -38,52 +49,162 @@ const givingPageUrl = givingUrl.split('?')[0];
 			<p class="lede">Your giving pays for the room, the meals, the kids&rsquo; ministry, and the people who keep this community running.</p>
 		</header>
 
-		<div class="longform band band-cream">
-			<div class="longform-inner">
-				<div class="give-action">
+		<div class="give-band band band-cream">
+			<div class="give-grid">
+				<div class="give-embed" data-give-url={givingUrl}>
 					<a class="chip" href={givingUrl}>Give now</a>
-					<p class="give-note">
-						Opens a secure Church Center form. One-time or recurring, bank account or card.
-					</p>
+					<p class="give-note">Opens the secure Church Center giving form. One-time or recurring, bank account or card.</p>
 				</div>
 
-				<section>
-					<h2>Other ways</h2>
+				<aside class="give-aside" aria-labelledby="other-ways">
+					<h2 id="other-ways">Other ways</h2>
 					<p>
-						You can also give from the Church Center app, or open the
-						<a href={givingPageUrl} target="_blank" rel="noreferrer">full giving page</a>
-						in a new tab — useful for managing a recurring gift or finding past statements.
+						To give in a full window instead — or if the form doesn&rsquo;t appear —
+						<a href={givingUrl} target="_blank" rel="noreferrer">open the giving page directly</a>.
+						You can also give from the Church Center app.
+					</p>
+					<p>
+						To manage a recurring gift or find past statements, open
+						<a href={givingUrl} target="_blank" rel="noreferrer">the same page</a> and sign in.
 					</p>
 					<p>
 						If you would rather give another way, or have a question about a gift,
 						<a href="/contact-us/">send us a message</a>.
 					</p>
-				</section>
+				</aside>
 			</div>
 		</div>
+
 	</article>
 </Layout>
 
+<script is:inline>
+	/* Church Center's giving form needs roughly 480px to lay out; below that it
+	   overflows its frame and clips. Embed it only where it fits, and leave the
+	   link in place everywhere else. */
+	(function () {
+		var EMBED_MIN_WIDTH = 544;
+		var host = document.querySelector('.give-embed');
+		if (!host || !host.dataset.giveUrl) return;
+
+		var embedded = false;
+		function mount() {
+			if (embedded || window.innerWidth < EMBED_MIN_WIDTH) return;
+			var frame = document.createElement('iframe');
+			frame.className = 'give-frame';
+			frame.src = host.dataset.giveUrl;
+			frame.title = 'Give to The Table Church';
+			frame.setAttribute('allow', 'payment *; clipboard-write');
+			frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+			host.replaceChildren(frame);
+			embedded = true;
+		}
+
+		mount();
+		/* Covers a rotate or a resized desktop window. Once mounted it stays put —
+		   tearing the frame down mid-donation would lose whatever was typed. */
+		window.addEventListener('resize', mount);
+	})();
+</script>
+
 <style>
-	.give-action {
+	.give-band {
+		padding-block: var(--space-2xl) var(--space-4xl);
+	}
+
+	.give-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+		gap: var(--space-2xl) var(--space-3xl);
+		align-items: start;
+		max-width: 72rem;
+	}
+
+	/* No border or ground of our own — the Church Center form ships its own white
+	   card, and wrapping it would be card-in-card. */
+	.give-embed {
 		display: grid;
 		justify-items: start;
 		gap: var(--space-md);
-		/* No bottom rule — the next section's h2 already carries a top rule, and
-		   two hairlines a gap apart read as a mistake. */
-		margin-bottom: var(--space-2xl);
+		min-width: 0;
 	}
 
-	.give-action .chip {
+	.give-embed .chip {
 		font-size: var(--text-md);
 		padding-inline: var(--space-2xl);
 	}
 
 	.give-note {
 		margin: 0;
-		max-width: 46ch;
+		max-width: 44ch;
 		font-size: var(--text-base);
 		line-height: var(--leading-body);
 		color: var(--color-muted);
 	}
+
+	/* :global because the frame is created in JS. Astro scopes styles with a
+	   build-time data-astro-cid attribute that a scripted element never gets, so a
+	   scoped selector would not match it.
+
+	   Cross-origin, so the frame cannot report its own height and there is no
+	   documented postMessage contract to resize against. The height is fixed to
+	   clear the form at its tallest ordinary state; later steps scroll inside it. */
+	:global(.give-frame) {
+		display: block;
+		width: 100%;
+		height: 46rem;
+		border: 0;
+	}
+
+	.give-aside {
+		padding-top: var(--space-2xs);
+		border-top: var(--rule-heavy) solid var(--color-ink);
+	}
+
+	.give-aside h2 {
+		margin: var(--space-lg) 0 var(--space-md);
+		font-size: var(--text-xl);
+		color: var(--color-ink);
+	}
+
+	.give-aside p {
+		margin: 0 0 var(--space-md);
+		max-width: 46ch;
+		font-size: var(--text-base);
+		line-height: var(--leading-body);
+		color: var(--color-ink-2);
+	}
+
+	.give-aside p:last-child {
+		margin-bottom: 0;
+	}
+
+	.give-aside a {
+		color: var(--color-accent-deep);
+		text-decoration: underline;
+		text-decoration-thickness: var(--rule-hair);
+		text-underline-offset: 2px;
+		transition: text-decoration-thickness var(--dur-short) var(--ease-out);
+	}
+
+	.give-aside a:hover,
+	.give-aside a:focus-visible {
+		text-decoration-thickness: 2px;
+	}
+
+	.give-aside a:active {
+		color: var(--color-accent);
+	}
+
+	@media (max-width: 60rem) {
+		.give-grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.give-band {
+			padding-block: var(--space-xl) var(--space-3xl);
+		}
+	}
+
+
 </style>
