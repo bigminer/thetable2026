@@ -23,6 +23,7 @@ The app lives at the repository root.
 
 ```text
 design.md               The locked visual system — read before writing any markup or CSS
+ROADMAP.md              Planned work and known gaps
 astro.config.mjs        Astro config (server output, Node standalone adapter)
 src/pages/              One .astro file per public route
 src/layouts/            Layout.astro (shell) and ContentPage.astro (inner pages)
@@ -98,10 +99,10 @@ These destinations are intentionally external. Do not convert them into broken l
 
 Use a strict progression for new ideas and proposed changes:
 
-1. **Roadmap first** — new ideas and future work belong in `.hermes/roadmap/` or `.hermes/plans/`. Do not turn brainstorming directly into repo changes.
-2. **Kanban second** — promote a roadmap item only when it is a concrete task. Triage for decisions/spec work; ready/running only for approved, actionable work.
-3. **Implementation third** — do not change code, docs, scripts, or config for a new idea without a matching kanban card or an explicit request. If reality shows the work is partly done, update the roadmap and split the remainder into a follow-up card.
-4. **Status and handoff** — status reports show both roadmap and kanban and explain the relationship. `handoff.md` captures the next approved step.
+1. **Roadmap first** — new ideas and future work belong in `ROADMAP.md`. Do not turn brainstorming directly into repo changes.
+2. **Implementation second** — do not change code, docs, scripts, or config for a new idea without a roadmap entry or an explicit request. If reality shows the work is partly done, update `ROADMAP.md` and leave the remainder as its own entry.
+
+Work the roadmap one item at a time: confirm the item is still valid against current code, explain what you intend to change and why, then pause for approval before implementing.
 
 If the user is discussing ideas, stay in planning mode. Move to implementation only when the work has clearly crossed the gate.
 
