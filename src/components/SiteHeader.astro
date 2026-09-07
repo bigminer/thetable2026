@@ -7,8 +7,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteName = site.title;
 const brandLogoSrc = base + '/attachments/branding/the-table-written-logo.png';
 const mastLine = `${site.serviceTime} · ${site.addressLines[0]}, ${site.addressLines[1]}`;
-const featuredItem = navItems.find((item) => item.featured);
-const primaryItems = navItems.filter((item) => !item.featured);
 const rawPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.url.pathname + '/';
 const currentPath = base && rawPath.startsWith(base) ? rawPath.slice(base.length) : rawPath;
 const isActive = (href: string) => currentPath === href;
@@ -26,7 +24,7 @@ const hasActiveChild = (item: (typeof navItems)[number]) => item.children?.some(
 
 		<nav class="site-nav desktop-nav" aria-label="Primary">
 			<ul>
-				{primaryItems.map((item, index) => (
+				{navItems.map((item, index) => (
 					<li
 						class:list={[
 							item.children && 'has-children',
@@ -62,12 +60,6 @@ const hasActiveChild = (item: (typeof navItems)[number]) => item.children?.some(
 		</nav>
 
 		<div class="header-actions">
-			{featuredItem?.href && (
-				<a
-					class:list={['giving-link', isActive(featuredItem.href) && 'is-active']}
-					href={base + featuredItem.href}
-				>{featuredItem.label}</a>
-			)}
 			<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">
 				<span class="menu-toggle-label">Menu</span>
 				<span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
@@ -77,7 +69,7 @@ const hasActiveChild = (item: (typeof navItems)[number]) => item.children?.some(
 
 	<nav id="mobile-nav" class="mobile-nav" aria-label="Mobile Primary" hidden>
 		<ul>
-			{primaryItems.map((item) => (
+			{navItems.map((item) => (
 				<li>
 					{item.children ? (
 						<details open={hasActiveChild(item)}>

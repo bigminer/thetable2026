@@ -9,7 +9,6 @@ type NavItem = {
 	href?: string;
 	children?: ChildItem[];
 	external?: boolean;
-	featured?: boolean;
 };
 
 export const navigation: NavItem[] = [
@@ -74,6 +73,6 @@ export const navigation: NavItem[] = [
 			{ label: 'Merch', href: '/merch/', description: 'Wear and share The Table.' },
 		],
 	},
-	{ label: 'Giving', href: '/giving/', featured: true },
+	{ label: 'Giving', href: '/giving/' },
 ];
 

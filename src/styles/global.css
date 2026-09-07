@@ -439,35 +439,6 @@ p {
 	gap: var(--space-sm);
 }
 
-.giving-link {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 44px;
-	box-sizing: border-box;
-	padding: var(--space-xs);
-	border: 0;
-	border-bottom: var(--rule-heavy) solid transparent;
-	color: var(--color-ink);
-	font-family: var(--font-display);
-	font-weight: 700;
-	font-size: var(--text-sm);
-	letter-spacing: 0.1em;
-	text-decoration: none;
-	text-transform: uppercase;
-	transition: border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
-}
-
-.giving-link:hover,
-.giving-link:focus-visible,
-.giving-link.is-active {
-	border-bottom-color: var(--color-accent);
-}
-
-.giving-link:active {
-	color: var(--color-accent-deep);
-}
-
 .menu-toggle {
 	display: none;
 	align-items: center;

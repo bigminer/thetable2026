@@ -132,12 +132,13 @@ prevents the ground from following the palette.
 ## Navigation
 
 - Desktop uses a compact horizontal masthead: wordmark and service details left,
-  an explicit Home link plus five visitor-centered sections right, and Giving as
-  a direct navigation link.
+  an explicit Home link plus five visitor-centered sections right. Giving is an
+  ordinary direct link in the same navigation sequence.
 - Section disclosures open into a wide slate panel with short descriptions. The
   panel borrows a mega-menu's scanability without importing card styling.
-- Mobile keeps the wordmark and Giving visible beside a real menu button. The
-  expanded navigation uses full-width disclosure rows with 44px minimum targets.
+- Mobile keeps the wordmark beside a real menu button. The expanded navigation
+  contains every item, including Giving, in full-width rows with 44px minimum
+  targets.
 - Desktop menus remain open while the pointer travels from the trigger to the
   panel. They close on another selection, outside click, or Escape; Escape returns
   focus to the trigger.
