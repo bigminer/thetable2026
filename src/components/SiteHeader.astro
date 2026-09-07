@@ -1,0 +1,152 @@
+---
+import { site } from '../config/site';
+import { navigation as navItems } from '../config/navigation';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteName = site.title;
+const brandLogoSrc = base + '/attachments/branding/the-table-written-logo.png';
+const rawPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.url.pathname + '/';
+const currentPath = base && rawPath.startsWith(base) ? rawPath.slice(base.length) : rawPath;
+const isActive = (href: string) => currentPath === href;
+const hasActiveChild = (item: (typeof navItems)[number]) => item.children?.some(child => isActive(child.href)) ?? false;
+---
+
+<div class="header-wrap">
+			<header class="site-header">
+				<div class="brand-wrap">
+					<a class="brand brand-logo-link" href={base + '/'} aria-label={siteName}>
+						<img class="brand-logo" src={brandLogoSrc} alt={siteName} width="720" height="236" />
+					</a>
+					<p class="tagline">{site.tagline}</p>
+				</div>
+				<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">
+					Menu
+				</button>
+				<nav class="site-nav desktop-nav" aria-label="Primary">
+					<ul>
+						{navItems.map((item, index) => (
+							<li
+								class:list={[
+									item.children && 'has-children',
+									((item.href && isActive(item.href)) || hasActiveChild(item)) && 'is-active',
+								]}
+							>
+								{item.href ? (
+									<a
+										href={item.external ? item.href : base + item.href}
+										target={item.external ? '_blank' : undefined}
+										rel={item.external ? 'noreferrer' : undefined}
+									>
+										{item.label}
+									</a>
+								) : (
+									<details class="desktop-group" open={hasActiveChild(item)}>
+										<summary class="nav-trigger">{item.label}</summary>
+										<ul class="submenu" id={`submenu-${index}`}>
+											{item.children?.map((child) => (
+												<li class:list={[isActive(child.href) && 'is-active']}>
+													<a href={base + child.href}>{child.label}</a>
+												</li>
+											))}
+										</ul>
+									</details>
+								)}
+							</li>
+						))}
+					</ul>
+				</nav>
+			</header>
+
+			<nav id="mobile-nav" class="mobile-nav" aria-label="Mobile Primary" hidden>
+				<ul>
+					{navItems.map((item) => (
+						<li>
+							{item.children ? (
+								<details open={hasActiveChild(item)}>
+									<summary>{item.label}</summary>
+									<ul class="mobile-submenu">
+										{item.children.map((child) => (
+											<li class:list={[isActive(child.href) && 'is-active']}>
+												<a href={base + child.href}>{child.label}</a>
+											</li>
+										))}
+									</ul>
+								</details>
+							) : (
+								<a
+									href={item.external ? item.href : base + item.href}
+									target={item.external ? '_blank' : undefined}
+									rel={item.external ? 'noreferrer' : undefined}
+								>
+									{item.label}
+								</a>
+							)}
+						</li>
+					))}
+				</ul>
+			</nav>
+			</div><!-- /.header-wrap -->
+
+<script is:inline>
+			const toggle = document.querySelector('.menu-toggle');
+			const mobileNav = document.querySelector('#mobile-nav');
+			const closeMobileNav = () => {
+				if (!toggle || !mobileNav) return;
+				toggle.setAttribute('aria-expanded', 'false');
+				mobileNav.hidden = true;
+			};
+
+			toggle?.addEventListener('click', () => {
+				if (!mobileNav) return;
+				const next = toggle.getAttribute('aria-expanded') !== 'true';
+				toggle.setAttribute('aria-expanded', String(next));
+				mobileNav.hidden = !next;
+			});
+
+			mobileNav?.querySelectorAll('a').forEach((link) => {
+				link.addEventListener('click', () => {
+					if (window.innerWidth <= 900) closeMobileNav();
+				});
+			});
+
+			window.addEventListener('resize', () => {
+				if (window.innerWidth > 900) closeMobileNav();
+			});
+
+			const desktopGroups = Array.from(document.querySelectorAll('.desktop-group'));
+			const syncDesktopGroup = (group) => {
+				const submenu = group.querySelector('.submenu');
+				if (submenu instanceof HTMLElement) submenu.style.display = group.open ? 'block' : 'none';
+			};
+
+			const closeDesktopGroups = () => {
+				desktopGroups.forEach((group) => {
+					group.open = false;
+					syncDesktopGroup(group);
+				});
+			};
+
+			desktopGroups.forEach((group) => {
+				syncDesktopGroup(group);
+				group.addEventListener('toggle', () => syncDesktopGroup(group));
+				const summary = group.querySelector('summary');
+				summary?.addEventListener('click', (event) => {
+					event.preventDefault();
+					const next = !group.open;
+					closeDesktopGroups();
+					group.open = next;
+					syncDesktopGroup(group);
+				});
+				group.addEventListener('mouseenter', () => {
+					if (window.innerWidth <= 900) return;
+					closeDesktopGroups();
+					group.open = true;
+					syncDesktopGroup(group);
+				});
+			});
+
+			document.addEventListener('click', (event) => {
+				if (event.target instanceof Element && event.target.closest('.desktop-nav')) return;
+				closeDesktopGroups();
+			});
+
+		</script>

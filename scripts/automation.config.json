@@ -1,0 +1,66 @@
+{
+  "name": "weekly-media-ingestion",
+  "description": "Skeleton config for weekly draft-first ingestion of The Table YouTube videos and podcast episodes, scoped to the-good-book only.",
+  "schedule": "0 9 * * 1",
+  "runMode": "dry-run-safe",
+  "seriesScope": {
+    "slug": "the-good-book",
+    "title": "The Good Book: Fresh Insights Into an Ancient Text",
+    "seriesLink": "[The Good Book: Fresh Insights Into an Ancient Text](../series/the-good-book.md)",
+    "dateRange": {
+      "start": "2025-09-14",
+      "end": "2025-10-05"
+    },
+    "titleHints": [
+      "the good book",
+      "scripture",
+      "jesus interpret scripture"
+    ],
+    "messageDir": "src/content/messages",
+    "transcriptArchiveDir": "data/transcripts/content",
+    "youtubeTitleOverrides": {
+      "qBXvwWpJ5aY": "Scripture: More Than a Book"
+    }
+  },
+  "defaults": {
+    "ingestionDisposition": "draft-first",
+    "publishToSite": false,
+    "writeContentFiles": false,
+    "allowMissingSources": true,
+    "onMissingSource": "skip-and-report",
+    "ingestVideoTranscript": true,
+    "ingestPodcastEpisodes": true
+  },
+  "youtubeDiscovery": {
+    "sourceUrl": "TODO: supply via YOUTUBE_SOURCE_URL before this wrapper produces real output. See decision D3.",
+    "excludePatterns": [
+      "📱"
+    ],
+    "notes": "Regex exclude patterns are evaluated case-insensitively. YouTube source URL (channel or playlist) must be supplied via YOUTUBE_SOURCE_URL before this wrapper produces real output. See decision D3."
+  },
+  "sources": [
+    {
+      "id": "youtube",
+      "kind": "youtube",
+      "label": "The Table YouTube channel or playlist",
+      "channelUrl": "https://www.youtube.com/channel/UC4C3HWTMx34ec7QJ5hkhtwg",
+      "playlistUrl": "https://www.youtube.com/playlist?list=UU4C3HWTMx34ec7QJ5hkhtwg",
+      "feedUrl": "https://www.youtube.com/feeds/videos.xml?channel_id=UC4C3HWTMx34ec7QJ5hkhtwg",
+      "requiredSourceFields": ["channelUrl", "playlistUrl"],
+      "notes": "Seeded from the live site YouTube channel link plus the standard uploads playlist for this channel. The ingestion script uses the channel uploads RSS feed in this environment because yt-dlp is not installed, and historical backfill falls back to the scoped repo transcript archive because the live uploads RSS feed is too shallow. Verify channel-vs-streams scope before enabling writes."
+    },
+    {
+      "id": "podcast",
+      "kind": "rss",
+      "label": "Podcast RSS feed",
+      "feedUrl": "https://anchor.fm/s/1067c248/podcast/rss",
+      "requiredSourceFields": ["feedUrl"],
+      "notes": "Canonical RSS feed confirmed from homepage links, llms.txt, and Apple Podcasts lookup."
+    }
+  ],
+  "reporting": {
+    "includeSummary": true,
+    "includeMissingSources": true,
+    "format": "text"
+  }
+}

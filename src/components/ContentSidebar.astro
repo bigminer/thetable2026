@@ -1,0 +1,41 @@
+---
+import { site } from '../config/site';
+import '../styles/content-page.css';
+---
+
+<aside class="sidebar">
+					<section class="sidebar-card">
+						<h2>Our Vision</h2>
+						<p>{site.vision}</p>
+					</section>
+					<section class="sidebar-card">
+						<h2>Connect With Us</h2>
+						{site.addressLines && (
+							<address class="sidebar-address">
+								{site.addressLines.map((line) => <span>{line}</span>)}
+							</address>
+						)}
+						{site.serviceTime && (
+							<p class="service-time">{site.serviceTime}</p>
+						)}
+						{site.mapEmbedUrl && (
+							<iframe
+								src={site.mapEmbedUrl}
+								title="Map to The Table"
+								loading="lazy"
+								referrerpolicy="no-referrer-when-downgrade"
+							/>
+						)}
+					</section>
+					{(() => {
+						const fbLink = site.socialLinks?.find(l => l.label === 'Facebook');
+						return fbLink?.url ? (
+						<section class="sidebar-card">
+							<h2>Connect With Us On Facebook</h2>
+							<a class="sidebar-social-link" href={fbLink.url} target="_blank" rel="noreferrer">
+								Follow us on Facebook
+							</a>
+						</section>
+						) : null;
+					})()}
+				</aside>

@@ -2,8 +2,8 @@ services:
   - type: web
     name: thetabletx
     runtime: node
-    buildCommand: cd site && npm ci && npm run build
-    startCommand: cd site && HOST=0.0.0.0 node dist/server/entry.mjs
+    buildCommand: npm ci && npm run build
+    startCommand: HOST=0.0.0.0 npm start
     healthCheckPath: /
     envVars:
       - key: NODE_ENV
@@ -15,4 +15,22 @@ services:
       - key: ASK_LLM_API_KEY
         sync: false
       - key: OPENAI_API_KEY
+        sync: false
+      # Contact and newsletter form delivery via Google Workspace SMTP.
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: CONTACT_TO_EMAIL
+        sync: false
+      - key: CONTACT_FROM_EMAIL
+        sync: false
+      # Optional analytics. GTM preferred; GA4 is the fallback when GTM is unset.
+      - key: PUBLIC_GTM_ID
+        sync: false
+      - key: PUBLIC_GA4_ID
         sync: false

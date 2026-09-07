@@ -1,0 +1,288 @@
+---
+export const prerender = true;
+// Our Story — proposed-version treatment.
+// Click-to-play YouTube thumbnail at top so the page can be watched
+// or read depending on preference. Body copy preserved from the
+// existing markdown content.
+
+import Layout from '../layouts/Layout.astro';
+import { resolveAsset } from '../lib/content';
+
+const youtubeId = 'xbtuP_UITPo';
+const thumbnailUrl = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+const brettPhoto = resolveAsset('attachments/pages/our-story/Brett-and-Maggie-Tilford.jpg');
+---
+
+<Layout
+	title="Our Story | The Table Church"
+	description="The story and people behind The Table Church."
+>
+	<article class="our-story">
+		<header>
+			<h1>Our Story</h1>
+		</header>
+
+		<button type="button" class="welcome-video" data-youtube-id={youtubeId} aria-label="Play 3-minute welcome video — Brett and members of The Table on what this community is and how they got here">
+			<img src={thumbnailUrl} alt="" loading="lazy" />
+			<span class="play-icon" aria-hidden="true">
+				<svg viewBox="0 0 80 80" width="64" height="64">
+					<circle cx="40" cy="40" r="40" fill="rgba(255, 255, 255, 0.94)" />
+					<polygon points="32,24 32,56 58,40" fill="#1a1815" />
+				</svg>
+			</span>
+			<span class="video-label">Welcome to The Table (3 min)</span>
+		</button>
+
+		<aside class="draft-note">
+			<strong>Draft.</strong> Composed from Brett's own sermons and Table Talks. Sources cited inline. Posted here to start the conversation, not to settle it.
+		</aside>
+
+		<div class="body">
+			<p>The Table didn't come from nowhere.</p>
+
+			<p>In January of 2017, Brett Tilford and a group of others launched a satellite campus of a larger church. The values that now define this community — thoughtful, inclusive, eclectic, communal, vulnerable — came partly from that earlier place. The people who helped start The Table came from there too. Some were mentors. Some were literal family.</p>
+
+			<p>That earlier community was beautiful in many ways. Over almost three years, gay and lesbian folks began to attend regularly. The church wasn't fully affirming, and they couldn't fully participate in its life. It wasn't dramatic — not big and ugly — just slowly, increasingly uncomfortable for everyone. Eventually Brett and others felt they couldn't continue in integrity. Both Elder teams met for months hoping to find a way through. They couldn't.</p>
+
+			<blockquote>
+				<p>It's neither true that they heartlessly kicked us out. Nor that I, in willful rebellion, led those people astray. The truth is — we tried. Both of us. All of us. Our Elder team met with their Elder team for months. We were even hoping for a middle way... and it just didn't work out. We just couldn't figure it out. So we said goodbye. I still miss them. I know they miss us. I pray for them. I know they pray for us.</p>
+				<cite>— Brett, <a href="https://www.youtube.com/watch?v=XTvMlyz7a44&t=3295s" target="_blank" rel="noreferrer">Forgive &amp; Forget</a>, November 13, 2023</cite>
+			</blockquote>
+
+			<p>In November of 2019, twenty-nine adults from Collin and Dallas counties gathered for the first time as The Table. The first few months were unbelievable — energy, excitement, momentum. Then the world shut down. The church survived that season, but it lost a lot.</p>
+
+			<p>The vision Brett named in a <a href="https://www.youtube.com/watch?v=lscMZcPgEc8&t=31s" target="_blank" rel="noreferrer">Table Talk video</a> just before the launch hasn't changed: The Table exists to shift a generation from reactionary to visionary through the person and work of Jesus.</p>
+
+			<p>We meet inside First United Methodist Church of Sachse, on Sunday evenings at 5pm. Twenty-nine became more. The story is still being told.</p>
+
+			<p>We're saving you a seat.</p>
+		</div>
+
+		<section class="leadership">
+			{brettPhoto && (
+				<img src={brettPhoto} alt="Brett and Maggie Tilford" loading="lazy" />
+			)}
+			<div class="leadership-copy">
+				<h2>Brett and Maggie Tilford</h2>
+				<p>Brett and Maggie Tilford lead at The Table and live in Sachse, TX with their three kids Eve, Dax, and Oak. They have been married for 18 years and, although they have wildly different tastes in Netflix shows, they make a great team since they both love Jesus and helping others discover a more thoughtful, inclusive, and beautiful Christianity.</p>
+			</div>
+		</section>
+	</article>
+</Layout>
+
+<script>
+	const buttons = document.querySelectorAll<HTMLButtonElement>('.welcome-video');
+	for (const button of buttons) {
+		button.addEventListener('click', () => {
+			const id = button.dataset.youtubeId;
+			if (!id) return;
+			const iframe = document.createElement('iframe');
+			iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+			iframe.title = '3-minute welcome from Brett Tilford';
+			iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+			iframe.allowFullscreen = true;
+			iframe.className = 'welcome-video-iframe';
+			button.replaceWith(iframe);
+		});
+	}
+</script>
+
+<style>
+	.our-story {
+		max-width: 56rem;
+		margin: 4rem auto 6rem;
+		padding: 0 clamp(1.25rem, 3vw, 2.5rem);
+		font-family: 'Lora', serif;
+		color: var(--text-primary, #1a1a1a);
+	}
+
+	.our-story header {
+		margin-bottom: 3rem;
+	}
+
+	.our-story h1 {
+		margin: 0;
+		font-size: clamp(2rem, 4.4vw, 3.2rem);
+		font-weight: 600;
+		line-height: 1.05;
+		letter-spacing: -0.005em;
+	}
+
+	.welcome-video {
+		display: block;
+		position: relative;
+		width: 100%;
+		margin: 0 0 4rem;
+		padding: 0;
+		border: 0;
+		background: #1a1815;
+		cursor: pointer;
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		border-radius: 4px;
+		font-family: inherit;
+	}
+
+	.welcome-video img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		opacity: 0.85;
+		transition: opacity 0.2s;
+	}
+
+	.welcome-video:hover img,
+	.welcome-video:focus-visible img {
+		opacity: 1;
+	}
+
+	.welcome-video .play-icon {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.35));
+		transition: transform 0.15s;
+	}
+
+	.welcome-video:hover .play-icon,
+	.welcome-video:focus-visible .play-icon {
+		transform: translate(-50%, -50%) scale(1.05);
+	}
+
+	.welcome-video .video-label {
+		position: absolute;
+		left: 1.25rem;
+		bottom: 1rem;
+		padding: 0.4rem 0.85rem;
+		background: rgba(20, 24, 21, 0.7);
+		color: #fdfaf4;
+		font-size: 0.95rem;
+		border-radius: 999px;
+		backdrop-filter: blur(4px);
+	}
+
+	:global(.welcome-video-iframe) {
+		display: block;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		margin: 0 0 4rem;
+		border: 0;
+		border-radius: 4px;
+	}
+
+	.draft-note {
+		margin: 0 0 2.5rem;
+		padding: 0.85rem 1.1rem;
+		background: rgba(139, 58, 43, 0.06);
+		border-left: 2px solid var(--brand-rust, #8b3a2b);
+		font-size: 0.95rem;
+		line-height: 1.55;
+		color: var(--text-secondary, #555);
+		font-style: italic;
+	}
+
+	.draft-note strong {
+		font-style: normal;
+		color: var(--brand-rust, #8b3a2b);
+	}
+
+	.body {
+		margin-bottom: 5rem;
+	}
+
+	.body p {
+		margin: 0 0 1.5rem;
+		font-size: 1.1rem;
+		line-height: 1.75;
+		color: var(--text-body, #333);
+	}
+
+	.body p:last-child {
+		margin-bottom: 0;
+	}
+
+	.body blockquote {
+		margin: 2rem 0;
+		padding: 0.5rem 0 0.5rem 1.5rem;
+		border-left: 2px solid var(--brand-rust, #8b3a2b);
+	}
+
+	.body blockquote p {
+		font-style: italic;
+		font-size: 1.08rem;
+		line-height: 1.7;
+		color: var(--text-secondary, #555);
+		margin-bottom: 0.85rem;
+	}
+
+	.body blockquote p:last-of-type {
+		margin-bottom: 0.85rem;
+	}
+
+	.body blockquote cite {
+		display: block;
+		margin-top: 0.5rem;
+		font-style: normal;
+		font-size: 0.9rem;
+		line-height: 1.5;
+		color: var(--text-secondary, #666);
+	}
+
+	.body blockquote cite a {
+		color: var(--brand-rust, #8b3a2b);
+		text-decoration: none;
+		border-bottom: 1px solid currentColor;
+	}
+
+	.body blockquote cite a:hover {
+		opacity: 0.7;
+	}
+
+	.leadership {
+		display: grid;
+		grid-template-columns: minmax(200px, 0.7fr) minmax(0, 1.3fr);
+		gap: 2rem;
+		align-items: start;
+		padding-top: 3rem;
+		border-top: 1px solid rgba(127, 127, 127, 0.2);
+	}
+
+	.leadership img {
+		width: 100%;
+		height: auto;
+		border-radius: 4px;
+		display: block;
+	}
+
+	.leadership h2 {
+		margin: 0 0 1rem;
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: var(--text-primary, #1a1a1a);
+	}
+
+	.leadership p {
+		margin: 0;
+		font-size: 1.05rem;
+		line-height: 1.7;
+		color: var(--text-body, #333);
+	}
+
+	@media (max-width: 700px) {
+		.leadership {
+			grid-template-columns: 1fr;
+		}
+
+		.leadership img {
+			max-width: 16rem;
+		}
+
+		.welcome-video .play-icon svg {
+			width: 48px;
+			height: 48px;
+		}
+	}
+</style>

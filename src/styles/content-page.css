@@ -1,0 +1,210 @@
+.content-page {
+		display: grid;
+		gap: 2rem;
+	}
+
+	.content-page .page-hero {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+		gap: 1.5rem;
+		align-items: center;
+	}
+
+	.content-page .hero-copy {
+		max-width: 44rem;
+	}
+
+	.content-page .eyebrow {
+		margin: 0 0 0.5rem;
+		color: var(--brand-rust);
+		font: 700 0.82rem/1.1 'Trebuchet MS', sans-serif;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	.content-page h1 {
+		margin: 0 0 0.75rem;
+		font-size: clamp(2.2rem, 5vw, 4rem);
+		line-height: 0.95;
+	}
+
+	.content-page .lede {
+		margin: 0;
+		color: var(--text-secondary);
+		font-size: 1.08rem;
+		line-height: 1.7;
+	}
+
+	.content-page .page-hero img {
+		width: 100%;
+		border-radius: var(--radius-card);
+		object-fit: cover;
+		box-shadow: var(--shadow-card);
+	}
+
+	.content-page .content-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 2fr) minmax(280px, 0.95fr);
+		gap: 1.5rem;
+		align-items: start;
+	}
+
+	.content-page .body {
+		line-height: 1.8;
+	}
+
+	.content-page .body p,
+.content-page .body li {
+		color: var(--text-body);
+	}
+
+	.content-page .body img {
+		display: block;
+		max-width: min(100%, 480px);
+		border-radius: var(--radius-sm);
+		box-shadow: var(--shadow-sm);
+		margin: 1.5rem 0;
+	}
+
+	.content-page .google-form-embed {
+		display: block;
+		width: 100%;
+		min-height: 640px;
+		border: 0;
+		border-radius: var(--radius-card);
+		margin-top: 1.5rem;
+	}
+
+	.content-page .body .content-map-embed {
+		display: block;
+		width: 100%;
+		min-height: 320px;
+		border: 0;
+		border-radius: var(--radius-card);
+		box-shadow: var(--shadow-sm);
+		margin: 1.5rem 0;
+	}
+
+	.content-page .body em {
+		color: var(--text-secondary);
+	}
+
+	.content-page .staff-section {
+		margin-top: 2.5rem;
+	}
+
+	.content-page .staff-section h2 {
+		margin-bottom: 1rem;
+	}
+
+	.content-page .staff-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 1rem;
+	}
+
+	.content-page .staff-card {
+		overflow: hidden;
+		border: 1px solid var(--border);
+		border-radius: 22px;
+		background: var(--bg-surface);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.content-page .staff-card img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 2 / 3;
+		object-fit: cover;
+		margin: 0;
+		border-radius: 0;
+		box-shadow: none;
+	}
+
+	.content-page .staff-copy {
+		padding: 1rem;
+	}
+
+	.content-page .staff-copy h3 {
+		margin: 0 0 0.4rem;
+	}
+
+	.content-page .staff-role,
+.content-page .staff-pronouns {
+		margin: 0;
+		color: var(--text-body);
+	}
+
+	.content-page .staff-pronouns {
+		margin-top: 0.25rem;
+		color: var(--text-secondary);
+		font-style: italic;
+	}
+
+	.content-page .sidebar {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.content-page .sidebar-card {
+		background: var(--bg-surface);
+		border: 1px solid var(--border);
+		border-radius: 24px;
+		padding: 1.15rem;
+		box-shadow: var(--shadow-sm);
+	}
+
+	.content-page .sidebar-card h2 {
+		margin-bottom: 0.65rem;
+		font-size: 1.3rem;
+	}
+
+	.content-page .sidebar-card p,
+.content-page .sidebar-card li {
+		color: var(--text-body);
+		line-height: 1.7;
+	}
+
+	.content-page .sidebar-card ul {
+		margin: 0 0 0.75rem;
+		padding-left: 1.1rem;
+	}
+
+	.content-page .sidebar-address {
+		display: grid;
+		gap: 0.2rem;
+		font-style: normal;
+		line-height: 1.55;
+		color: var(--text-body);
+		margin: 0 0 0.75rem;
+	}
+
+	.content-page .service-time {
+		margin: 0.5rem 0 0.9rem;
+		font-family: 'Trebuchet MS', sans-serif;
+		font-weight: 700;
+		color: var(--brand-rust);
+	}
+
+	.content-page .sidebar-card iframe {
+		display: block;
+		width: 100%;
+		min-height: 220px;
+		border: 0;
+		border-radius: 18px;
+	}
+
+	.content-page .sidebar-social-link {
+		display: inline-block;
+		margin-top: 0.25rem;
+		color: var(--brand-rust);
+		font: 700 0.95rem/1 'Trebuchet MS', sans-serif;
+		text-decoration: none;
+	}
+
+	@media (max-width: 820px) {
+		.content-page .page-hero,
+.content-page .content-grid {
+			grid-template-columns: 1fr;
+		}
+	}

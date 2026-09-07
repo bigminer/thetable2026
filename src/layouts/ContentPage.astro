@@ -1,0 +1,34 @@
+---
+import Layout from './Layout.astro';
+import ContentSidebar from '../components/ContentSidebar.astro';
+import { resolveAsset } from '../lib/content';
+import '../styles/content-page.css';
+
+interface Props {
+	title: string;
+	description?: string;
+	lede?: string;
+	eyebrow?: string;
+	heroImage?: string;
+	heroImageAlt?: string;
+	showSidebar?: boolean;
+}
+const { title, description, lede, eyebrow = title, heroImage, heroImageAlt, showSidebar = false } = Astro.props;
+---
+
+<Layout title={title + ' | The Table Church'} description={description}>
+	<article class="content-page">
+		<header class="page-hero">
+			<div class="hero-copy">
+				<p class="eyebrow">{eyebrow}</p>
+				<h1>{title}</h1>
+				{(lede || description) && <p class="lede">{lede || description}</p>}
+			</div>
+			{heroImage && <img src={resolveAsset(heroImage)} alt={heroImageAlt ?? title} />}
+		</header>
+		<div class="content-grid">
+			<section class="body"><slot /></section>
+			{showSidebar && <ContentSidebar />}
+		</div>
+	</article>
+</Layout>

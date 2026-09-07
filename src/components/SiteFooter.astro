@@ -1,0 +1,55 @@
+---
+import { site } from '../config/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteName = site.title;
+const siteTagline = site.tagline;
+const brandLogoSrc = base + '/attachments/branding/the-table-written-logo.png';
+const privacyHref = base + '/privacy-policy/';
+const footerAddressLines = site.addressLines;
+const footerServiceTime = site.serviceTime;
+const footerSocialLinks = site.socialLinks;
+const footerCopyrightYear = new Date().getFullYear();
+---
+
+<footer class="site-footer" aria-labelledby="site-footer-title">
+				<div class="footer-brand">
+					<p class="footer-title" id="site-footer-title">
+						<img class="footer-logo" src={brandLogoSrc} alt={siteName} width="720" height="236" />
+					</p>
+					<p class="footer-tagline">{siteTagline}</p>
+				</div>
+				<div class="footer-grid">
+					<div class="footer-section">
+						<p class="footer-label">Location</p>
+						<address class="footer-address">
+							{footerAddressLines.map((line) => (
+								<span>{line}</span>
+							))}
+						</address>
+					</div>
+					<div class="footer-section">
+						<p class="footer-label">Service Time</p>
+						<p class="footer-text">{footerServiceTime}</p>
+					</div>
+					<div class="footer-section">
+						<p class="footer-label">Social</p>
+						{footerSocialLinks.length > 0 ? (
+							<ul class="footer-social-links">
+								{footerSocialLinks.map((link) => (
+									<li>
+										<a href={link.url} target="_blank" rel="noreferrer">
+											{link.label}
+										</a>
+									</li>
+								))}
+							</ul>
+						) : (
+							<p class="footer-text">Follow us online.</p>
+						)}
+					</div>
+				</div>
+				<div class="footer-meta">
+					<p aria-label={`Copyright ${footerCopyrightYear} ${siteName}`}>Copyright {footerCopyrightYear}</p>
+					<a href={privacyHref}>Privacy</a>
+				</div>
+			</footer>
