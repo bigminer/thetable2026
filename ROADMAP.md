@@ -33,24 +33,55 @@ Sequence the mail work (below) with this — both touch DNS.
 
 ---
 
+## Direction
+
+Three roles, no content-management system. The repository is the database.
+
+- **Ingestion is autonomous.** A YouTube video is published; the sermon reaches the
+  archive and its transcript reaches `/ask` without a human running anything. The
+  scripts for this exist but sit behind four deliberate safety catches — see the
+  weekly-ingestion item below.
+- **Editing is conversational.** Someone wants a change; they ask an LLM, which edits
+  the files and opens a pull request.
+- **Pull request review is the gate.** Every change — ingested or authored — arrives as
+  a PR with its own Render preview deploy, and a human approves it. Nothing merges
+  itself.
+
+Podcasts stay as links. The feed is hosted on Anchor; this site does not generate one
+and is not planned to.
+
 ## Open: documentation and pipeline accuracy
 
 The current work queue, taken one item at a time.
 
-1. **Reconcile `docs/editorial-workflow.md` with the two real media pipelines.**
-   `make-stubs` writes transcript-review metadata under `data/transcripts/content/`,
-   not Astro message drafts. Ask eligibility uses `content_type`, `speaker`,
-   `consent_status`, `content_start`, `content_end`. `automation:dry-run` summarizes
-   config rather than running the chain. The document's claim about a podcast feed
-   route needs verifying — none was found.
+1. **Rewrite `docs/editorial-workflow.md` for the direction above.**
+   Blocked on the ingestion work below — the document currently describes a human
+   running scripts by hand, and correcting those descriptions would only make it an
+   accurate account of a workflow being replaced. Known wrong today: `make-stubs`
+   writes transcript-review metadata to `data/transcripts/content/`, not message
+   drafts; `automation:dry-run` prints a config summary rather than previewing the
+   chain; "generated content always lands as `draft: true`" holds only for
+   `ingest-new-media.ts`, while the transcript pipeline is gated by the default-deny
+   filter in `corpus.ts` instead; there is no podcast feed; `detect-bounds` and
+   `youtube:dry-run` are missing from the command table; and the `/ask` eligibility
+   rules are documented nowhere. `AGENTS.md` repeats the podcast-feed claim.
 
-2. **Repair or retire weekly media ingestion.**
-   `.github/workflows/weekly-media-ingestion.yml` uses `&& inputs.dry_run || 'true'`,
-   which appears to force dry-run even when the manual input is false. The workflow has
-   read-only permissions and no commit or PR step, so it cannot persist anything.
-   `automation.config.json` is still scoped to a September–October 2025 pilot window,
-   and its configured schedule differs from the workflow's. Decide: make it functional,
-   or document it as dormant.
+   *(Superseded scope: this began as a straight correction of the command
+   descriptions.)*
+
+2. **Make weekly media ingestion actually run.**
+   This is the backbone of the direction above, and it is fenced shut in four
+   independent places: `.github/workflows/weekly-media-ingestion.yml` uses
+   `&& inputs.dry_run || 'true'`, which appears to force dry-run even when the manual
+   input is false; the workflow has read-only permissions and no commit or PR step, so
+   it could not persist anything even if it ran; `ingest-new-media.ts` refuses to write
+   unless `defaults.writeContentFiles` is explicitly `true`; and
+   `automation.config.json` is still scoped to a September–October 2025 pilot window
+   whose schedule differs from the workflow's.
+
+   Each catch was deliberate. Unfencing them is a project, not a repair — the target is
+   a video going up and a pull request appearing, with the human approving rather than
+   running anything.
 
 3. **Correct the transcript-ingestion PR instructions.**
    `.github/workflows/ingest-transcripts.yml` asks reviewers for `sermon_start_seconds`
@@ -88,8 +119,11 @@ confirming against current code before work starts.
   SMTP rather than Resend, so re-verify: production needs a verified sender (e.g.
   `website@thetabletx.org`) with SPF and DKIM alongside the existing Workspace records.
   *Unverified — the audit predates the SMTP switch.*
-- **Ask has no production inference backend.** `ASK_LLM_BASE_URL` defaults to a local
-  llama.cpp endpoint. Decide: hosted endpoint, or ship `/ask/` disabled. *Unverified.*
+- **`/ask` is unfinished feature work.** Built, working locally, failing in production,
+  and deliberately hidden (`noindex` plus no nav entry) until it is finished. Needs a
+  composition backend, a precomputed embedding cache, and an error body that does not
+  leak internals. Written up in
+  [`docs/ask-remaining-work.md`](docs/ask-remaining-work.md).
 - **Rate limiter may key every visitor to one bucket behind Render's proxy.**
   `checkRateLimit` prefers `clientAddress`, falling back to `cf-connecting-ip` /
   `x-real-ip`. If the adapter reports Render's internal proxy IP, all visitors share a
