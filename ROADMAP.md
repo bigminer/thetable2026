@@ -50,6 +50,11 @@ Three roles, no content-management system. The repository is the database.
 Podcasts stay as links. The feed is hosted on Anchor; this site does not generate one
 and is not planned to.
 
+**Branches:** `main` is integration, `release` is production. Render deploys from
+`release` only — pinned in `render.yaml`, because a branch set in the Render dashboard
+is reset to the Blueprint's own branch on the next sync. Promote by merging `main` into
+`release`.
+
 **Preview:** a static build deploys to <https://bigminer.github.io/thetable2026/> for
 visual QA — run the *Deploy preview to GitHub Pages* workflow by hand from any branch.
 Every page route is prerendered, so the preview's markup matches production; only the

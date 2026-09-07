@@ -2,6 +2,13 @@ services:
   - type: web
     name: thetabletx
     runtime: node
+    # Production deploys from `release`, not `main`, so merging to main does not
+    # ship. Promote by merging main into release.
+    #
+    # This must live here rather than in the dashboard: a Blueprint sync
+    # reconciles the service against this file, and a branch set only in the
+    # dashboard is reset to the Blueprint's own branch on the next sync.
+    branch: release
     buildCommand: npm ci && npm run build
     startCommand: HOST=0.0.0.0 npm start
     healthCheckPath: /
