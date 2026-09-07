@@ -1,0 +1,107 @@
+---
+export const prerender = true;
+/* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
+ * Reconnaissance page. Written in logistics register — short, direct, answers the
+ * questions a first-time visitor actually asks themselves. No marketing voice.
+ * Copy unchanged. The communion liturgy keeps the body face and drops the italic.
+ */
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Layout
+	title="What Sundays Are Like | The Table Church"
+	description="What actually happens on a Sunday at The Table. Parking, dress, communion, kids, how to leave if you need to."
+>
+	<article class="reconnaissance">
+		<header class="longform-mast band band-slate">
+			<h1>What Sundays Are Like</h1>
+		</header>
+
+		<div class="longform band band-cream">
+			<div class="longform-inner">
+				<section>
+					<h2>Getting there</h2>
+					<p>The Table meets inside First United Methodist Church of Sachse, at 1520 Blackburn Rd. Service is at 5:00 pm.</p>
+					<p>Enter the parking lot through the main entrance — there&rsquo;s a sign. The building entrance is on the same side as the lot, so you won&rsquo;t have to walk around looking for it.</p>
+				</section>
+
+				<section>
+					<h2>What it looks like inside</h2>
+					<p>No dress code. People come in jeans, t-shirts, whatever&rsquo;s comfortable. Some dress up. No one&rsquo;s looking.</p>
+				</section>
+
+				<section>
+					<h2>The service</h2>
+					<p>Service is about an hour. There&rsquo;s music, a talk, and communion. You can sit anywhere. You don&rsquo;t have to stand up, introduce yourself, or sing if you don&rsquo;t want to.</p>
+				</section>
+
+				<section>
+					<h2>Communion</h2>
+					<p>Most Sundays, toward the end of the service, there&rsquo;s communion. People go up by rows, front first. At the front there&rsquo;s bread, then juice or wine (you pick one). Some take both the bread and a drink. Some take only the bread. Some just go up for a quiet moment. None of it is unusual.</p>
+
+					<p>Before the bread and cup are offered, the pastor reads this invitation:</p>
+
+					<blockquote class="is-prose">
+						<p>
+							This is the table.<br />
+							Not of the church, but of the Lord.<br />
+							It is made ready for those who love him,<br />
+							and for those who want to love him more.
+						</p>
+						<p>
+							So come — you who have much faith, and you who have little.<br />
+							You who have been here often, and you who have not been here long.<br />
+							You who have tried to follow, and you who have failed.
+						</p>
+						<p>
+							Come, because it is the Lord who invites you,<br />
+							and it is his will that those who want to meet him should meet him here.
+						</p>
+						<p>Come to the table.</p>
+					</blockquote>
+
+					<p>You don&rsquo;t need to be a member, baptized, or sure about anything to come up. If you&rsquo;ve been away from church for a long time, or never been to one, or had reason to leave the last one you were in — the liturgy is explicit that you&rsquo;re included.</p>
+
+					<p>If you&rsquo;d rather stay in your seat, you can. People do.</p>
+				</section>
+
+				<section>
+					<h2>Kids and noise</h2>
+					<p>Kids are here. They make noise. No one turns around.</p>
+				</section>
+
+				<section>
+					<h2>People</h2>
+					<p>No one will follow up unless you want them to. You can come in, sit in the back, and leave. That&rsquo;s a complete visit.</p>
+				</section>
+
+				<section>
+					<h2>If you need to leave</h2>
+					<p>You can leave at any point. No one will notice, and if they do, they won&rsquo;t say anything.</p>
+				</section>
+
+				<section>
+					<h2>If you&rsquo;re LGBTQ</h2>
+					<p>Full affirmation isn&rsquo;t a program here. It&rsquo;s the baseline. Nobody will make a thing of it. You&rsquo;ll just be here.</p>
+				</section>
+
+				<div class="longform-close">
+					<a class="link" href={base + '/plan-your-visit/'}>Plan Your Visit</a>
+				</div>
+			</div>
+		</div>
+	</article>
+</Layout>
+
+<style>
+	.longform-close .link {
+		color: var(--color-ink);
+	}
+
+	/* The liturgy's line breaks are the shape of the text; keep them intact. */
+	blockquote.is-prose p + p {
+		margin-top: var(--space-md);
+	}
+</style>

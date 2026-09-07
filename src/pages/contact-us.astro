@@ -1,0 +1,111 @@
+---
+export const prerender = true;
+import ContentSidebar from '../components/ContentSidebar.astro';
+import Layout from '../layouts/Layout.astro';
+import '../styles/content-page.css';
+
+---
+
+<Layout
+	title="Contact Us | The Table Church"
+	description="Get in touch with someone from The Table Church in Sachse, TX."
+>
+	<article class="content-page">
+		<header class="page-hero band band-slate">
+			<h1>Contact Us</h1>
+			<p class="lede">If you have a question or need to connect with someone from The Table TX, we&rsquo;d love to hear from you.</p>
+		</header>
+
+		<div class="content-grid band band-cream">
+			<div class="body">
+				<p>How can we help? Fill out the form below and someone from The Table will be in touch.</p>
+
+				<form id="contact-form" class="site-form" novalidate>
+					<div class="hp-field" aria-hidden="true">
+						<label for="hp-name">Leave this blank</label>
+						<input type="text" id="hp-name" name="hp_name" tabindex="-1" autocomplete="off" />
+					</div>
+
+					<div class="form-row">
+						<div class="field">
+							<label for="firstName">First Name <span class="req">*</span></label>
+							<input type="text" id="firstName" name="firstName" required autocomplete="given-name" />
+						</div>
+						<div class="field">
+							<label for="lastName">Last Name <span class="req">*</span></label>
+							<input type="text" id="lastName" name="lastName" required autocomplete="family-name" />
+						</div>
+					</div>
+
+					<div class="field">
+						<label for="email">Email <span class="req">*</span></label>
+						<input type="email" id="email" name="email" required autocomplete="email" />
+					</div>
+
+					<div class="field">
+						<label for="phone">Phone</label>
+						<input type="tel" id="phone" name="phone" autocomplete="tel" />
+					</div>
+
+					<div class="field">
+						<label for="message">Message</label>
+						<textarea id="message" name="message" rows="5"></textarea>
+					</div>
+
+					<div class="form-footer">
+						<button type="submit" class="submit-btn">Submit</button>
+						<p class="form-status" aria-live="polite"></p>
+					</div>
+				</form>
+			</div>
+
+			<ContentSidebar />
+		</div>
+	</article>
+</Layout>
+
+<script>
+const form = document.getElementById('contact-form') as HTMLFormElement;
+const status = form?.querySelector('.form-status') as HTMLParagraphElement;
+const btn = form?.querySelector('.submit-btn') as HTMLButtonElement;
+
+form?.addEventListener('submit', async (e) => {
+	e.preventDefault();
+	btn.disabled = true;
+	btn.textContent = 'Sending…';
+	status.textContent = '';
+	status.className = 'form-status';
+
+	const data = {
+		hp_name: (form.querySelector('[name="hp_name"]') as HTMLInputElement).value,
+		firstName: (form.querySelector('[name="firstName"]') as HTMLInputElement).value,
+		lastName: (form.querySelector('[name="lastName"]') as HTMLInputElement).value,
+		email: (form.querySelector('[name="email"]') as HTMLInputElement).value,
+		phone: (form.querySelector('[name="phone"]') as HTMLInputElement).value,
+		message: (form.querySelector('[name="message"]') as HTMLTextAreaElement).value,
+	};
+
+	try {
+		const res = await fetch('/api/contact', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data),
+		});
+		const json = await res.json();
+
+		if (json.ok) {
+			form.innerHTML = '<p class="success-msg">Thanks — we\'ll be in touch soon.</p>';
+		} else {
+			status.textContent = json.error ?? 'Something went wrong. Please try again.';
+			status.classList.add('is-error');
+			btn.disabled = false;
+			btn.textContent = 'Submit';
+		}
+	} catch {
+		status.textContent = 'Something went wrong. Please try again.';
+		status.classList.add('is-error');
+		btn.disabled = false;
+		btn.textContent = 'Submit';
+	}
+});
+</script>

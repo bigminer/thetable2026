@@ -1,0 +1,224 @@
+---
+export const prerender = true;
+/* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
+ *
+ * Photographic hero rather than the shared ContentPage figure. The source is
+ * a 1200x1600 portrait, so the desktop hero uses a photo/slate split instead
+ * of forcing the photograph into a panoramic crop. Both people stay prominent
+ * and the headline gets its own poster-like field.
+ *
+ * The photo replaces the slate masthead the other pages open with, so the lede
+ * gets its own slate band underneath it. Without that the page ran cream from
+ * the hero to the footer and lost the two-ground rhythm the rest of the site
+ * keeps.
+ *
+ * "How it works" is a genuinely ordinal three-step sequence, so it takes the
+ * ledger treatment — the same numeral-left / label-right rhythm as the series
+ * index and the homepage values, instead of a default ordered list.
+ */
+import Layout from '../layouts/Layout.astro';
+import { resolveAsset } from '../lib/content';
+
+const heroImage = resolveAsset('attachments/pages/merch/table-tees-doorway.jpg');
+
+const steps = [
+	{ verb: 'Browse', rest: ' the store and pick your size and color.' },
+	{ verb: 'Order', rest: ' directly — Printful handles printing and shipping.' },
+	{ verb: 'Receive', rest: ' your shirt, usually within a week or two.' },
+];
+---
+
+<Layout
+	title="The Table Merch | The Table Church"
+	description="Shop official The Table Church merchandise — t-shirts printed on demand and shipped directly to you."
+>
+	<article class="merch">
+		<header class="merch-hero band band-deep">
+			<div class="merch-hero-media">
+				<img
+					class="merch-hero-img"
+					src={heroImage}
+					alt="Two people in The Table t-shirts holding open the doors of the church"
+					width="1200"
+					height="1600"
+					fetchpriority="high"
+				/>
+			</div>
+			<div class="merch-hero-panel">
+				<h1 class="merch-hero-title">Shop<br />the Table</h1>
+			</div>
+		</header>
+
+		<div class="merch-lede-band band band-slate">
+			<p class="merch-lede">Wear the mission. Every order supports The Table community.</p>
+		</div>
+
+		<div class="longform band band-cream">
+			<div class="longform-inner">
+				<p>Rep your church and carry the mission wherever you go. Our t-shirts are printed on demand through <a href="https://printful.com">Printful</a> — no inventory, no waste, shipped straight to your door.</p>
+
+				<p class="cta-row"><a class="chip" href="https://the-table-tx.printful.me/">Shop now</a></p>
+
+				<section>
+					<h2 id="how-it-works">How It Works</h2>
+					<ol class="ledger merch-steps">
+						{steps.map((step, i) => (
+							<li>
+								<p class="ledger-key">{String(i + 1).padStart(2, '0')}</p>
+								<p class="ledger-value"><strong>{step.verb}</strong>{step.rest}</p>
+							</li>
+						))}
+					</ol>
+					<p class="merch-close">No need to pick up anything at church. Questions? <a href="/contact-us/">Contact us</a>.</p>
+				</section>
+			</div>
+		</div>
+	</article>
+</Layout>
+
+<style>
+	.merch-hero {
+		display: grid;
+		grid-template-columns: minmax(0, 3fr) minmax(18rem, 2fr);
+		width: 100%;
+		height: clamp(30rem, 42vw, 42rem);
+		padding-inline: 0;
+	}
+
+	.merch-hero-media {
+		min-width: 0;
+		overflow: hidden;
+	}
+
+	.merch-hero-img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 48%;
+	}
+
+	.merch-hero-panel {
+		display: flex;
+		align-items: flex-end;
+		padding: var(--space-2xl) var(--page-gutter);
+		border-left: var(--rule-hair) solid var(--color-rule-on-band);
+	}
+
+	.merch-hero-title {
+		margin: 0;
+		max-width: 7ch;
+		font-size: var(--text-display);
+		font-weight: 800;
+		line-height: 1.02;
+		color: var(--color-ink-on-band);
+	}
+
+	/* Carries the slate ground the photo displaced. */
+	.merch-lede-band {
+		padding-block: var(--space-2xl);
+	}
+
+	.merch-lede {
+		margin: 0;
+		max-width: 24ch;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--text-2xl);
+		line-height: var(--leading-display);
+		letter-spacing: var(--track-display);
+		text-transform: uppercase;
+		color: var(--color-ink-on-band);
+	}
+
+	/* The next section's h2 carries a top rule; without clearance the chip's
+	   border and that rule collide. */
+	.cta-row {
+		margin: var(--space-xl) 0 var(--space-2xl);
+	}
+
+	.cta-row .chip {
+		font-size: var(--text-md);
+		padding-inline: var(--space-2xl);
+	}
+
+	.merch-steps {
+		margin-top: var(--space-lg);
+	}
+
+	/* Narrow key column — these are two-digit numerals, not words.
+	   `max-width: none` because `.longform li` caps rows at the prose measure,
+	   which left them narrower than the heading rule above. */
+	.merch-steps > li {
+		grid-template-columns: minmax(0, 4.5rem) minmax(0, 1fr);
+		gap: var(--space-xs) var(--space-xl);
+		padding-block: var(--space-lg);
+		max-width: none;
+	}
+
+	.merch-steps .ledger-key {
+		margin: 0;
+		max-width: none;
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: var(--text-xl);
+		line-height: 1.04;
+		letter-spacing: var(--track-display);
+		font-variant-numeric: tabular-nums;
+		color: var(--color-muted);
+	}
+
+	.merch-steps .ledger-value {
+		margin: 0;
+		max-width: var(--measure);
+	}
+
+	.merch-steps .ledger-value strong {
+		color: var(--color-ink);
+		font-weight: 600;
+	}
+
+	.merch-close {
+		margin-top: var(--space-xl);
+	}
+
+	@media (max-width: 60rem) {
+		.merch-hero {
+			grid-template-columns: minmax(0, 1fr);
+			height: auto;
+		}
+
+		.merch-hero-media {
+			aspect-ratio: 4 / 3;
+		}
+
+		.merch-hero-panel {
+			padding-block: var(--space-xl);
+			border-top: var(--rule-hair) solid var(--color-rule-on-band);
+			border-left: 0;
+		}
+
+		.merch-lede-band {
+			padding-block: var(--space-xl);
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.merch-hero-media {
+			aspect-ratio: 1 / 1;
+		}
+
+		.merch-hero-title {
+			font-size: var(--text-display-s);
+		}
+
+		.merch-lede {
+			max-width: none;
+			font-size: var(--text-xl);
+		}
+
+		.merch-steps > li {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>

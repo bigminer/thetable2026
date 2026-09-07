@@ -1,0 +1,1015 @@
+/* Hallmark · genre: editorial · macrostructure: Manifesto · design-system: design.md · designed-as-app
+ * theme: custom · vibe: "printed poster, woodgrain, declaration, cream and slate"
+ * paper: oklch(94% 0.034 94) · accent: oklch(61% 0.166 34)
+ * display: Big Shoulders Display · body: Switzer
+ * axes: light / display-condensed-bold / warm
+ * nav: N6 masthead · footer: Ft5 statement · hero: H1 marquee · enrichment: Tier-B SVG woodgrain
+ * studied: no · context: user-provided (brand graphics + Instagram)
+ * pre-emit critique: P5 H5 E4 S5 R5 V5
+ * contrast: pass (40-41, measured in-browser) · slop: pass (42-45)
+ * honest: pass (46) · chrome: pass (47) · tokens: pass (48) · responsive: pass (49)
+ * icons: pass (30) · mobile: pass (34, 49, 50-57)
+ * gate 51 deviation: .ledger-key uses overflow-wrap: break-word, not anywhere —
+ *   `anywhere` drops min-content to one glyph and split THOUGHTFUL. mid-word.
+ */
+
+@import './tokens.css';
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+
+html {
+	overflow-x: clip;
+	background: var(--color-paper);
+	color: var(--color-ink);
+	font-family: var(--font-body);
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	overflow-x: clip;
+	margin: 0;
+	min-height: 100vh;
+	font-size: var(--text-md);
+	line-height: var(--leading-body);
+}
+
+a {
+	color: inherit;
+}
+
+img {
+	max-width: 100%;
+}
+
+:focus-visible {
+	outline: var(--rule-heavy) solid var(--color-focus);
+	outline-offset: 2px;
+	/* Focus must appear instantly — never transitioned. */
+}
+
+::selection {
+	background: var(--color-accent);
+	color: var(--color-accent-ink);
+}
+
+/* ── Display type ───────────────────────────────────────────────────────── */
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: var(--font-display);
+	font-style: normal;
+	font-weight: 700;
+	line-height: var(--leading-display);
+	letter-spacing: var(--track-display);
+	text-transform: uppercase;
+	overflow-wrap: anywhere;
+	min-width: 0;
+	margin: 0;
+}
+
+p {
+	margin: 0;
+}
+
+/* The signature move. One per page, never on body copy, never under 40rem. */
+.justified-caps {
+	text-align: justify;
+	text-align-last: left;
+	hyphens: none;
+	word-spacing: -0.02em;
+}
+
+/* Small tracked label — used for addresses, meta rows, nav. Not a section eyebrow. */
+.label {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-sm);
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	line-height: 1.2;
+}
+
+/* ── Grounds ────────────────────────────────────────────────────────────── */
+
+.band {
+	position: relative;
+	isolation: isolate;
+	padding-inline: var(--page-gutter);
+}
+
+.band > * {
+	position: relative;
+	z-index: var(--z-base);
+}
+
+/* Woodgrain: one SVG, masked, so the colour follows the token. */
+.band::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	-webkit-mask-image: var(--woodgrain);
+	mask-image: var(--woodgrain);
+	-webkit-mask-size: var(--woodgrain-scale);
+	mask-size: var(--woodgrain-scale);
+	-webkit-mask-repeat: repeat;
+	mask-repeat: repeat;
+}
+
+.band-cream {
+	background: var(--color-paper);
+	color: var(--color-ink);
+}
+
+.band-cream::before {
+	background-color: var(--color-ink);
+	opacity: var(--woodgrain-opacity-cream);
+}
+
+.band-slate {
+	background: var(--color-band);
+	color: var(--color-ink-on-band);
+}
+
+.band-deep {
+	background: var(--color-band-2);
+	color: var(--color-ink-on-band);
+}
+
+.band-slate::before,
+.band-deep::before {
+	background-color: var(--color-ink-on-band);
+	opacity: var(--woodgrain-opacity-band);
+}
+
+.page-shell {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	background: var(--color-paper);
+}
+
+.site-main {
+	flex: 1;
+}
+
+/* ── Typographic link (C3) — the only CTA voice ─────────────────────────── */
+
+.link {
+	display: inline-block;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-md);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	padding-block: var(--space-2xs);
+	text-decoration: underline;
+	text-decoration-thickness: var(--rule-hair);
+	text-underline-offset: 2px;
+	transition: text-decoration-color var(--dur-short) var(--ease-out),
+		text-decoration-thickness var(--dur-short) var(--ease-out);
+}
+
+.link::after {
+	content: ' \2192';
+}
+
+.link:hover,
+.link:focus-visible {
+	text-decoration-thickness: 2px;
+	text-decoration-color: var(--color-accent);
+}
+
+.link:active {
+	text-decoration-color: var(--color-accent-deep);
+}
+
+.band-slate .link:active,
+.band-deep .link:active {
+	text-decoration-color: var(--color-accent);
+}
+
+.link-quiet {
+	font-family: var(--font-body);
+	font-weight: 600;
+	font-size: var(--text-base);
+	letter-spacing: 0;
+	text-transform: none;
+	color: var(--color-ink-2);
+}
+
+.link-quiet::after {
+	content: none;
+}
+
+/* ── Masthead (N6) ──────────────────────────────────────────────────────── */
+
+.header-wrap {
+	position: relative;
+	background: var(--color-paper);
+	border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.site-header {
+	display: grid;
+	justify-items: center;
+	gap: var(--space-xs);
+	padding: var(--space-md) var(--page-gutter) var(--space-2xs);
+}
+
+.brand-logo-link {
+	display: inline-flex;
+	line-height: 0;
+	width: min(14rem, 58vw);
+}
+
+.brand-logo {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.mast-line {
+	margin: 0;
+	color: var(--color-muted);
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: var(--text-sm);
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.mast-rule {
+	border: 0;
+	border-top: var(--rule-hair) solid var(--color-rule);
+	border-bottom: var(--rule-hair) solid var(--color-rule);
+	height: 3px;
+	width: 100%;
+	margin: var(--space-2xs) 0 0;
+}
+
+/* ── Navigation ─────────────────────────────────────────────────────────── */
+
+.site-nav ul,
+.mobile-nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.desktop-nav > ul {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 0 var(--space-lg);
+}
+
+.desktop-nav li {
+	position: relative;
+}
+
+.site-nav a,
+.nav-trigger,
+.mobile-nav a,
+.mobile-nav summary {
+	display: inline-flex;
+	align-items: center;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-base);
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	text-decoration: none;
+	white-space: nowrap;
+	color: var(--color-ink);
+	padding-block: var(--space-xs);
+	border-bottom: var(--rule-heavy) solid transparent;
+	cursor: pointer;
+	transition: border-color var(--dur-short) var(--ease-out),
+		color var(--dur-short) var(--ease-out);
+}
+
+.site-nav a:hover,
+.nav-trigger:hover,
+.site-nav a:focus-visible,
+.nav-trigger:focus-visible {
+	border-bottom-color: var(--color-accent);
+}
+
+.site-nav a:active,
+.nav-trigger:active,
+.mobile-nav a:active {
+	color: var(--color-accent-deep);
+}
+
+.menu-toggle:active {
+	background: var(--color-paper-2);
+}
+
+.nav-trigger {
+	list-style: none;
+}
+
+.nav-trigger::-webkit-details-marker,
+.desktop-group > summary::-webkit-details-marker,
+.mobile-nav summary::-webkit-details-marker {
+	display: none;
+}
+
+.desktop-group > .submenu {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: var(--z-dropdown);
+	min-width: 15rem;
+	display: none;
+	padding: var(--space-xs) 0;
+	background: var(--color-paper-2);
+	border: var(--rule-hair) solid var(--color-rule);
+}
+
+.desktop-group[open] > .submenu,
+.desktop-nav li:hover > .desktop-group > .submenu,
+.desktop-nav li:focus-within > .desktop-group > .submenu {
+	display: block;
+}
+
+.desktop-nav .submenu li + li {
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.desktop-nav .submenu a {
+	display: flex;
+	width: 100%;
+	box-sizing: border-box;
+	padding: var(--space-sm) var(--space-md);
+	border-bottom: 0;
+	font-size: var(--text-sm);
+	letter-spacing: 0.08em;
+}
+
+.desktop-nav .submenu a:hover,
+.desktop-nav .submenu a:focus-visible {
+	background: var(--color-paper);
+	color: var(--color-accent-deep);
+}
+
+.is-active > a,
+.is-active > .desktop-group > .nav-trigger {
+	border-bottom-color: var(--color-accent);
+}
+
+.submenu .is-active > a,
+.mobile-submenu .is-active > a {
+	color: var(--color-accent-deep);
+}
+
+.menu-toggle {
+	display: none;
+	min-height: 44px;
+	padding: var(--space-xs) var(--space-md);
+	border: var(--rule-hair) solid var(--color-ink);
+	border-radius: var(--radius);
+	background: transparent;
+	color: var(--color-ink);
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-base);
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.mobile-nav {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: var(--z-dropdown);
+	padding: 0 var(--page-gutter) var(--space-md);
+	background: var(--color-paper);
+	border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.mobile-nav[hidden] {
+	display: none !important;
+}
+
+.mobile-nav > ul > li {
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.mobile-nav a,
+.mobile-nav summary {
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 44px;
+	padding-block: var(--space-sm);
+	border-bottom: 0;
+}
+
+.mobile-submenu {
+	padding-bottom: var(--space-xs);
+}
+
+.mobile-submenu a {
+	padding-left: var(--space-md);
+	font-size: var(--text-sm);
+	color: var(--color-ink-2);
+}
+
+/* ── Ledger — the row pattern from the church's own event graphics ──────── */
+
+.ledger {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.band-slate .ledger,
+.band-deep .ledger {
+	border-top-color: var(--color-rule-on-band);
+}
+
+.ledger > li {
+	display: grid;
+	grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+	gap: var(--space-md) var(--space-2xl);
+	align-items: baseline;
+	padding-block: var(--space-lg);
+	border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.band-slate .ledger > li,
+.band-deep .ledger > li {
+	border-bottom-color: var(--color-rule-on-band);
+}
+
+.ledger-key {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: var(--text-xl);
+	line-height: 1.04;
+	letter-spacing: var(--track-display);
+	text-transform: uppercase;
+	/* Keys are single words. `anywhere` would hyphen-less break them mid-letter. */
+	overflow-wrap: break-word;
+	min-width: 0;
+}
+
+.ledger-value {
+	font-size: var(--text-base);
+	line-height: var(--leading-body);
+	max-width: var(--measure);
+	color: var(--color-ink-2);
+}
+
+.band-slate .ledger-value,
+.band-deep .ledger-value {
+	color: var(--color-muted-on-band);
+}
+
+/* ── Forms ──────────────────────────────────────────────────────────────────
+ * Shared by the contact and newsletter pages. Field and button share one 44px
+ * base height; border-width never changes between states (that shifts layout),
+ * the focus ring is an outline reserved transparent at rest, and the status
+ * slot holds its line so an error doesn't push the page down.
+ * ------------------------------------------------------------------------- */
+
+.site-form {
+	display: grid;
+	gap: var(--space-lg);
+	max-width: 38rem;
+	margin-top: var(--space-xl);
+}
+
+.site-form .form-row {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+	gap: var(--space-lg);
+}
+
+.site-form .field {
+	display: grid;
+	gap: var(--space-2xs);
+}
+
+.site-form label {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-sm);
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	color: var(--color-ink);
+}
+
+.site-form .req {
+	color: var(--color-accent-deep);
+}
+
+.site-form input,
+.site-form textarea {
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 44px;
+	padding: var(--space-sm) var(--space-md);
+	border: var(--rule-hair) solid var(--color-rule);
+	border-radius: var(--radius);
+	background: var(--color-paper-2);
+	color: var(--color-ink);
+	font-family: var(--font-body);
+	font-size: var(--text-base);
+	line-height: var(--leading-body);
+	outline: 2px solid transparent;
+	outline-offset: 1px;
+	transition: border-color var(--dur-short) var(--ease-out),
+		background-color var(--dur-short) var(--ease-out);
+}
+
+.site-form textarea {
+	min-height: 9rem;
+	resize: vertical;
+}
+
+.site-form input::placeholder,
+.site-form textarea::placeholder {
+	color: var(--color-muted);
+}
+
+.site-form input:hover,
+.site-form textarea:hover {
+	border-color: var(--color-ink-2);
+}
+
+.site-form input:focus-visible,
+.site-form textarea:focus-visible {
+	outline-color: var(--color-focus);
+	border-color: var(--color-ink);
+	background: var(--color-paper);
+}
+
+.site-form input:user-invalid,
+.site-form textarea:user-invalid {
+	border-color: var(--color-accent-deep);
+	background: var(--color-paper);
+}
+
+.site-form input:disabled,
+.site-form textarea:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+.site-form .form-footer {
+	display: grid;
+	gap: var(--space-sm);
+	padding-top: var(--space-xs);
+}
+
+/* design.md: giving is the one CTA that may take a bordered chip rather than a
+   typographic link, because it is a transaction, not a reading action. */
+.chip {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+}
+
+.chip,
+.site-form .submit-btn {
+	justify-self: start;
+	min-height: 44px;
+	padding: var(--space-sm) var(--space-xl);
+	border: var(--rule-hair) solid var(--color-ink);
+	border-radius: var(--radius);
+	background: transparent;
+	color: var(--color-ink);
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-base);
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	white-space: nowrap;
+	cursor: pointer;
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+	transition: background-color var(--dur-short) var(--ease-out),
+		color var(--dur-short) var(--ease-out);
+}
+
+.chip:hover,
+.site-form .submit-btn:hover {
+	background: var(--color-ink);
+	color: var(--color-paper);
+}
+
+.chip:focus-visible,
+.site-form .submit-btn:focus-visible {
+	outline-color: var(--color-focus);
+}
+
+.chip:active,
+.site-form .submit-btn:active {
+	background: var(--color-accent-deep);
+	border-color: var(--color-accent-deep);
+	color: var(--color-accent-ink);
+}
+
+.chip:disabled,
+.site-form .submit-btn:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+	background: transparent;
+	color: var(--color-ink);
+}
+
+/* Reserve the line so an appearing error doesn't shift the page. */
+.site-form .form-status {
+	margin: 0;
+	min-height: 1lh;
+	font-size: var(--text-base);
+	color: var(--color-muted);
+}
+
+.site-form .form-status.is-error {
+	color: var(--color-accent-deep);
+	font-weight: 600;
+}
+
+.site-form .hp-field {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+.success-msg {
+	margin: var(--space-xl) 0 0;
+	padding-left: var(--space-lg);
+	border-left: var(--rule-heavy) solid var(--color-accent);
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-lg);
+	line-height: 1.18;
+	letter-spacing: var(--track-display);
+	text-transform: uppercase;
+	color: var(--color-ink);
+}
+
+/* ── Longform — the Long Document family for hand-built prose pages ─────────
+ * Shared by the pages that don't go through ContentPage.astro. Same rhythm:
+ * slate masthead band, cream body, hairline-ruled section heads, one measure.
+ * ------------------------------------------------------------------------- */
+
+.longform-mast {
+	padding-block: var(--space-2xl) var(--space-3xl);
+}
+
+.longform-mast h1 {
+	max-width: 20ch;
+	font-size: var(--text-display-s);
+	font-weight: 800;
+}
+
+.longform-mast .lede {
+	margin-top: var(--space-lg);
+	max-width: 52ch;
+	font-size: var(--text-md);
+	line-height: var(--leading-body);
+	color: var(--color-muted-on-band);
+}
+
+.longform {
+	padding-block: var(--space-3xl) var(--space-4xl);
+}
+
+.longform-inner {
+	max-width: 46rem;
+}
+
+.longform section {
+	margin-bottom: var(--space-2xl);
+}
+
+.longform section:last-of-type {
+	margin-bottom: 0;
+}
+
+.longform h2 {
+	margin: 0 0 var(--space-md);
+	padding-top: var(--space-md);
+	border-top: var(--rule-hair) solid var(--color-rule);
+	font-size: var(--text-xl);
+	color: var(--color-ink);
+}
+
+.longform p,
+.longform li {
+	margin: 0 0 var(--space-md);
+	max-width: var(--measure);
+	font-size: var(--text-md);
+	line-height: var(--leading-body);
+	color: var(--color-ink-2);
+}
+
+.longform p:last-child,
+.longform li:last-child {
+	margin-bottom: 0;
+}
+
+.longform address {
+	font-style: normal;
+	font-size: var(--text-md);
+	line-height: var(--leading-body);
+	color: var(--color-ink-2);
+}
+
+.longform a {
+	color: var(--color-accent-deep);
+	text-decoration: underline;
+	text-decoration-thickness: var(--rule-hair);
+	text-underline-offset: 2px;
+	transition: text-decoration-thickness var(--dur-short) var(--ease-out);
+}
+
+.longform a:hover,
+.longform a:focus-visible {
+	text-decoration-thickness: 2px;
+}
+
+.longform a:active {
+	color: var(--color-accent);
+}
+
+/* A statement set apart from the argument — the permission lines, a liturgy,
+   a pull-quote. Accent rule, roman, never italic. */
+.longform blockquote,
+.longform .aside-statement {
+	margin: var(--space-xl) 0;
+	padding-left: var(--space-lg);
+	border-left: var(--rule-heavy) solid var(--color-accent);
+}
+
+.longform .aside-statement p,
+.longform blockquote p {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-lg);
+	line-height: 1.18;
+	letter-spacing: var(--track-display);
+	text-transform: uppercase;
+	color: var(--color-ink);
+}
+
+/* Liturgy and long quotations stay in the body face — display caps would make
+   them unreadable at this length. */
+.longform blockquote.is-prose p {
+	font-family: var(--font-body);
+	font-weight: 400;
+	font-size: var(--text-md);
+	line-height: var(--leading-body);
+	letter-spacing: 0;
+	text-transform: none;
+	color: var(--color-ink);
+}
+
+.longform .longform-close {
+	margin-top: var(--space-3xl);
+	padding-top: var(--space-lg);
+	border-top: var(--rule-heavy) solid var(--color-ink);
+}
+
+@media (max-width: 60rem) {
+	.longform {
+		padding-block: var(--space-2xl) var(--space-3xl);
+	}
+
+	.longform-mast {
+		padding-block: var(--space-xl) var(--space-2xl);
+	}
+}
+
+@media (max-width: 40rem) {
+	.longform-mast h1 {
+		max-width: none;
+	}
+}
+
+/* ── Footer (Ft5 statement) ─────────────────────────────────────────────── */
+
+.site-footer {
+	display: grid;
+	gap: var(--space-xl);
+	padding-block: var(--space-3xl) var(--space-xl);
+}
+
+.footer-statement {
+	margin: 0;
+	max-width: 24ch;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-display-s);
+	line-height: var(--leading-display);
+	letter-spacing: var(--track-display);
+	text-transform: uppercase;
+}
+
+.footer-statement .dot {
+	color: var(--color-accent);
+}
+
+.footer-facts {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+	gap: var(--space-lg) var(--space-xl);
+	padding-top: var(--space-lg);
+	border-top: var(--rule-hair) solid var(--color-rule-on-band);
+}
+
+.footer-label {
+	margin: 0 0 var(--space-2xs);
+	color: var(--color-muted-on-band);
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-sm);
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+}
+
+.footer-address {
+	display: grid;
+	gap: var(--space-3xs);
+	font-style: normal;
+	font-size: var(--text-base);
+}
+
+.footer-text {
+	margin: 0;
+	font-size: var(--text-base);
+}
+
+.footer-social-links {
+	display: grid;
+	gap: var(--space-2xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--text-base);
+}
+
+.footer-social-links a,
+.footer-meta a {
+	white-space: nowrap;
+	text-decoration: underline;
+	text-decoration-thickness: var(--rule-hair);
+	text-decoration-color: var(--color-rule-on-band);
+	text-underline-offset: 2px;
+	transition: text-decoration-color var(--dur-short) var(--ease-out),
+		text-decoration-thickness var(--dur-short) var(--ease-out);
+}
+
+.footer-social-links a:hover,
+.footer-social-links a:focus-visible,
+.footer-meta a:hover,
+.footer-meta a:focus-visible {
+	text-decoration-thickness: 2px;
+	text-decoration-color: var(--color-accent);
+}
+
+.footer-social-links a:active,
+.footer-meta a:active {
+	text-decoration-color: var(--color-accent-deep);
+}
+
+.footer-logo {
+	display: block;
+	width: min(11rem, 46vw);
+	height: auto;
+}
+
+.footer-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-sm) var(--space-lg);
+	padding-top: var(--space-lg);
+	border-top: var(--rule-hair) solid var(--color-rule-on-band);
+	color: var(--color-muted-on-band);
+	font-size: var(--text-sm);
+}
+
+.footer-meta p {
+	margin: 0;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 60rem) {
+	.desktop-nav {
+		display: none;
+	}
+
+	.site-header {
+		grid-template-columns: minmax(0, 1fr) auto;
+		justify-items: start;
+		align-items: center;
+	}
+
+	.mast-line {
+		display: none;
+	}
+
+	.menu-toggle {
+		display: inline-flex;
+		justify-self: end;
+	}
+
+	.mast-rule {
+		display: none;
+	}
+}
+
+@media (min-width: 60.0625rem) {
+	.mobile-nav {
+		display: none;
+	}
+}
+
+@media (max-width: 40rem) {
+	.justified-caps {
+		text-align: left;
+	}
+
+
+
+	.ledger > li {
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--space-xs);
+	}
+
+	.footer-statement {
+		max-width: none;
+	}
+}
+
+/* 44px hit-target floor on every clickable at tablet width and below,
+   and on any coarse-pointer device regardless of width. */
+@media (max-width: 48rem), (pointer: coarse) {
+	.link,
+	.footer-social-links a,
+	.footer-meta a,
+	.content-page .sidebar-social-link,
+	.content-page .cta-row .link,
+	/* A paragraph whose only content is a link is a standalone affordance, not
+	   an inline one, so the target-size exemption does not apply to it. */
+	.content-page .body p > a:only-child,
+	.longform p > a:only-child {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
+}
+
+/* The chip is an affordance, not prose. Declared last, and qualified, so the
+   longform / content-page link rules don't repaint it as an inline link. */
+a.chip,
+.longform a.chip,
+.content-page .body a.chip {
+	color: var(--color-ink);
+	text-decoration: none;
+}
+
+a.chip:hover,
+.longform a.chip:hover,
+.content-page .body a.chip:hover {
+	color: var(--color-paper);
+	text-decoration: none;
+}
+
+a.chip:active,
+.longform a.chip:active,
+.content-page .body a.chip:active {
+	color: var(--color-accent-ink);
+	text-decoration: none;
+}

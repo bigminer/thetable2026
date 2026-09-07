@@ -1,0 +1,26 @@
+[
+  {
+    "date": "2026-09-07",
+    "scope": "app",
+    "macrostructure": "Manifesto + Long Document + Ledger",
+    "theme": "custom",
+    "theme_axes": "light / display-condensed-bold / warm",
+    "vibe": "printed poster, woodgrain, declaration, cream and slate",
+    "enrichment": "Tier-B hand-built SVG woodgrain (masked, token-coloured)",
+    "nav": "N6 newspaper masthead",
+    "footer": "Ft5 statement",
+    "brief": "The Table Church \u00b7 full-site rollout across all 19 routes"
+  },
+  {
+    "date": "2026-09-06",
+    "scope": "app",
+    "macrostructure": "Manifesto",
+    "theme": "custom",
+    "theme_axes": "light / display-condensed-bold / warm",
+    "vibe": "printed poster, woodgrain, declaration, cream and slate",
+    "enrichment": "Tier-B hand-built SVG woodgrain (masked, token-coloured)",
+    "nav": "N6 newspaper masthead",
+    "footer": "Ft5 statement",
+    "brief": "The Table Church \u00b7 system + homepage redesign from brand graphics and Instagram"
+  }
+]

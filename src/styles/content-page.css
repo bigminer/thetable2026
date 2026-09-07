@@ -1,0 +1,320 @@
+/* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
+ * The prose-page family: eleven routes share this file.
+ * Slate masthead → optional full-bleed figure → cream body with a hairline sidebar.
+ * No cards, no radii, no shadows, no eyebrows. See design.md.
+ */
+
+.content-page {
+	display: block;
+}
+
+/* ── Masthead band ──────────────────────────────────────────────────────── */
+
+.content-page .page-hero {
+	padding-block: var(--space-2xl) var(--space-3xl);
+}
+
+.content-page .page-hero h1 {
+	max-width: 20ch;
+	font-size: var(--text-display-s);
+	font-weight: 800;
+}
+
+.content-page .page-hero .lede {
+	margin-top: var(--space-lg);
+	max-width: 52ch;
+	font-size: var(--text-md);
+	line-height: var(--leading-body);
+	color: var(--color-muted-on-band);
+}
+
+/* ── Full-bleed figure ──────────────────────────────────────────────────── */
+
+.content-page .page-figure {
+	margin: 0;
+}
+
+.content-page .page-figure img {
+	display: block;
+	width: 100%;
+	max-height: 44vh;
+	object-fit: cover;
+}
+
+/* ── Body ───────────────────────────────────────────────────────────────── */
+
+.content-page .content-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 19rem);
+	gap: var(--space-2xl) var(--space-3xl);
+	align-items: start;
+	padding-block: var(--space-3xl) var(--space-4xl);
+}
+
+.content-page .body > * {
+	max-width: var(--measure);
+}
+
+.content-page .body p,
+.content-page .body li {
+	margin: 0 0 var(--space-md);
+	font-size: var(--text-md);
+	line-height: var(--leading-body);
+	color: var(--color-ink-2);
+}
+
+.content-page .body ul,
+.content-page .body ol {
+	margin: 0 0 var(--space-lg);
+	padding-left: var(--space-lg);
+}
+
+.content-page .body li {
+	margin-bottom: var(--space-xs);
+}
+
+.content-page .body h2 {
+	margin: var(--space-2xl) 0 var(--space-md);
+	padding-top: var(--space-md);
+	max-width: none;
+	border-top: var(--rule-hair) solid var(--color-rule);
+	font-size: var(--text-2xl);
+	color: var(--color-ink);
+}
+
+.content-page .body h3 {
+	margin: var(--space-xl) 0 var(--space-xs);
+	font-size: var(--text-lg);
+	color: var(--color-ink);
+}
+
+.content-page .body h4 {
+	margin: var(--space-lg) 0 var(--space-2xs);
+	font-size: var(--text-base);
+	letter-spacing: var(--track-label);
+	color: var(--color-accent-deep);
+}
+
+.content-page .body > *:first-child {
+	margin-top: 0;
+}
+
+.content-page .body a {
+	color: var(--color-accent-deep);
+	text-decoration: underline;
+	text-decoration-thickness: var(--rule-hair);
+	text-underline-offset: 2px;
+	transition: text-decoration-thickness var(--dur-short) var(--ease-out);
+}
+
+.content-page .body a:hover,
+.content-page .body a:focus-visible {
+	text-decoration-thickness: 2px;
+}
+
+.content-page .body a:active {
+	color: var(--color-accent);
+}
+
+.content-page .body strong {
+	color: var(--color-ink);
+	font-weight: 600;
+}
+
+.content-page .body blockquote {
+	margin: var(--space-lg) 0;
+	padding-left: var(--space-lg);
+	border-left: var(--rule-heavy) solid var(--color-accent);
+	color: var(--color-ink);
+}
+
+.content-page .body img {
+	display: block;
+	width: 100%;
+	max-width: min(100%, 34rem);
+	margin: var(--space-lg) 0;
+}
+
+.content-page .body hr {
+	margin: var(--space-2xl) 0;
+	border: 0;
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.content-page .google-form-embed,
+.content-page .body .content-map-embed {
+	display: block;
+	width: 100%;
+	max-width: none;
+	border: var(--rule-hair) solid var(--color-rule);
+	border-radius: var(--radius);
+	margin-top: var(--space-lg);
+}
+
+.content-page .google-form-embed {
+	min-height: 640px;
+}
+
+.content-page .body .content-map-embed {
+	min-height: 320px;
+}
+
+/* ── Staff ledger — portraits, not cards ────────────────────────────────── */
+
+.content-page .staff-section {
+	margin-top: var(--space-2xl);
+	max-width: none;
+}
+
+.content-page .staff-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+	gap: var(--space-xl) var(--space-lg);
+}
+
+.content-page .staff-card {
+	display: grid;
+	gap: var(--space-sm);
+	align-content: start;
+}
+
+.content-page .staff-card img {
+	display: block;
+	width: 100%;
+	max-width: none;
+	aspect-ratio: 2 / 3;
+	object-fit: cover;
+	margin: 0;
+}
+
+.content-page .staff-copy {
+	padding-top: var(--space-xs);
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.content-page .staff-copy h3 {
+	margin: 0;
+	font-size: var(--text-md);
+	line-height: 1.06;
+	color: var(--color-ink);
+}
+
+.content-page .staff-role,
+.content-page .staff-pronouns {
+	margin: 0;
+	font-size: var(--text-sm);
+	color: var(--color-muted);
+}
+
+.content-page .staff-role {
+	margin-top: var(--space-2xs);
+	font-family: var(--font-display);
+	font-weight: 700;
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	color: var(--color-ink-2);
+}
+
+/* ── Sidebar — hairline blocks, not cards ───────────────────────────────── */
+
+.content-page .sidebar {
+	display: grid;
+	gap: var(--space-xl);
+	align-content: start;
+	padding-top: var(--space-2xs);
+	border-top: var(--rule-heavy) solid var(--color-ink);
+}
+
+.content-page .sidebar-card {
+	display: grid;
+	gap: var(--space-xs);
+	padding-top: var(--space-lg);
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.content-page .sidebar-card:first-child {
+	border-top: 0;
+	padding-top: var(--space-lg);
+}
+
+.content-page .sidebar-card h2 {
+	margin: 0;
+	font-size: var(--text-sm);
+	letter-spacing: var(--track-label);
+	color: var(--color-muted);
+}
+
+.content-page .sidebar-card p,
+.content-page .sidebar-card li {
+	margin: 0;
+	font-size: var(--text-base);
+	line-height: var(--leading-body);
+	color: var(--color-ink-2);
+}
+
+.content-page .sidebar-address {
+	display: grid;
+	gap: var(--space-3xs);
+	font-style: normal;
+	font-size: var(--text-base);
+	line-height: var(--leading-body);
+	color: var(--color-ink-2);
+}
+
+.content-page .service-time {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-md);
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	color: var(--color-ink);
+}
+
+.content-page .sidebar-card iframe {
+	display: block;
+	width: 100%;
+	min-height: 220px;
+	margin-top: var(--space-xs);
+	border: var(--rule-hair) solid var(--color-rule);
+	border-radius: var(--radius);
+}
+
+.content-page .sidebar-social-link {
+	justify-self: start;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-base);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--color-accent-deep);
+	text-decoration: underline;
+	text-decoration-thickness: var(--rule-hair);
+	text-underline-offset: 2px;
+	transition: text-decoration-thickness var(--dur-short) var(--ease-out);
+}
+
+.content-page .sidebar-social-link:hover,
+.content-page .sidebar-social-link:focus-visible {
+	text-decoration-thickness: 2px;
+}
+
+@media (max-width: 60rem) {
+	.content-page .content-grid {
+		grid-template-columns: minmax(0, 1fr);
+		padding-block: var(--space-2xl) var(--space-3xl);
+	}
+
+	.content-page .page-hero {
+		padding-block: var(--space-xl) var(--space-2xl);
+	}
+}
+
+@media (max-width: 40rem) {
+	.content-page .page-hero h1 {
+		max-width: none;
+	}
+
+	.content-page .staff-grid {
+		grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+	}
+}

@@ -33,10 +33,9 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-          cache-dependency-path: site/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: site
         run: npm ci
 
       - name: Write YouTube cookies for yt-dlp
@@ -45,7 +44,6 @@ jobs:
         run: printf '%s' "$YT_COOKIES" > /tmp/yt-cookies.txt
 
       - name: Download new transcripts
-        working-directory: site
         # yt-dlp exits 101 when --break-on-existing stops the run — that's
         # expected (it just means we caught up to the archive), not failure.
         run: |
@@ -56,25 +54,20 @@ jobs:
           exit $code
 
       - name: Whisper fallback for videos without auto-captions
-        working-directory: site
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run transcribe
 
       - name: Generate stubs for new downloads
-        working-directory: site
         run: npm run make-stubs
 
       - name: Enrich titles and detect series
-        working-directory: site
         run: npm run enrich-titles
 
       - name: Auto-detect sermon bounds via Brett's consistent phrasings
-        working-directory: site
         run: npm run detect-bounds
 
       - name: Generate AI descriptions for new stubs
-        working-directory: site
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: npm run make-descriptions
@@ -89,7 +82,7 @@ jobs:
           body: |
             Auto-ingested new sermon transcripts from YouTube.
 
-            **For each stub in `site/scripts/transcripts/content/`, replace the `null` fields with the correct values:**
+            **For each stub in `data/transcripts/content/`, replace the `null` fields with the correct values:**
 
             - `title` — cleaned-up display title
             - `speaker` — `brett_tilford` for Brett, or `guest:first-last` for a guest teacher
@@ -103,6 +96,6 @@ jobs:
             transcripts
             needs-review
           add-paths: |
-            site/scripts/transcripts/raw/
-            site/scripts/transcripts/content/
-            site/scripts/transcripts/archive.txt
+            data/transcripts/raw/
+            data/transcripts/content/
+            data/transcripts/archive.txt

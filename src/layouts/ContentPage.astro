@@ -1,0 +1,45 @@
+---
+/* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
+ * The shared shell for the site's prose pages. Slate masthead band, optional
+ * full-bleed figure, cream body. No cards, no eyebrows, no sidebar boxes.
+ */
+import Layout from './Layout.astro';
+import ContentSidebar from '../components/ContentSidebar.astro';
+import { resolveAsset } from '../lib/content';
+import '../styles/content-page.css';
+
+interface Props {
+	title: string;
+	description?: string;
+	lede?: string;
+	/* Accepted for compatibility with existing call sites and deliberately not
+	   rendered. It defaulted to the page title, so every page printed its own
+	   name twice — an eyebrow that labelled nothing. See design.md. */
+	eyebrow?: string;
+	heroImage?: string;
+	heroImageAlt?: string;
+	showSidebar?: boolean;
+}
+const { title, description, lede, heroImage, heroImageAlt, showSidebar = false } = Astro.props;
+const heroImageSrc = heroImage ? resolveAsset(heroImage) : undefined;
+---
+
+<Layout title={title + ' | The Table Church'} description={description}>
+	<article class="content-page">
+		<header class="page-hero band band-slate">
+			<h1>{title}</h1>
+			{(lede || description) && <p class="lede">{lede || description}</p>}
+		</header>
+
+		{heroImageSrc && (
+			<figure class="page-figure">
+				<img src={heroImageSrc} alt={heroImageAlt ?? ''} fetchpriority="high" />
+			</figure>
+		)}
+
+		<div class="content-grid band band-cream">
+			<div class="body"><slot /></div>
+			{showSidebar && <ContentSidebar />}
+		</div>
+	</article>
+</Layout>

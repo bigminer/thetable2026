@@ -1,0 +1,70 @@
+---
+/* Footer archetype: Ft5 Statement. The closing line is the church's own, taken from
+   their social posts — not marketing copy written for the page. See design.md. */
+import { site } from '../config/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteName = site.title;
+const brandLogoSrc = base + '/attachments/branding/the-table-written-logo.png';
+const privacyHref = base + '/privacy-policy/';
+const footerAddressLines = site.addressLines;
+const footerServiceTime = site.serviceTime;
+const footerSocialLinks = site.socialLinks;
+const footerCopyrightYear = new Date().getFullYear();
+---
+
+<footer class="site-footer band band-deep" aria-labelledby="site-footer-statement">
+	<p class="footer-statement" id="site-footer-statement">
+		There is room for you at this table<span class="dot">.</span>
+	</p>
+
+	<div class="footer-facts">
+		<div>
+			<p class="footer-label">Gather</p>
+			<p class="footer-text">{footerServiceTime}</p>
+		</div>
+		<div>
+			<p class="footer-label">Find us</p>
+			<address class="footer-address">
+				{footerAddressLines.map((line) => (
+					<span>{line}</span>
+				))}
+			</address>
+		</div>
+		<div>
+			<p class="footer-label">Elsewhere</p>
+			<ul class="footer-social-links">
+				{footerSocialLinks.map((link) => (
+					<li>
+						<a href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
+					</li>
+				))}
+			</ul>
+		</div>
+	</div>
+
+	<div class="footer-meta">
+		<span class="footer-logo" role="img" aria-label={siteName} style={`--footer-logo-src: url('${brandLogoSrc}')`}></span>
+		<p>Copyright {footerCopyrightYear} {siteName}</p>
+		<a href={privacyHref}>Privacy</a>
+	</div>
+</footer>
+
+<style>
+	/* The wordmark is orange-red artwork on transparent. On the deep-slate ground the
+	   church's own tiles set it in cream, so the mark is masked and filled from the
+	   token rather than shipping a second PNG. */
+	.footer-logo {
+		display: block;
+		width: min(11rem, 46vw);
+		aspect-ratio: 720 / 236;
+		background-color: var(--color-ink-on-band);
+		-webkit-mask-image: var(--footer-logo-src);
+		mask-image: var(--footer-logo-src);
+		-webkit-mask-size: contain;
+		mask-size: contain;
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: left center;
+		mask-position: left center;
+	}
+</style>

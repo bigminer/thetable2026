@@ -1,52 +1,34 @@
-.DS_Store
+# Installed dependencies and generated output
+node_modules/
+dist/
+.astro/
 
-# Playwright / browser session dumps
+# Local credentials
+.env
+.env.*
+!.env.example
+
+# Generated retrieval cache and download metadata
+data/transcripts/embeddings.json
+data/transcripts/raw/*.info.json
+
+# Local tooling and reports
+.DS_Store
+.idea/
+*.log
 .playwright-cli/
 .playwright-mcp/
 test-results/
 output/
-
-# Screenshots dumped at repo root
-*.png
-*.jpg
-!site/src/content/attachments/**/*.png
-!site/src/content/attachments/**/*.jpg
-!site/src/content/attachments/**/*.jpeg
-
-# Build output
-.astro/
-dist/
-node_modules/
-
-# Obsidian personal state (shared config lives in .obsidian/)
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
-
-# Claude / agent tooling
+/*.png
+/*.jpg
 .claude/settings.json
 .agents/
 .gemini/
-
-# Keep durable project plans/roadmaps, but do not commit copied chat transcripts
 .hermes/session-history/
 
-# Site-level ignores
-site/node_modules/
-site/dist/
-site/.astro/
-site/public/attachments/
-site/scripts/transcripts/embeddings.json
-site/scripts/transcripts/raw/*.info.json
-site/.env
+# Scrapbook source photos (full-resolution originals stay out of git)
+public/attachments/scrapbook/
 
-*.log
-
-# Obsidian personal workspace/session state
-site/src/content/.obsidian/app.json
-site/src/content/.obsidian/appearance.json
-site/src/content/.obsidian/bookmarks.json
-site/src/content/.obsidian/graph.json
-site/src/content/.obsidian/hotkeys.json
-site/src/content/.obsidian/switcher.json
-site/src/content/.obsidian/workspace.json
-site/src/content/.obsidian/workspaces.json
+# Raw transcript downloads (pipeline input; generated markdown in content/ is tracked)
+data/transcripts/raw/

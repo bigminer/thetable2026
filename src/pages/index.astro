@@ -1,0 +1,216 @@
+---
+export const prerender = true;
+/* Hallmark · genre: editorial · macrostructure: Manifesto · hero: H1 Marquee
+ * design-system: design.md · designed-as-app
+ * Copy is unchanged from the previous build at the church's request. The redesign
+ * replaces structure and voice only: the five values move from a five-column card
+ * grid to the stacked ledger the church already prints on its own merch, and the
+ * hero statement is set as the justified all-caps block used across its social
+ * graphics. One justified block on the page, per design.md.
+ */
+
+import Layout from '../layouts/Layout.astro';
+import { resolveAsset } from '../lib/content';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const heroVideo = resolveAsset('attachments/video/homepage/Table-B-roll-mp4.mp4');
+const heroPoster = resolveAsset('attachments/video/homepage/Table-B-roll-poster.jpg');
+
+const values = [
+	{ name: 'Thoughtful', body: 'We try to do things deliberately, and to say what we mean — even when it’s harder.' },
+	{ name: 'Inclusive', body: 'Everyone belongs here. Including the parts of yourself you’ve been told to hide.' },
+	{ name: 'Eclectic', body: 'We’re built from different stories, traditions, and questions. There isn’t one way to be at this table.' },
+	{ name: 'Communal', body: 'We try to be present for each other — Sundays, weekdays, easy seasons and hard ones.' },
+	{ name: 'Vulnerable', body: 'We tell our actual stories. We try to be honest about what we don’t yet understand.' },
+];
+
+const ways = [
+	{ label: 'Our Story', href: '/our-story/' },
+	{ label: 'What Sundays Are Like', href: '/what-sundays-are-like/' },
+	{ label: 'Plan Your Visit', href: '/plan-your-visit/' },
+];
+---
+
+<Layout
+	title="The Table Church"
+	description="A church in Sachse, Texas, founded for full LGBTQ affirmation."
+>
+	<section class="hero">
+		{heroVideo && (
+			<video
+				class="hero-bg"
+				src={heroVideo}
+				autoplay
+				muted
+				loop
+				playsinline
+				preload="metadata"
+				poster={heroPoster}
+				fetchpriority="high"
+				aria-hidden="true"
+			/>
+		)}
+		<div class="hero-scrim" aria-hidden="true"></div>
+		<div class="hero-statement">
+			<h1 class="justified-caps">The Table exists because &ldquo;almost affirming&rdquo; wasn&rsquo;t enough.</h1>
+			<p class="hero-subline">We believe following Jesus should never require hiding who you are.</p>
+		</div>
+	</section>
+
+	<section class="values band band-slate" aria-labelledby="values-title">
+		<h2 class="values-title" id="values-title">We try to be</h2>
+		<ul class="ledger">
+			{values.map((value) => (
+				<li>
+					<h3 class="ledger-key">{value.name}.</h3>
+					<p class="ledger-value">{value.body}</p>
+				</li>
+			))}
+		</ul>
+	</section>
+
+	<section class="ways band band-cream" aria-labelledby="ways-title">
+		<h2 class="ways-title" id="ways-title">Come and see</h2>
+		<ul class="ways-list">
+			{ways.map((way) => (
+				<li><a class="link" href={base + way.href}>{way.label}</a></li>
+			))}
+		</ul>
+	</section>
+</Layout>
+
+<style>
+	/* ── Hero · H1 Marquee ────────────────────────────────────────────────── */
+
+	.hero {
+		position: relative;
+		isolation: isolate;
+		/* The masthead is ~200px. 62dvh keeps the statement inside a 900px fold
+		   without the hero swallowing the whole viewport. */
+		min-height: 62dvh;
+		display: grid;
+		align-content: end;
+		overflow: hidden;
+		background: var(--color-band-2);
+		padding: var(--space-lg) var(--page-gutter) var(--space-2xl);
+	}
+
+	.hero-bg,
+	.hero-scrim {
+		position: absolute;
+		inset: 0;
+	}
+
+	.hero-bg {
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.hero-scrim {
+		z-index: 1;
+		background: linear-gradient(
+			180deg,
+			var(--scrim-band-soft) 0%,
+			var(--scrim-band) 100%
+		);
+	}
+
+	.hero-statement {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		gap: var(--space-lg);
+		max-width: min(46rem, 92vw);
+		color: var(--color-ink-on-band);
+	}
+
+	/* 56 characters — the 51–90 bucket caps at display-s so the justified block
+	   settles into four lines instead of seven blown-out ones. */
+	.hero-statement h1 {
+		font-size: var(--text-display-s);
+		font-weight: 800;
+	}
+
+	.hero-subline {
+		max-width: 50ch;
+		font-size: var(--text-md);
+		line-height: var(--leading-body);
+		color: var(--color-ink-on-band);
+	}
+
+	/* ── Values · ledger on slate ─────────────────────────────────────────── */
+
+	.values {
+		padding-block: var(--space-2xl) var(--space-4xl);
+	}
+
+	.values-title {
+		margin-bottom: var(--space-lg);
+		font-weight: 400;
+		font-size: var(--text-lg);
+		letter-spacing: var(--track-label);
+		color: var(--color-muted-on-band);
+	}
+
+	.values .ledger {
+		max-width: 72rem;
+	}
+
+	/* ── Ways · closing links on cream ────────────────────────────────────── */
+
+	.ways {
+		padding-block: var(--space-4xl) var(--space-3xl);
+	}
+
+	.ways-title {
+		margin-bottom: var(--space-xl);
+		font-size: var(--text-2xl);
+	}
+
+	.ways-list {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--space-lg) var(--space-2xl);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	@media (max-width: 60rem) {
+		.hero {
+			padding-top: var(--space-md);
+		}
+
+		.hero-statement {
+			max-width: none;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.hero {
+			min-height: 68dvh;
+		}
+
+		.values {
+			padding-block: var(--space-xl) var(--space-2xl);
+		}
+
+		.ways {
+			padding-block: var(--space-2xl);
+		}
+
+		.ways-list {
+			flex-direction: column;
+			gap: var(--space-md);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-bg {
+			display: none;
+		}
+	}
+</style>

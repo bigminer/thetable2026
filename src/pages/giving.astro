@@ -1,0 +1,205 @@
+---
+export const prerender = true;
+/* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
+ *
+ * The giving form is embedded inline in the page.
+ *
+ * A caveat worth keeping: Planning Center does not document an inline embed.
+ * Their help page offers a modal, a direct link, per-fund links, and prefill
+ * parameters — nothing else. The inline embed works because churchcenter.com
+ * sends no X-Frame-Options and no CSP frame-ancestors, so the page permits
+ * framing; their own modal is an iframe pointed at this same URL. Verified
+ * against the live response headers.
+ *
+ * What that means in practice:
+ *  - It is unsupported, not broken. Planning Center could add a frame-ancestors
+ *    policy at any time and this would stop rendering without warning.
+ *  - Apple Pay does not work in an embedded context. Planning Center documents
+ *    this for their own modal; the same restriction applies to any framed
+ *    context. Card and bank payment are unaffected.
+ *  - The form's interior is their markup on their origin and cannot be themed.
+ *
+ * The frame is sized from measurements of their page, not guesses. Loading it as
+ * a top-level document and stepping the viewport:
+ *   - below 640px wide, their own .pc-donation-form and .container overflow
+ *     horizontally; at 640 those scrollers disappear;
+ *   - the first step needs 779px of height at that width. Google Pay, which only
+ *     appears on real devices, adds roughly another 60px.
+ * Hence a 42rem x 54rem frame. Undersize either axis and their page — which is a
+ * full-height app layout, not a widget — grows its own scrollbars inside ours.
+ * That is what makes an embedded Church Center form look broken.
+ *
+ * Because the form needs 640px plus the page gutters, the embed only appears
+ * above EMBED_MIN_WIDTH. Phones and small tablets get the link instead, which is
+ * also what Planning Center's own modal does on mobile. The markup ships the
+ * link; a small inline script swaps in the iframe where it fits. With no
+ * JavaScript, a narrow viewport, or a blocked frame, everyone gets the link, and
+ * the link has always worked. Nothing in the payment path depends on our script.
+ */
+import Layout from '../layouts/Layout.astro';
+import { site } from '../config/site';
+
+const givingUrl = site.givingUrl;
+---
+
+<Layout
+	title="Giving | The Table Church"
+	description="Give to The Table Church in Sachse, Texas."
+>
+	<article class="giving">
+		<header class="longform-mast band band-slate">
+			<h1>Giving</h1>
+			<p class="lede">Your giving pays for the room, the meals, the kids&rsquo; ministry, and the people who keep this community running.</p>
+		</header>
+
+		<div class="give-band band band-cream">
+			<div class="give-embed" data-give-url={givingUrl}>
+				<a class="chip" href={givingUrl}>Give now</a>
+				<p class="give-note">Opens the secure Church Center giving form. One-time or recurring, bank account or card.</p>
+			</div>
+
+			<aside class="give-aside" aria-labelledby="other-ways">
+				<h2 id="other-ways">Other ways</h2>
+				<p>
+					To give in a full window instead — or if the form doesn&rsquo;t appear —
+					<a href={givingUrl} target="_blank" rel="noreferrer">open the giving page directly</a>.
+					You can also give from the Church Center app.
+				</p>
+				<p>
+					To manage a recurring gift or find past statements, open
+					<a href={givingUrl} target="_blank" rel="noreferrer">the same page</a> and sign in.
+				</p>
+				<p>
+					If you would rather give another way, or have a question about a gift,
+					<a href="/contact-us/">send us a message</a>.
+				</p>
+			</aside>
+		</div>
+
+	</article>
+</Layout>
+
+<script is:inline>
+	/* Church Center's giving form needs roughly 480px to lay out; below that it
+	   overflows its frame and clips. Embed it only where it fits, and leave the
+	   link in place everywhere else. */
+	(function () {
+		var EMBED_MIN_WIDTH = 760;
+		var host = document.querySelector('.give-embed');
+		if (!host || !host.dataset.giveUrl) return;
+
+		var embedded = false;
+		function mount() {
+			if (embedded || window.innerWidth < EMBED_MIN_WIDTH) return;
+			var frame = document.createElement('iframe');
+			frame.className = 'give-frame';
+			frame.src = host.dataset.giveUrl;
+			frame.title = 'Give to The Table Church';
+			frame.setAttribute('allow', 'payment *; clipboard-write');
+			frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+			host.replaceChildren(frame);
+			embedded = true;
+		}
+
+		mount();
+		/* Covers a rotate or a resized desktop window. Once mounted it stays put —
+		   tearing the frame down mid-donation would lose whatever was typed. */
+		window.addEventListener('resize', mount);
+	})();
+</script>
+
+<style>
+	.give-band {
+		padding-block: var(--space-2xl) var(--space-4xl);
+	}
+
+	/* No border or ground of our own — the Church Center form ships its own white
+	   card, and wrapping it would be card-in-card. */
+	.give-embed {
+		display: grid;
+		justify-items: start;
+		gap: var(--space-md);
+		max-width: 42rem;
+	}
+
+	.give-embed .chip {
+		font-size: var(--text-md);
+		padding-inline: var(--space-2xl);
+	}
+
+	.give-note {
+		margin: 0;
+		max-width: 44ch;
+		font-size: var(--text-base);
+		line-height: var(--leading-body);
+		color: var(--color-muted);
+	}
+
+	/* :global because the frame is created in JS. Astro scopes styles with a
+	   build-time data-astro-cid attribute that a scripted element never gets, so a
+	   scoped selector would not match it.
+
+	   Sized from measurements of their page (see the header comment): 640px is
+	   where their horizontal overflow stops, 779px is the first step's height, and
+	   Google Pay adds about 60 more on real devices. Cross-origin, so the frame
+	   cannot report its own height and there is no postMessage contract to resize
+	   against — later steps scroll inside it. */
+	:global(.give-frame) {
+		display: block;
+		width: 100%;
+		height: 54rem;
+		border: 0;
+	}
+
+	.give-aside {
+		margin-top: var(--space-3xl);
+		padding-top: var(--space-2xs);
+		border-top: var(--rule-heavy) solid var(--color-ink);
+		max-width: 42rem;
+	}
+
+	.give-aside h2 {
+		margin: var(--space-lg) 0 var(--space-md);
+		font-size: var(--text-xl);
+		color: var(--color-ink);
+	}
+
+	.give-aside p {
+		margin: 0 0 var(--space-md);
+		max-width: var(--measure);
+		font-size: var(--text-base);
+		line-height: var(--leading-body);
+		color: var(--color-ink-2);
+	}
+
+	.give-aside p:last-child {
+		margin-bottom: 0;
+	}
+
+	.give-aside a {
+		color: var(--color-accent-deep);
+		text-decoration: underline;
+		text-decoration-thickness: var(--rule-hair);
+		text-underline-offset: 2px;
+		transition: text-decoration-thickness var(--dur-short) var(--ease-out);
+	}
+
+	.give-aside a:hover,
+	.give-aside a:focus-visible {
+		text-decoration-thickness: 2px;
+	}
+
+	.give-aside a:active {
+		color: var(--color-accent);
+	}
+
+	@media (max-width: 60rem) {
+		.give-band {
+			padding-block: var(--space-xl) var(--space-3xl);
+		}
+
+		.give-aside {
+			margin-top: var(--space-2xl);
+		}
+	}
+</style>

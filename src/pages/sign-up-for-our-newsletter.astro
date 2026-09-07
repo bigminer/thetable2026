@@ -1,0 +1,99 @@
+---
+export const prerender = true;
+import ContentSidebar from '../components/ContentSidebar.astro';
+import Layout from '../layouts/Layout.astro';
+import '../styles/content-page.css';
+
+---
+
+<Layout
+	title="Sign Up For Our Newsletter | The Table Church"
+	description="Subscribe to receive updates on events and news from The Table TX."
+>
+	<article class="content-page">
+		<header class="page-hero band band-slate">
+			<h1>Sign Up For Our Newsletter</h1>
+			<p class="lede">Receive updates on events and news from The Table TX.</p>
+		</header>
+
+		<div class="content-grid band band-cream">
+			<div class="body">
+				<p>Please fill out your information below to receive updates on events and news from The Table TX.</p>
+
+				<form id="newsletter-form" class="site-form" novalidate>
+					<div class="hp-field" aria-hidden="true">
+						<label for="hp-name">Leave this blank</label>
+						<input type="text" id="hp-name" name="hp_name" tabindex="-1" autocomplete="off" />
+					</div>
+
+					<div class="form-row">
+						<div class="field">
+							<label for="firstName">First Name <span class="req">*</span></label>
+							<input type="text" id="firstName" name="firstName" required autocomplete="given-name" />
+						</div>
+						<div class="field">
+							<label for="lastName">Last Name <span class="req">*</span></label>
+							<input type="text" id="lastName" name="lastName" required autocomplete="family-name" />
+						</div>
+					</div>
+
+					<div class="field">
+						<label for="email">Email Address <span class="req">*</span></label>
+						<input type="email" id="email" name="email" required autocomplete="email" />
+					</div>
+
+					<div class="form-footer">
+						<button type="submit" class="submit-btn">Submit</button>
+						<p class="form-status" aria-live="polite"></p>
+					</div>
+				</form>
+			</div>
+
+			<ContentSidebar />
+		</div>
+	</article>
+</Layout>
+
+<script>
+const form = document.getElementById('newsletter-form') as HTMLFormElement;
+const status = form?.querySelector('.form-status') as HTMLParagraphElement;
+const btn = form?.querySelector('.submit-btn') as HTMLButtonElement;
+
+form?.addEventListener('submit', async (e) => {
+	e.preventDefault();
+	btn.disabled = true;
+	btn.textContent = 'Sending…';
+	status.textContent = '';
+	status.className = 'form-status';
+
+	const data = {
+		hp_name: (form.querySelector('[name="hp_name"]') as HTMLInputElement).value,
+		firstName: (form.querySelector('[name="firstName"]') as HTMLInputElement).value,
+		lastName: (form.querySelector('[name="lastName"]') as HTMLInputElement).value,
+		email: (form.querySelector('[name="email"]') as HTMLInputElement).value,
+	};
+
+	try {
+		const res = await fetch('/api/newsletter', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data),
+		});
+		const json = await res.json();
+
+		if (json.ok) {
+			form.innerHTML = '<p class="success-msg">You\'re signed up — thanks!</p>';
+		} else {
+			status.textContent = json.error ?? 'Something went wrong. Please try again.';
+			status.classList.add('is-error');
+			btn.disabled = false;
+			btn.textContent = 'Submit';
+		}
+	} catch {
+		status.textContent = 'Something went wrong. Please try again.';
+		status.classList.add('is-error');
+		btn.disabled = false;
+		btn.textContent = 'Submit';
+	}
+});
+</script>

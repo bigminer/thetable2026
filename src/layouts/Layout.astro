@@ -1,0 +1,144 @@
+---
+import { site } from '../config/site';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+	canonicalPath?: string;
+	image?: string;
+	noindex?: boolean;
+}
+
+const { title, description, canonicalPath, image, noindex = false } = Astro.props;
+const siteName = site.title;
+const metaDescription = description ?? site.description;
+const footerAddressLines = site.addressLines;
+const footerServiceTime = site.serviceTime;
+const footerSocialLinks = site.socialLinks;
+const googleTagManagerId = import.meta.env.PUBLIC_GTM_ID?.trim();
+const googleAnalyticsId = import.meta.env.PUBLIC_GA4_ID?.trim();
+const directGoogleAnalyticsId = googleTagManagerId ? undefined : googleAnalyticsId;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteUrl = Astro.site ?? new URL(site.url);
+const brandLogoSrc = `${base}/attachments/branding/the-table-written-logo.png`;
+const rawPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const currentPath = base && rawPath.startsWith(base) ? rawPath.slice(base.length) : rawPath;
+const normalizePath = (path: string) => {
+	const withLeadingSlash = path.startsWith('/') ? path : `/${path}`;
+	return withLeadingSlash.endsWith('/') ? withLeadingSlash : `${withLeadingSlash}/`;
+};
+const withBase = (path: string) => `${base}${path.startsWith('/') ? path : `/${path}`}`.replace(/\/\/+/g, '/');
+const absoluteUrl = (pathOrUrl: string) => {
+	try {
+		return new URL(pathOrUrl).toString();
+	} catch {
+		return new URL(pathOrUrl, siteUrl).toString();
+	}
+};
+const canonicalUrl = absoluteUrl(withBase(normalizePath(canonicalPath ?? currentPath)));
+const socialImagePath = image
+	? image.startsWith('http://') || image.startsWith('https://')
+		? image
+		: withBase(image)
+	: brandLogoSrc;
+const socialImageUrl = absoluteUrl(socialImagePath);
+const organizationJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': ['Organization', 'Church'],
+	name: siteName,
+	url: absoluteUrl(base + '/'),
+	logo: absoluteUrl(brandLogoSrc),
+	description: metaDescription,
+	address: {
+		'@type': 'PostalAddress',
+		streetAddress: footerAddressLines[0],
+		addressLocality: 'Sachse',
+		addressRegion: 'TX',
+		postalCode: '75048',
+		addressCountry: 'US',
+	},
+	openingHours: footerServiceTime,
+	sameAs: footerSocialLinks.map((link) => link.url),
+};
+
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
+		<link rel="icon" href={base + '/favicon.ico'} />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="preconnect" href="https://api.fontshare.com" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;800&display=swap"
+			rel="stylesheet"
+		/>
+		<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,600&display=swap" rel="stylesheet" />
+		<meta
+			name="description"
+			content={metaDescription}
+		/>
+		<link rel="canonical" href={canonicalUrl} />
+		{noindex && <meta name="robots" content="noindex, nofollow" />}
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={metaDescription} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={socialImageUrl} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={metaDescription} />
+		<meta name="twitter:image" content={socialImageUrl} />
+		<script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+		{googleTagManagerId && (
+			<script
+				is:inline
+				set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',${JSON.stringify(googleTagManagerId)});`}
+			/>
+		)}
+		{directGoogleAnalyticsId && (
+			<>
+				<script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(directGoogleAnalyticsId)}`} />
+				<script
+					is:inline
+					set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config',${JSON.stringify(directGoogleAnalyticsId)});`}
+				/>
+			</>
+		)}
+		<title>{title}</title>
+	</head>
+	<body>
+		{googleTagManagerId && (
+			<noscript>
+				<iframe
+					src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(googleTagManagerId)}`}
+					height="0"
+					width="0"
+					style="display:none;visibility:hidden"
+					title="Google Tag Manager"
+				></iframe>
+			</noscript>
+		)}
+		<div class="page-shell">
+			<SiteHeader />
+
+			<main class="site-main">
+				<slot />
+			</main>
+
+			<SiteFooter />
+		</div>
+
+		
+	</body>
+</html>
+
