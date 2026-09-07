@@ -129,6 +129,25 @@ prevents the ground from following the palette.
 - Hover affordances always have a matching `:focus-visible` state.
 - Nav disclosure works on click and hover on pointer devices, click only on coarse.
 
+## Navigation
+
+- Desktop uses a compact horizontal masthead: wordmark and service details left,
+  an explicit Home link plus five visitor-centered sections right, and Giving as
+  a direct navigation link.
+- Section disclosures open into a wide slate panel with short descriptions. The
+  panel borrows a mega-menu's scanability without importing card styling.
+- Mobile keeps the wordmark and Giving visible beside a real menu button. The
+  expanded navigation uses full-width disclosure rows with 44px minimum targets.
+- Desktop menus remain open while the pointer travels from the trigger to the
+  panel. They close on another selection, outside click, or Escape; Escape returns
+  focus to the trigger.
+- An orange leader connects the open desktop trigger to the matching top rule of
+  its slate panel, so the parent-child relationship stays visible across the
+  masthead gap without adding a heavy tab shape.
+- Open disclosure arrows rotate upward to communicate that the section can be
+  collapsed. The arrows and mobile menu icon use the same short state transition;
+  no other decorative navigation motion is added.
+
 ## CTA voice
 
 - **Primary**: C3 typographic link — the verb, an arrow, and a rule that thickens and
