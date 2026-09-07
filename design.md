@@ -172,13 +172,34 @@ pointed at the same URL. Verified against the live response headers. They could
 add a framing policy at any time and this would stop rendering without warning —
 the fallback link below is what keeps that from being an outage.
 
-**It does not fit a phone.** Measured: in a 350px frame their layout overflows
-and clips — "General" renders as "neral" — because the form needs roughly 480px.
-This is the same reason Planning Center's own modal opens a new window on
-mobile. So the embed is added only above 544px, by a small inline script. The
-markup ships the link; the script swaps in the iframe where it fits. With no
-JavaScript, a narrow viewport, or a blocked frame, everyone gets the link, and
-the link has always worked. Nothing in the payment path depends on our script.
+**The frame is sized from measurements, not guesses.** Their giving page is a
+full-height app layout, not a widget: it fills whatever box it is given and
+grows its own scrollbars when the box is too small. Undersize either axis and
+the embed looks broken — nested scrollbars inside our page. Loading their page
+as a top-level document and stepping the viewport gave the real numbers:
+
+- below **640px wide**, their own `.pc-donation-form` and `.container` overflow
+  horizontally; at 640 those scrollers disappear;
+- the first step needs **779px of height** at that width;
+- Google Pay, which only appears on real devices and never in headless, adds
+  roughly another 60px.
+
+Hence a **42rem × 54rem** frame. The height allowance is invisible when Google
+Pay is absent, because their page background is transparent and our ground shows
+through.
+
+**It does not fit a phone.** In a 350px frame their layout clips — "General"
+renders as "neral". Since the form needs 640px plus the page gutters, the embed
+is added only above **760px** by a small inline script; below that everyone gets
+the link, which is also what Planning Center's own modal does on mobile. The
+markup ships the link and the script swaps in the iframe where it fits, so no
+JavaScript, a narrow viewport, or a blocked frame all degrade to the link.
+Nothing in the payment path depends on our script.
+
+**Their card has its own max width (~480px).** Widening the frame past 640 adds
+side padding, not card width, so the frequency options keep their horizontal
+scroller and chevron. That is their component behaving normally; it does the
+same on their own site. Do not chase it.
 
 **Apple Pay does not work in an embedded context.** Planning Center documents
 this for their own modal; it applies to any framed context. Card and bank
