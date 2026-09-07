@@ -1,3 +1,8 @@
+# Every pull request gets its own full SSR deploy, so changes can be reviewed
+# on a real server rather than a static approximation.
+previews:
+  generation: automatic
+
 services:
   - type: web
     name: thetabletx
