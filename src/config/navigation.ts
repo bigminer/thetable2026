@@ -17,11 +17,10 @@ export const navigation: NavItem[] = [
 	{
 		label: 'New Here',
 		children: [
-			{ label: 'Start Here', href: '/new-here/', description: 'A welcome and a simple place to begin.' },
 			{
-				label: 'Plan Your Visit',
-				href: '/plan-your-visit/',
-				description: 'The practical details for your first Sunday.',
+				label: 'Start Here',
+				href: '/new-here/',
+				description: 'A welcome and a simple place to begin.',
 			},
 			{
 				label: 'What Sundays Are Like',
@@ -56,6 +55,11 @@ export const navigation: NavItem[] = [
 	{
 		label: 'Join In',
 		children: [
+			{
+				label: 'Welcome to the Table Class',
+				href: '/welcome-to-the-table-class/',
+				description: 'Learn more and take a next step in our community.',
+			},
 			{ label: 'MeetUps', href: '/meetups/', description: 'Find people and rhythms beyond Sunday.' },
 			{ label: 'Kids & Youth', href: '/kids-youth/', description: 'A place for children and students to belong.' },
 			{ label: 'Community Meals', href: '/community-meal/', description: 'Share a table with our wider community.' },

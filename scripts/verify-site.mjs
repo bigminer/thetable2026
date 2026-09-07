@@ -21,6 +21,7 @@ const routes = [
 	'/kids-youth/',
 	'/community-meal/',
 	'/get-involved/',
+	'/welcome-to-the-table-class/',
 	'/merch/',
 	'/giving/',
 	'/sign-up-for-our-newsletter/',

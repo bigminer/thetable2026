@@ -61,5 +61,8 @@ export default defineConfig({
 	site: 'https://bigminer.github.io',
 	base: BASE,
 	output: 'static',
+	redirects: {
+		'/plan-your-visit': `${BASE}/service-times-locations`,
+	},
 	integrations: [sitemap(), rebaseAbsolutePaths()],
 });
