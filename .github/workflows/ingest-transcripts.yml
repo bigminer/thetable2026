@@ -82,16 +82,38 @@ jobs:
           body: |
             Auto-ingested new sermon transcripts from YouTube.
 
-            **For each stub in `data/transcripts/content/`, replace the `null` fields with the correct values:**
+            Most fields arrive filled in: this workflow runs title enrichment, series
+            detection, sermon-bound detection and description generation before opening
+            the PR. **Your job is to check the guesses and fill the gaps, not to type
+            everything in.**
 
-            - `title` — cleaned-up display title
-            - `speaker` — `brett_tilford` for Brett, or `guest:first-last` for a guest teacher
-            - `content_type` — `sermon` | `table_talk` | `guest_sermon` | `worship` | `story_sunday` | `panel_discussion` | `announcements`
-            - `sermon_start_seconds` — integer seconds where the sermon begins in the video
-            - `sermon_end_seconds` — integer seconds where the sermon ends
-            - `series` — leave `null` if not part of a series, otherwise the series name
+            **Check these in each stub under `data/transcripts/content/`:**
 
-            Merge when every stub has its `null` fields filled in. A follow-up workflow will pick up from there (chunking, embedding, deploy — not wired yet).
+            - `title` — auto-filled from the YouTube title. Tidy it for display.
+            - `content_start` / `content_end` — **format `"hh:mm:ss"`, quoted** (e.g. `"00:28:15"`).
+              Auto-detected from Brett's "grace and peace" opener and the "open table"
+              communion transition. Guest speakers and special services usually fail
+              detection and arrive `null` — fill those in by watching the video.
+            - `speaker` — defaults to `brett_tilford`. Use `guest:first-last` for a guest
+              teacher.
+            - `content_type` — defaults to `sermon`. One of: `sermon` | `table_talk` |
+              `guest_sermon` | `worship` | `story_sunday` | `panel_discussion` | `announcements`
+            - `series` — auto-detected where possible; `null` means not part of a series.
+            - `content_description` — auto-generated summary. Read it for accuracy.
+
+            **Two fields decide whether `/ask` can quote a talk.** The chatbot is
+            default-deny: it skips anything that does not pass every check.
+
+            - `consent_status` defaults to `granted`. Set it to anything else to keep a
+              talk out of the chatbot while leaving the transcript in the repo.
+            - `speaker` must be exactly `brett_tilford`. Marking a talk `guest:...`
+              correctly excludes it — guest teachers have not consented to being quoted.
+
+            A stub with `content_start` or `content_end` left `null`, or with the wrong
+            time format, is skipped silently. It will not error; the talk simply never
+            appears in `/ask`.
+
+            Merge once each stub has been checked and no required field is `null`.
           labels: |
             transcripts
             needs-review
