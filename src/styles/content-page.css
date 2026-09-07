@@ -1,210 +1,320 @@
+/* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
+ * The prose-page family: eleven routes share this file.
+ * Slate masthead → optional full-bleed figure → cream body with a hairline sidebar.
+ * No cards, no radii, no shadows, no eyebrows. See design.md.
+ */
+
 .content-page {
-		display: grid;
-		gap: 2rem;
+	display: block;
+}
+
+/* ── Masthead band ──────────────────────────────────────────────────────── */
+
+.content-page .page-hero {
+	padding-block: var(--space-2xl) var(--space-3xl);
+}
+
+.content-page .page-hero h1 {
+	max-width: 20ch;
+	font-size: var(--text-display-s);
+	font-weight: 800;
+}
+
+.content-page .page-hero .lede {
+	margin-top: var(--space-lg);
+	max-width: 52ch;
+	font-size: var(--text-md);
+	line-height: var(--leading-body);
+	color: var(--color-muted-on-band);
+}
+
+/* ── Full-bleed figure ──────────────────────────────────────────────────── */
+
+.content-page .page-figure {
+	margin: 0;
+}
+
+.content-page .page-figure img {
+	display: block;
+	width: 100%;
+	max-height: 44vh;
+	object-fit: cover;
+}
+
+/* ── Body ───────────────────────────────────────────────────────────────── */
+
+.content-page .content-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 19rem);
+	gap: var(--space-2xl) var(--space-3xl);
+	align-items: start;
+	padding-block: var(--space-3xl) var(--space-4xl);
+}
+
+.content-page .body > * {
+	max-width: var(--measure);
+}
+
+.content-page .body p,
+.content-page .body li {
+	margin: 0 0 var(--space-md);
+	font-size: var(--text-md);
+	line-height: var(--leading-body);
+	color: var(--color-ink-2);
+}
+
+.content-page .body ul,
+.content-page .body ol {
+	margin: 0 0 var(--space-lg);
+	padding-left: var(--space-lg);
+}
+
+.content-page .body li {
+	margin-bottom: var(--space-xs);
+}
+
+.content-page .body h2 {
+	margin: var(--space-2xl) 0 var(--space-md);
+	padding-top: var(--space-md);
+	max-width: none;
+	border-top: var(--rule-hair) solid var(--color-rule);
+	font-size: var(--text-2xl);
+	color: var(--color-ink);
+}
+
+.content-page .body h3 {
+	margin: var(--space-xl) 0 var(--space-xs);
+	font-size: var(--text-lg);
+	color: var(--color-ink);
+}
+
+.content-page .body h4 {
+	margin: var(--space-lg) 0 var(--space-2xs);
+	font-size: var(--text-base);
+	letter-spacing: var(--track-label);
+	color: var(--color-accent-deep);
+}
+
+.content-page .body > *:first-child {
+	margin-top: 0;
+}
+
+.content-page .body a {
+	color: var(--color-accent-deep);
+	text-decoration: underline;
+	text-decoration-thickness: var(--rule-hair);
+	text-underline-offset: 2px;
+	transition: text-decoration-thickness var(--dur-short) var(--ease-out);
+}
+
+.content-page .body a:hover,
+.content-page .body a:focus-visible {
+	text-decoration-thickness: 2px;
+}
+
+.content-page .body a:active {
+	color: var(--color-accent);
+}
+
+.content-page .body strong {
+	color: var(--color-ink);
+	font-weight: 600;
+}
+
+.content-page .body blockquote {
+	margin: var(--space-lg) 0;
+	padding-left: var(--space-lg);
+	border-left: var(--rule-heavy) solid var(--color-accent);
+	color: var(--color-ink);
+}
+
+.content-page .body img {
+	display: block;
+	width: 100%;
+	max-width: min(100%, 34rem);
+	margin: var(--space-lg) 0;
+}
+
+.content-page .body hr {
+	margin: var(--space-2xl) 0;
+	border: 0;
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.content-page .google-form-embed,
+.content-page .body .content-map-embed {
+	display: block;
+	width: 100%;
+	max-width: none;
+	border: var(--rule-hair) solid var(--color-rule);
+	border-radius: var(--radius);
+	margin-top: var(--space-lg);
+}
+
+.content-page .google-form-embed {
+	min-height: 640px;
+}
+
+.content-page .body .content-map-embed {
+	min-height: 320px;
+}
+
+/* ── Staff ledger — portraits, not cards ────────────────────────────────── */
+
+.content-page .staff-section {
+	margin-top: var(--space-2xl);
+	max-width: none;
+}
+
+.content-page .staff-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+	gap: var(--space-xl) var(--space-lg);
+}
+
+.content-page .staff-card {
+	display: grid;
+	gap: var(--space-sm);
+	align-content: start;
+}
+
+.content-page .staff-card img {
+	display: block;
+	width: 100%;
+	max-width: none;
+	aspect-ratio: 2 / 3;
+	object-fit: cover;
+	margin: 0;
+}
+
+.content-page .staff-copy {
+	padding-top: var(--space-xs);
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.content-page .staff-copy h3 {
+	margin: 0;
+	font-size: var(--text-md);
+	line-height: 1.06;
+	color: var(--color-ink);
+}
+
+.content-page .staff-role,
+.content-page .staff-pronouns {
+	margin: 0;
+	font-size: var(--text-sm);
+	color: var(--color-muted);
+}
+
+.content-page .staff-role {
+	margin-top: var(--space-2xs);
+	font-family: var(--font-display);
+	font-weight: 700;
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	color: var(--color-ink-2);
+}
+
+/* ── Sidebar — hairline blocks, not cards ───────────────────────────────── */
+
+.content-page .sidebar {
+	display: grid;
+	gap: var(--space-xl);
+	align-content: start;
+	padding-top: var(--space-2xs);
+	border-top: var(--rule-heavy) solid var(--color-ink);
+}
+
+.content-page .sidebar-card {
+	display: grid;
+	gap: var(--space-xs);
+	padding-top: var(--space-lg);
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.content-page .sidebar-card:first-child {
+	border-top: 0;
+	padding-top: var(--space-lg);
+}
+
+.content-page .sidebar-card h2 {
+	margin: 0;
+	font-size: var(--text-sm);
+	letter-spacing: var(--track-label);
+	color: var(--color-muted);
+}
+
+.content-page .sidebar-card p,
+.content-page .sidebar-card li {
+	margin: 0;
+	font-size: var(--text-base);
+	line-height: var(--leading-body);
+	color: var(--color-ink-2);
+}
+
+.content-page .sidebar-address {
+	display: grid;
+	gap: var(--space-3xs);
+	font-style: normal;
+	font-size: var(--text-base);
+	line-height: var(--leading-body);
+	color: var(--color-ink-2);
+}
+
+.content-page .service-time {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-md);
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	color: var(--color-ink);
+}
+
+.content-page .sidebar-card iframe {
+	display: block;
+	width: 100%;
+	min-height: 220px;
+	margin-top: var(--space-xs);
+	border: var(--rule-hair) solid var(--color-rule);
+	border-radius: var(--radius);
+}
+
+.content-page .sidebar-social-link {
+	justify-self: start;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: var(--text-base);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--color-accent-deep);
+	text-decoration: underline;
+	text-decoration-thickness: var(--rule-hair);
+	text-underline-offset: 2px;
+	transition: text-decoration-thickness var(--dur-short) var(--ease-out);
+}
+
+.content-page .sidebar-social-link:hover,
+.content-page .sidebar-social-link:focus-visible {
+	text-decoration-thickness: 2px;
+}
+
+@media (max-width: 60rem) {
+	.content-page .content-grid {
+		grid-template-columns: minmax(0, 1fr);
+		padding-block: var(--space-2xl) var(--space-3xl);
 	}
 
 	.content-page .page-hero {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
-		gap: 1.5rem;
-		align-items: center;
+		padding-block: var(--space-xl) var(--space-2xl);
 	}
+}
 
-	.content-page .hero-copy {
-		max-width: 44rem;
-	}
-
-	.content-page .eyebrow {
-		margin: 0 0 0.5rem;
-		color: var(--brand-rust);
-		font: 700 0.82rem/1.1 'Trebuchet MS', sans-serif;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-	}
-
-	.content-page h1 {
-		margin: 0 0 0.75rem;
-		font-size: clamp(2.2rem, 5vw, 4rem);
-		line-height: 0.95;
-	}
-
-	.content-page .lede {
-		margin: 0;
-		color: var(--text-secondary);
-		font-size: 1.08rem;
-		line-height: 1.7;
-	}
-
-	.content-page .page-hero img {
-		width: 100%;
-		border-radius: var(--radius-card);
-		object-fit: cover;
-		box-shadow: var(--shadow-card);
-	}
-
-	.content-page .content-grid {
-		display: grid;
-		grid-template-columns: minmax(0, 2fr) minmax(280px, 0.95fr);
-		gap: 1.5rem;
-		align-items: start;
-	}
-
-	.content-page .body {
-		line-height: 1.8;
-	}
-
-	.content-page .body p,
-.content-page .body li {
-		color: var(--text-body);
-	}
-
-	.content-page .body img {
-		display: block;
-		max-width: min(100%, 480px);
-		border-radius: var(--radius-sm);
-		box-shadow: var(--shadow-sm);
-		margin: 1.5rem 0;
-	}
-
-	.content-page .google-form-embed {
-		display: block;
-		width: 100%;
-		min-height: 640px;
-		border: 0;
-		border-radius: var(--radius-card);
-		margin-top: 1.5rem;
-	}
-
-	.content-page .body .content-map-embed {
-		display: block;
-		width: 100%;
-		min-height: 320px;
-		border: 0;
-		border-radius: var(--radius-card);
-		box-shadow: var(--shadow-sm);
-		margin: 1.5rem 0;
-	}
-
-	.content-page .body em {
-		color: var(--text-secondary);
-	}
-
-	.content-page .staff-section {
-		margin-top: 2.5rem;
-	}
-
-	.content-page .staff-section h2 {
-		margin-bottom: 1rem;
+@media (max-width: 40rem) {
+	.content-page .page-hero h1 {
+		max-width: none;
 	}
 
 	.content-page .staff-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
 	}
-
-	.content-page .staff-card {
-		overflow: hidden;
-		border: 1px solid var(--border);
-		border-radius: 22px;
-		background: var(--bg-surface);
-		box-shadow: var(--shadow-sm);
-	}
-
-	.content-page .staff-card img {
-		display: block;
-		width: 100%;
-		aspect-ratio: 2 / 3;
-		object-fit: cover;
-		margin: 0;
-		border-radius: 0;
-		box-shadow: none;
-	}
-
-	.content-page .staff-copy {
-		padding: 1rem;
-	}
-
-	.content-page .staff-copy h3 {
-		margin: 0 0 0.4rem;
-	}
-
-	.content-page .staff-role,
-.content-page .staff-pronouns {
-		margin: 0;
-		color: var(--text-body);
-	}
-
-	.content-page .staff-pronouns {
-		margin-top: 0.25rem;
-		color: var(--text-secondary);
-		font-style: italic;
-	}
-
-	.content-page .sidebar {
-		display: grid;
-		gap: 1rem;
-	}
-
-	.content-page .sidebar-card {
-		background: var(--bg-surface);
-		border: 1px solid var(--border);
-		border-radius: 24px;
-		padding: 1.15rem;
-		box-shadow: var(--shadow-sm);
-	}
-
-	.content-page .sidebar-card h2 {
-		margin-bottom: 0.65rem;
-		font-size: 1.3rem;
-	}
-
-	.content-page .sidebar-card p,
-.content-page .sidebar-card li {
-		color: var(--text-body);
-		line-height: 1.7;
-	}
-
-	.content-page .sidebar-card ul {
-		margin: 0 0 0.75rem;
-		padding-left: 1.1rem;
-	}
-
-	.content-page .sidebar-address {
-		display: grid;
-		gap: 0.2rem;
-		font-style: normal;
-		line-height: 1.55;
-		color: var(--text-body);
-		margin: 0 0 0.75rem;
-	}
-
-	.content-page .service-time {
-		margin: 0.5rem 0 0.9rem;
-		font-family: 'Trebuchet MS', sans-serif;
-		font-weight: 700;
-		color: var(--brand-rust);
-	}
-
-	.content-page .sidebar-card iframe {
-		display: block;
-		width: 100%;
-		min-height: 220px;
-		border: 0;
-		border-radius: 18px;
-	}
-
-	.content-page .sidebar-social-link {
-		display: inline-block;
-		margin-top: 0.25rem;
-		color: var(--brand-rust);
-		font: 700 0.95rem/1 'Trebuchet MS', sans-serif;
-		text-decoration: none;
-	}
-
-	@media (max-width: 820px) {
-		.content-page .page-hero,
-.content-page .content-grid {
-			grid-template-columns: 1fr;
-		}
-	}
+}

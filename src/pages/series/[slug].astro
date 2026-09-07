@@ -1,5 +1,9 @@
 ---
 export const prerender = true;
+/* Hallmark · macrostructure: Ledger · design-system: design.md · designed-as-app
+ * Slate masthead → full-bleed series art → cream body → message ledger.
+ * The message rows keep the church's own date-left / label-right rhythm.
+ */
 import { getCollection, render } from 'astro:content';
 import { fallbackSlug, resolveAsset, safeGetCollection } from '../../lib/content';
 import { formatMessageDate, getMessagesForSeries } from '../../lib/podcast';
@@ -18,259 +22,319 @@ export async function getStaticPaths() {
 const { entry, messages } = Astro.props;
 const { Content } = await render(entry);
 const podcastLinks = site.podcastLinks;
+const seriesArt = entry.data.featuredImage ? resolveAsset(entry.data.featuredImage) : undefined;
 ---
 
 <Layout title={`${entry.data.title} | The Table Church`} description={entry.data.description}>
 	<article class="series-entry">
-		<div class="hero">
-			{entry.data.featuredImage && (
-				<img src={resolveAsset(entry.data.featuredImage)} alt={entry.data.featuredImageAlt ?? entry.data.title} />
-			)}
-			<div class="hero-copy">
-				<p class="eyebrow">Series</p>
-				<h1>{entry.data.title}</h1>
-				<p class="lede">{entry.data.description}</p>
-				{entry.data.speaker && <p class="meta">Speaker: {entry.data.speaker}</p>}
-				{entry.data.scripture && <p class="meta">Scripture: {entry.data.scripture}</p>}
-				{podcastLinks.length > 0 && (
-					<div class="podcast-links">
-						<p class="podcast-label">Subscribe</p>
-						{podcastLinks.map((link) => (
-							<a class="podcast-btn" href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
-						))}
-					</div>
-				)}
-			</div>
-		</div>
+		<header class="series-mast band band-slate">
+			<h1>{entry.data.title}</h1>
+			<p class="lede">{entry.data.description}</p>
 
-		<div class="content-grid">
-			<div class="body">
-				<Content />
-
-				{messages.length > 0 && (
-					<section class="episodes">
-						<h2>Messages in this series</h2>
-						<div class="episode-list">
-							{messages.map((message) => (
-								<article class="episode-row">
-									<div class="episode-date">{formatMessageDate(message.data.date)}</div>
-									<div class="episode-copy">
-										<h3>{message.data.title}</h3>
-										{message.data.speaker && <p>{message.data.speaker}</p>}
-									</div>
-									<div class="episode-actions">
-										{message.data.sourceUrl ? (
-											<a class="watch-link" href={message.data.sourceUrl} target="_blank" rel="noreferrer">Watch</a>
-										) : (
-											<span class="watch-link watch-link-disabled">Unavailable</span>
-										)}
-										{message.data.podcastUrl?.trim() && (
-											<a class="listen-link" href={message.data.podcastUrl.trim()} target="_blank" rel="noreferrer">Listen</a>
-										)}
-									</div>
-								</article>
-							))}
+			{(entry.data.speaker || entry.data.scripture) && (
+				<dl class="mast-meta">
+					{entry.data.speaker && (
+						<div>
+							<dt>Speaker</dt>
+							<dd>{entry.data.speaker}</dd>
 						</div>
-					</section>
-				)}
-			</div>
+					)}
+					{entry.data.scripture && (
+						<div>
+							<dt>Scripture</dt>
+							<dd>{entry.data.scripture}</dd>
+						</div>
+					)}
+				</dl>
+			)}
+
+			{podcastLinks.length > 0 && (
+				<div class="subscribe">
+					<p class="subscribe-label">Subscribe</p>
+					<ul class="subscribe-list">
+						{podcastLinks.map((link) => (
+							<li><a href={link.url} target="_blank" rel="noreferrer">{link.label}</a></li>
+						))}
+					</ul>
+				</div>
+			)}
+		</header>
+
+		{seriesArt && (
+			<figure class="series-figure">
+				<img src={seriesArt} alt={entry.data.featuredImageAlt ?? ''} fetchpriority="high" />
+			</figure>
+		)}
+
+		<div class="series-body band band-cream">
+			<div class="body"><Content /></div>
+
+			{messages.length > 0 && (
+				<section class="episodes" aria-labelledby="episodes-title">
+					<h2 id="episodes-title">Messages in this series</h2>
+					<ol class="episode-ledger">
+						{messages.map((message) => (
+							<li class="episode-row">
+								<p class="episode-date">{formatMessageDate(message.data.date)}</p>
+								<div class="episode-copy">
+									<h3>{message.data.title}</h3>
+									{message.data.speaker && <p class="episode-speaker">{message.data.speaker}</p>}
+								</div>
+								<div class="episode-actions">
+									{message.data.sourceUrl ? (
+										<a class="episode-link" href={message.data.sourceUrl} target="_blank" rel="noreferrer">Watch</a>
+									) : (
+										<span class="episode-link is-unavailable">Unavailable</span>
+									)}
+									{message.data.podcastUrl?.trim() && (
+										<a class="episode-link" href={message.data.podcastUrl.trim()} target="_blank" rel="noreferrer">Listen</a>
+									)}
+								</div>
+							</li>
+						))}
+					</ol>
+				</section>
+			)}
 		</div>
 	</article>
 </Layout>
 
 <style>
-	.series-entry {
-		display: grid;
-		gap: 2rem;
+	.series-mast {
+		padding-block: var(--space-2xl) var(--space-3xl);
 	}
 
-	.hero {
-		display: grid;
-		grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-		gap: 1.5rem;
-		align-items: stretch;
+	.series-mast h1 {
+		max-width: 20ch;
+		font-size: var(--text-display-s);
+		font-weight: 800;
 	}
 
-	.hero img {
-		width: 100%;
-		height: 100%;
-		min-height: 18rem;
-		object-fit: cover;
-		border-radius: var(--radius-card);
-		box-shadow: var(--shadow-card);
+	.series-mast .lede {
+		margin-top: var(--space-lg);
+		max-width: 52ch;
+		font-size: var(--text-md);
+		line-height: var(--leading-body);
+		color: var(--color-muted-on-band);
 	}
 
-	.hero-copy {
-		background: var(--bg-surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-card);
-		padding: 1.5rem;
+	.mast-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-md) var(--space-2xl);
+		margin: var(--space-xl) 0 0;
 	}
 
-	.eyebrow,
-	.meta {
-		font-family: 'Trebuchet MS', sans-serif;
-	}
-
-	.eyebrow {
-		margin: 0 0 0.5rem;
-		color: var(--brand-rust);
-		font-size: 0.82rem;
+	.mast-meta dt {
+		font-family: var(--font-display);
 		font-weight: 700;
-		letter-spacing: 0.16em;
+		font-size: var(--text-sm);
+		letter-spacing: var(--track-label);
 		text-transform: uppercase;
+		color: var(--color-muted-on-band);
 	}
 
-	h1 {
-		margin: 0 0 0.75rem;
-		font-size: clamp(2.2rem, 5vw, 4rem);
-		line-height: 0.95;
+	.mast-meta dd {
+		margin: var(--space-2xs) 0 0;
+		font-size: var(--text-base);
 	}
 
-	.lede {
-		margin: 0 0 1rem;
-		font-size: 1.08rem;
-		line-height: 1.7;
-		color: var(--text-secondary);
-	}
-
-	.meta {
-		margin: 0.35rem 0 0;
-		color: #5f6b69;
-		font-weight: 600;
-	}
-
-	.podcast-links {
+	.subscribe {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 0.6rem;
-		margin-top: 1.25rem;
+		gap: var(--space-sm) var(--space-lg);
+		margin-top: var(--space-xl);
+		padding-top: var(--space-md);
+		border-top: var(--rule-hair) solid var(--color-rule-on-band);
 	}
 
-	.podcast-label {
+	.subscribe-label {
 		margin: 0;
-		font: 700 0.8rem/1 'Trebuchet MS', sans-serif;
-		letter-spacing: 0.14em;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--text-sm);
+		letter-spacing: var(--track-label);
 		text-transform: uppercase;
-		color: var(--brand-rust);
+		color: var(--color-muted-on-band);
 	}
 
-	.podcast-btn {
-		padding: 0.55rem 0.9rem;
-		border-radius: 999px;
-		background: var(--brand-cream);
-		color: var(--text-primary);
-		font: 700 0.88rem/1 'Trebuchet MS', sans-serif;
-		text-decoration: none;
+	.subscribe-list {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--space-sm) var(--space-lg);
+		margin: 0;
+		padding: 0;
+		list-style: none;
 	}
 
-	.content-grid {
-		max-width: 58rem;
+	.subscribe-list a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--text-base);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		text-decoration: underline;
+		text-decoration-thickness: var(--rule-hair);
+		text-underline-offset: 2px;
+		transition: text-decoration-thickness var(--dur-short) var(--ease-out),
+			text-decoration-color var(--dur-short) var(--ease-out);
 	}
 
-	.body {
-		line-height: 1.75;
+	.subscribe-list a:hover,
+	.subscribe-list a:focus-visible {
+		text-decoration-thickness: 2px;
+		text-decoration-color: var(--color-accent);
 	}
+
+	.series-figure {
+		margin: 0;
+	}
+
+	.series-figure img {
+		display: block;
+		width: 100%;
+		max-height: 44vh;
+		object-fit: contain;
+		background: var(--color-band-2);
+	}
+
+	/* ── Body ───────────────────────────────────────────────────────────── */
+
+	.series-body {
+		padding-block: var(--space-3xl) var(--space-4xl);
+	}
+
+	.body :global(p),
+	.body :global(li) {
+		max-width: var(--measure);
+		margin: 0 0 var(--space-md);
+		font-size: var(--text-md);
+		line-height: var(--leading-body);
+		color: var(--color-ink-2);
+	}
+
+	.body :global(a) {
+		color: var(--color-accent-deep);
+		text-decoration: underline;
+		text-decoration-thickness: var(--rule-hair);
+		text-underline-offset: 2px;
+	}
+
+	/* ── Message ledger ─────────────────────────────────────────────────── */
 
 	.episodes {
-		margin-top: 2rem;
+		margin-top: var(--space-3xl);
 	}
 
 	.episodes h2 {
-		margin-bottom: 1rem;
+		margin: 0 0 var(--space-lg);
+		font-size: var(--text-2xl);
+		color: var(--color-ink);
 	}
 
-	.episode-list {
-		display: grid;
-		gap: 0.85rem;
+	.episode-ledger {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		border-top: var(--rule-heavy) solid var(--color-ink);
 	}
 
 	.episode-row {
 		display: grid;
-		grid-template-columns: 84px minmax(0, 1fr) auto;
-		gap: 1rem;
-		align-items: center;
-		padding: 1rem;
-		border: 1px solid var(--border);
-		border-radius: 20px;
-		background: var(--bg-surface);
+		grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) auto;
+		gap: var(--space-sm) var(--space-xl);
+		align-items: baseline;
+		padding-block: var(--space-lg);
+		border-bottom: var(--rule-hair) solid var(--color-rule);
 	}
 
 	.episode-date {
-		color: var(--brand-rust);
-		font: 700 0.95rem/1.2 'Trebuchet MS', sans-serif;
+		margin: 0;
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: var(--text-md);
+		letter-spacing: var(--track-display);
 		text-transform: uppercase;
+		font-variant-numeric: tabular-nums;
+		color: var(--color-ink);
 	}
 
 	.episode-copy h3 {
-		margin: 0 0 0.25rem;
-		font-size: 1.08rem;
-	}
-
-	.episode-copy h3 a {
-		text-decoration: none;
-	}
-
-	.episode-copy p {
 		margin: 0;
-		color: #5f6b69;
-		font-family: 'Trebuchet MS', sans-serif;
-		font-size: 0.92rem;
+		font-size: var(--text-lg);
+		line-height: 1.06;
+		color: var(--color-ink);
 	}
 
-	.watch-link {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.8rem 0.95rem;
-		border-radius: 999px;
-		background: var(--brand-coral);
-		color: #fff8f2;
-		font: 700 0.88rem/1 'Trebuchet MS', sans-serif;
-		text-decoration: none;
-	}
-
-	.listen-link {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.8rem 0.95rem;
-		border-radius: 999px;
-		border: 1px solid rgba(47, 119, 124, 0.35);
-		background: #fff8f2;
-		color: var(--brand-teal);
-		font: 700 0.88rem/1 'Trebuchet MS', sans-serif;
-		text-decoration: none;
+	.episode-speaker {
+		margin: var(--space-2xs) 0 0;
+		font-size: var(--text-base);
+		color: var(--color-muted);
 	}
 
 	.episode-actions {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.6rem;
 		align-items: center;
+		gap: var(--space-md);
 	}
 
-	.watch-link-disabled {
-		background: rgba(78, 93, 92, 0.16);
-		color: var(--text-secondary);
+	.episode-link {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--text-base);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		color: var(--color-accent-deep);
+		text-decoration: underline;
+		text-decoration-thickness: var(--rule-hair);
+		text-underline-offset: 2px;
+		transition: text-decoration-thickness var(--dur-short) var(--ease-out);
 	}
 
-	.body :global(p),
-	.body :global(li) {
-		color: var(--text-body);
+	.episode-link:hover,
+	.episode-link:focus-visible {
+		text-decoration-thickness: 3px;
 	}
 
-	@media (max-width: 880px) {
-		.hero {
-			grid-template-columns: 1fr;
+	.episode-link:active {
+		color: var(--color-accent);
+	}
+
+	.episode-link.is-unavailable {
+		color: var(--color-muted);
+		text-decoration: none;
+		cursor: not-allowed;
+	}
+
+	@media (max-width: 60rem) {
+		.series-body {
+			padding-block: var(--space-2xl) var(--space-3xl);
 		}
 	}
 
-	@media (max-width: 620px) {
+	@media (max-width: 48rem) {
 		.episode-row {
-			grid-template-columns: 1fr;
-			align-items: start;
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--space-xs);
+		}
+
+		.series-mast {
+			padding-block: var(--space-xl) var(--space-2xl);
+		}
+
+		.series-mast h1 {
+			max-width: none;
 		}
 	}
 </style>

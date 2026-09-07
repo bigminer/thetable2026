@@ -75,7 +75,13 @@ const organizationJsonLd = {
 		<link rel="icon" href={base + '/favicon.ico'} />
 		<meta name="generator" content={Astro.generator} />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="preconnect" href="https://api.fontshare.com" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;800&display=swap"
+			rel="stylesheet"
+		/>
+		<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,600&display=swap" rel="stylesheet" />
 		<meta
 			name="description"
 			content={metaDescription}

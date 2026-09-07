@@ -1,9 +1,10 @@
 ---
 export const prerender = true;
-// Plan Your Visit. Two-part page: the permission line up top, then logistics.
-// Permission is set as a policy statement, not reassurance marketing —
-// trauma brains trust visible exits.
-
+/* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
+ * Two-part page: the permission line up top, then logistics. Permission is set as a
+ * policy statement, not reassurance marketing — trauma brains trust visible exits.
+ * Copy unchanged; the permission lines now carry display weight instead of a tinted box.
+ */
 import Layout from '../layouts/Layout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -14,117 +15,51 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 	description="What you need to know before visiting The Table for the first time."
 >
 	<article class="visit">
-		<header>
+		<header class="longform-mast band band-slate">
 			<h1>Plan Your Visit</h1>
 		</header>
 
-		<aside class="permission">
-			<p>You don't have to know what you believe before you come.</p>
-			<p>You don't have to stay if it isn't for you.</p>
-		</aside>
+		<div class="longform band band-cream">
+			<div class="longform-inner">
+				<aside class="aside-statement">
+					<p>You don&rsquo;t have to know what you believe before you come.</p>
+					<p>You don&rsquo;t have to stay if it isn&rsquo;t for you.</p>
+				</aside>
 
-		<section>
-			<h2>When</h2>
-			<p>Sundays at 5:00 pm.</p>
-		</section>
+				<section>
+					<h2>When</h2>
+					<p>Sundays at 5:00 pm.</p>
+				</section>
 
-		<section>
-			<h2>Where</h2>
-			<p>The Table meets inside First United Methodist Church of Sachse.</p>
-			<address>
-				1520 Blackburn Rd<br />
-				Sachse, TX 75048
-			</address>
-		</section>
+				<section>
+					<h2>Where</h2>
+					<p>The Table meets inside First United Methodist Church of Sachse.</p>
+					<address>
+						1520 Blackburn Rd<br />
+						Sachse, TX 75048
+					</address>
+				</section>
 
-		<section>
-			<h2>What to expect</h2>
-			<p>If you want a clearer picture before you come, our <a href={base + '/what-sundays-are-like/'}>What Sundays Are Like</a> page walks through what actually happens — parking, dress, kids, communion, and how to leave quietly if you need to.</p>
-		</section>
+				<section>
+					<h2>What to expect</h2>
+					<p>If you want a clearer picture before you come, our <a href={base + '/what-sundays-are-like/'}>What Sundays Are Like</a> page walks through what actually happens — parking, dress, kids, communion, and how to leave quietly if you need to.</p>
+				</section>
 
-		<section>
-			<h2>Questions</h2>
-			<p>If you have a question you'd rather ask before showing up, our <a href={base + '/contact-us/'}>contact page</a> has the email. We try to answer within a few days.</p>
-		</section>
+				<section>
+					<h2>Questions</h2>
+					<p>If you have a question you&rsquo;d rather ask before showing up, our <a href={base + '/contact-us/'}>contact page</a> has the email. We try to answer within a few days.</p>
+				</section>
+			</div>
+		</div>
 	</article>
 </Layout>
 
 <style>
-	.visit {
-		max-width: 44rem;
-		margin: 4rem auto 6rem;
-		padding: 0 clamp(1.25rem, 3vw, 2.5rem);
-		font-family: 'Lora', serif;
-		color: var(--text-primary, #1a1a1a);
+	.aside-statement {
+		margin-top: 0;
 	}
 
-	.visit header {
-		margin-bottom: 3rem;
-	}
-
-	.visit h1 {
-		margin: 0;
-		font-size: clamp(2rem, 4.4vw, 3.2rem);
-		font-weight: 600;
-		line-height: 1.05;
-		letter-spacing: -0.005em;
-	}
-
-	.permission {
-		margin: 0 0 4rem;
-		padding: 1.75rem 1.75rem;
-		background: rgba(139, 58, 43, 0.06);
-		border-left: 3px solid var(--brand-rust, #8b3a2b);
-	}
-
-	.permission p {
-		margin: 0 0 0.6rem;
-		font-size: 1.15rem;
-		line-height: 1.6;
-		color: var(--text-body, #333);
-	}
-
-	.permission p:last-child {
-		margin-bottom: 0;
-	}
-
-	.visit section {
-		margin-bottom: 2.5rem;
-	}
-
-	.visit h2 {
-		margin: 0 0 0.75rem;
-		font-size: 1.35rem;
-		font-weight: 600;
-		color: var(--brand-rust, #8b3a2b);
-	}
-
-	.visit p {
-		margin: 0 0 0.85rem;
-		font-size: 1.1rem;
-		line-height: 1.7;
-		color: var(--text-body, #333);
-	}
-
-	.visit p:last-child {
-		margin-bottom: 0;
-	}
-
-	.visit address {
-		font-style: normal;
-		font-size: 1.1rem;
-		line-height: 1.7;
-		color: var(--text-body, #333);
-	}
-
-	.visit a {
-		color: var(--brand-rust, #8b3a2b);
-		text-decoration: none;
-		border-bottom: 1px solid currentColor;
-		padding-bottom: 1px;
-	}
-
-	.visit a:hover {
-		opacity: 0.7;
+	.aside-statement p + p {
+		margin-top: var(--space-sm);
 	}
 </style>

@@ -18,16 +18,19 @@ const brettPhoto = resolveAsset('attachments/pages/our-story/Brett-and-Maggie-Ti
 	description="The story and people behind The Table Church."
 >
 	<article class="our-story">
-		<header>
+		<header class="longform-mast band band-slate">
 			<h1>Our Story</h1>
 		</header>
+
+		<div class="longform band band-cream">
+			<div class="longform-inner">
 
 		<button type="button" class="welcome-video" data-youtube-id={youtubeId} aria-label="Play 3-minute welcome video — Brett and members of The Table on what this community is and how they got here">
 			<img src={thumbnailUrl} alt="" loading="lazy" />
 			<span class="play-icon" aria-hidden="true">
 				<svg viewBox="0 0 80 80" width="64" height="64">
-					<circle cx="40" cy="40" r="40" fill="rgba(255, 255, 255, 0.94)" />
-					<polygon points="32,24 32,56 58,40" fill="#1a1815" />
+					<circle cx="40" cy="40" r="40" class="play-disc" />
+					<polygon points="32,24 32,56 58,40" class="play-tri" />
 				</svg>
 			</span>
 			<span class="video-label">Welcome to The Table (3 min)</span>
@@ -67,6 +70,8 @@ const brettPhoto = resolveAsset('attachments/pages/our-story/Brett-and-Maggie-Ti
 				<p>Brett and Maggie Tilford lead at The Table and live in Sachse, TX with their three kids Eve, Dax, and Oak. They have been married for 18 years and, although they have wildly different tastes in Netflix shows, they make a great team since they both love Jesus and helping others discover a more thoughtful, inclusive, and beautiful Christianity.</p>
 			</div>
 		</section>
+			</div>
+		</div>
 	</article>
 </Layout>
 
@@ -88,53 +93,43 @@ const brettPhoto = resolveAsset('attachments/pages/our-story/Brett-and-Maggie-Ti
 </script>
 
 <style>
-	.our-story {
-		max-width: 56rem;
-		margin: 4rem auto 6rem;
-		padding: 0 clamp(1.25rem, 3vw, 2.5rem);
-		font-family: 'Lora', serif;
-		color: var(--text-primary, #1a1a1a);
-	}
-
-	.our-story header {
-		margin-bottom: 3rem;
-	}
-
-	.our-story h1 {
-		margin: 0;
-		font-size: clamp(2rem, 4.4vw, 3.2rem);
-		font-weight: 600;
-		line-height: 1.05;
-		letter-spacing: -0.005em;
-	}
+	/* Hallmark · macrostructure: Long Document · design-system: design.md
+	 * Slate masthead → cream body. The click-to-play thumbnail, the draft note,
+	 * the Brett quotation and the leadership block all read from the shared
+	 * .longform rules in global.css; only the page-specific pieces live here.
+	 */
 
 	.welcome-video {
 		display: block;
 		position: relative;
 		width: 100%;
-		margin: 0 0 4rem;
+		margin: 0 0 var(--space-2xl);
 		padding: 0;
 		border: 0;
-		background: #1a1815;
+		border-radius: var(--radius);
+		background: var(--color-band-2);
 		cursor: pointer;
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
-		border-radius: 4px;
-		font-family: inherit;
+		font-family: var(--font-body);
 	}
 
 	.welcome-video img {
+		display: block;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		display: block;
-		opacity: 0.85;
-		transition: opacity 0.2s;
+		opacity: 0.88;
+		transition: opacity var(--dur-short) var(--ease-out);
 	}
 
 	.welcome-video:hover img,
 	.welcome-video:focus-visible img {
 		opacity: 1;
+	}
+
+	.welcome-video:active img {
+		opacity: 0.8;
 	}
 
 	.welcome-video .play-icon {
@@ -143,146 +138,116 @@ const brettPhoto = resolveAsset('attachments/pages/our-story/Brett-and-Maggie-Ti
 		left: 50%;
 		transform: translate(-50%, -50%);
 		pointer-events: none;
-		filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.35));
-		transition: transform 0.15s;
 	}
 
-	.welcome-video:hover .play-icon,
-	.welcome-video:focus-visible .play-icon {
-		transform: translate(-50%, -50%) scale(1.05);
+	.welcome-video .play-disc {
+		fill: var(--color-paper);
+	}
+
+	.welcome-video .play-tri {
+		fill: var(--color-band-2);
 	}
 
 	.welcome-video .video-label {
 		position: absolute;
-		left: 1.25rem;
-		bottom: 1rem;
-		padding: 0.4rem 0.85rem;
-		background: rgba(20, 24, 21, 0.7);
-		color: #fdfaf4;
-		font-size: 0.95rem;
-		border-radius: 999px;
-		backdrop-filter: blur(4px);
+		left: var(--space-md);
+		bottom: var(--space-md);
+		padding: var(--space-2xs) var(--space-sm);
+		background: var(--color-band-2);
+		color: var(--color-ink-on-band);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--text-sm);
+		letter-spacing: var(--track-label);
+		text-transform: uppercase;
 	}
 
 	:global(.welcome-video-iframe) {
 		display: block;
 		width: 100%;
 		aspect-ratio: 16 / 9;
-		margin: 0 0 4rem;
+		margin: 0 0 var(--space-2xl);
 		border: 0;
-		border-radius: 4px;
 	}
 
+	/* Editorial standfirst, not a tinted callout box. */
 	.draft-note {
-		margin: 0 0 2.5rem;
-		padding: 0.85rem 1.1rem;
-		background: rgba(139, 58, 43, 0.06);
-		border-left: 2px solid var(--brand-rust, #8b3a2b);
-		font-size: 0.95rem;
-		line-height: 1.55;
-		color: var(--text-secondary, #555);
-		font-style: italic;
+		margin: 0 0 var(--space-2xl);
+		padding-bottom: var(--space-md);
+		border-bottom: var(--rule-hair) solid var(--color-rule);
+		max-width: var(--measure);
+		font-size: var(--text-base);
+		line-height: var(--leading-body);
+		color: var(--color-muted);
 	}
 
 	.draft-note strong {
-		font-style: normal;
-		color: var(--brand-rust, #8b3a2b);
+		font-family: var(--font-display);
+		font-weight: 700;
+		letter-spacing: var(--track-label);
+		text-transform: uppercase;
+		color: var(--color-accent-deep);
 	}
 
-	.body {
-		margin-bottom: 5rem;
+	.body :global(blockquote) {
+		margin: var(--space-xl) 0;
+		padding-left: var(--space-lg);
+		border-left: var(--rule-heavy) solid var(--color-accent);
 	}
 
-	.body p {
-		margin: 0 0 1.5rem;
-		font-size: 1.1rem;
-		line-height: 1.75;
-		color: var(--text-body, #333);
+	.body :global(blockquote p) {
+		max-width: var(--measure);
+		font-size: var(--text-md);
+		line-height: var(--leading-body);
+		color: var(--color-ink);
 	}
 
-	.body p:last-child {
-		margin-bottom: 0;
-	}
-
-	.body blockquote {
-		margin: 2rem 0;
-		padding: 0.5rem 0 0.5rem 1.5rem;
-		border-left: 2px solid var(--brand-rust, #8b3a2b);
-	}
-
-	.body blockquote p {
-		font-style: italic;
-		font-size: 1.08rem;
-		line-height: 1.7;
-		color: var(--text-secondary, #555);
-		margin-bottom: 0.85rem;
-	}
-
-	.body blockquote p:last-of-type {
-		margin-bottom: 0.85rem;
-	}
-
-	.body blockquote cite {
+	.body :global(cite) {
 		display: block;
-		margin-top: 0.5rem;
+		margin-top: var(--space-sm);
 		font-style: normal;
-		font-size: 0.9rem;
-		line-height: 1.5;
-		color: var(--text-secondary, #666);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--text-sm);
+		letter-spacing: var(--track-label);
+		text-transform: uppercase;
+		color: var(--color-muted);
 	}
 
-	.body blockquote cite a {
-		color: var(--brand-rust, #8b3a2b);
-		text-decoration: none;
-		border-bottom: 1px solid currentColor;
-	}
-
-	.body blockquote cite a:hover {
-		opacity: 0.7;
-	}
+	/* ── Leadership ─────────────────────────────────────────────────────── */
 
 	.leadership {
 		display: grid;
-		grid-template-columns: minmax(200px, 0.7fr) minmax(0, 1.3fr);
-		gap: 2rem;
+		grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+		gap: var(--space-lg) var(--space-2xl);
 		align-items: start;
-		padding-top: 3rem;
-		border-top: 1px solid rgba(127, 127, 127, 0.2);
+		margin-top: var(--space-3xl);
+		padding-top: var(--space-lg);
+		border-top: var(--rule-heavy) solid var(--color-ink);
 	}
 
 	.leadership img {
-		width: 100%;
-		height: auto;
-		border-radius: 4px;
 		display: block;
+		width: 100%;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
 	}
 
 	.leadership h2 {
-		margin: 0 0 1rem;
-		font-size: 1.5rem;
-		font-weight: 600;
-		color: var(--text-primary, #1a1a1a);
+		margin: 0 0 var(--space-md);
+		padding-top: 0;
+		border-top: 0;
+		font-size: var(--text-xl);
+		color: var(--color-ink);
 	}
 
-	.leadership p {
-		margin: 0;
-		font-size: 1.05rem;
-		line-height: 1.7;
-		color: var(--text-body, #333);
-	}
-
-	@media (max-width: 700px) {
+	@media (max-width: 48rem) {
 		.leadership {
-			grid-template-columns: 1fr;
+			grid-template-columns: minmax(0, 1fr);
 		}
 
 		.leadership img {
-			max-width: 16rem;
-		}
-
-		.welcome-video .play-icon svg {
-			width: 48px;
-			height: 48px;
+			max-width: 18rem;
 		}
 	}
 </style>
