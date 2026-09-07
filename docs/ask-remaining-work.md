@@ -1,7 +1,8 @@
 # `/ask` — Remaining Work
 
-The sermon chatbot is built but unfinished. It works locally and fails in production.
-This document records what is left; the product itself is specified in
+The sermon chatbot is built but unfinished. It answers in production, but without an
+LLM behind it: composition degrades to a list of source matches. This document records
+what is left; the product itself is specified in
 [`sermon-chatbot-spec.md`](sermon-chatbot-spec.md).
 
 **Current state: deliberately hidden.** `src/pages/ask.astro` sets `noindex={true}`
@@ -30,7 +31,16 @@ below are resolved. The page is reachable by direct URL.
 
 `src/pages/api/ask.ts:37` defaults `ASK_LLM_BASE_URL` to `http://127.0.0.1:8080/v1`
 with model `Qwen3-8B-Q4_K_M.gguf` — a local llama.cpp server. Render has no such
-process, so every question returns 500.
+process.
+
+This does not error. `compose()` catches its own failure
+(`src/lib/sermon-chatbot/composition.ts:257`) and returns a fallback: *"I couldn't
+reach the local answer engine just now, so I'm giving you the closest source matches
+instead,"* followed by the best site page and sermon chunks. Verified by POSTing to a
+local build with no backend running — HTTP 200, retrieval intact, no generated answer.
+
+So the feature is degraded rather than broken: retrieval works, citations work, and the
+part that reads as a chatbot does not. That is the gap to close.
 
 The client is OpenAI-compatible, so any hosted OpenAI-compatible endpoint works by
 setting three environment variables in Render, with no code change:
@@ -86,10 +96,11 @@ is provider-swappable; retrieval is not, without a code change.
 
 ### 3. Raw error text is returned to the browser
 
-The catch block in `src/pages/api/ask.ts` returns the exception message in the response
-body. Today that publishes the internal host and port; with a hosted backend it would
-leak endpoint URLs and any request detail a provider echoes back. Log the detail
-server-side, return a generic message. Small, and independent of every other item here.
+The catch block in `src/pages/api/ask.ts` returned the exception message in the
+response body. Composition failures never reach it, but corpus, retrieval and embedding
+failures do, and their messages carry filesystem paths and provider request detail.
+
+**Fixed:** the detail is logged server-side and the response body is generic.
 
 ## Before unhiding
 
@@ -105,7 +116,7 @@ Unhiding means removing `noindex={true}` from `ask.astro` and adding the route t
 
 ## Suggested order
 
-1. Return a generic error body (independent, small, needed regardless of backend).
+1. ~~Return a generic error body.~~ Done.
 2. Choose and configure the composition backend; ship with lexical retrieval — it works
    today at no cost and with no cold-start penalty.
 3. Verify on a Render preview deploy.

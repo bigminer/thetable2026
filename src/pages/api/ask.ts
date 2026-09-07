@@ -130,9 +130,11 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("[/api/ask]", msg);
-    return new Response(JSON.stringify({ error: msg }), {
+    // Log the detail, return none of it. Composition failures are handled inside
+    // compose(); what reaches here is corpus, retrieval or embedding failure, whose
+    // messages carry filesystem paths and provider request detail.
+    console.error("[/api/ask]", err instanceof Error ? err.stack ?? err.message : String(err));
+    return new Response(JSON.stringify({ error: "Something went wrong. Please try again." }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });

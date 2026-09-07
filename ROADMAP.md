@@ -55,7 +55,7 @@ and is not planned to.
 The current work queue, taken one item at a time.
 
 1. **Rewrite `docs/editorial-workflow.md` for the direction above.**
-   Blocked on the ingestion work below — the document currently describes a human
+   Blocked on the media-ingestion work (see Known gaps) — the document describes a human
    running scripts by hand, and correcting those descriptions would only make it an
    accurate account of a workflow being replaced. Known wrong today: `make-stubs`
    writes transcript-review metadata to `data/transcripts/content/`, not message
@@ -69,32 +69,18 @@ The current work queue, taken one item at a time.
    *(Superseded scope: this began as a straight correction of the command
    descriptions.)*
 
-2. **Make weekly media ingestion actually run.**
-   This is the backbone of the direction above, and it is fenced shut in four
-   independent places: `.github/workflows/weekly-media-ingestion.yml` uses
-   `&& inputs.dry_run || 'true'`, which appears to force dry-run even when the manual
-   input is false; the workflow has read-only permissions and no commit or PR step, so
-   it could not persist anything even if it ran; `ingest-new-media.ts` refuses to write
-   unless `defaults.writeContentFiles` is explicitly `true`; and
-   `automation.config.json` is still scoped to a September–October 2025 pilot window
-   whose schedule differs from the workflow's.
-
-   Each catch was deliberate. Unfencing them is a project, not a repair — the target is
-   a video going up and a pull request appearing, with the human approving rather than
-   running anything.
-
-3. **Correct the transcript-ingestion PR instructions.**
+2. **Correct the transcript-ingestion PR instructions.**
    `.github/workflows/ingest-transcripts.yml` asks reviewers for `sermon_start_seconds`
    and `sermon_end_seconds`; the generator and corpus reader use `content_start` and
    `content_end` in `hh:mm:ss`. Check every instruction against the scripts before
    editing.
 
-4. **Reassess smoke coverage.**
+3. **Reassess smoke coverage.**
    `scripts/verify-site.mjs` passes 26 checks and now covers `/giving/`. It samples one
    series-detail route and asserts HTTP and HTML behavior, not layout. Propose only
    coverage that would catch a real regression.
 
-5. **Reconcile `design.md` with the accepted merch exceptions.**
+4. **Reconcile `design.md` with the accepted merch exceptions.**
    It says Long Document pages are typography-only and that Giving is the sole
    bordered-chip exception. Merch now intentionally uses a photographic hero and a Shop
    Now chip. Document the accepted exceptions rather than removing the approved design.
@@ -119,10 +105,15 @@ confirming against current code before work starts.
   SMTP rather than Resend, so re-verify: production needs a verified sender (e.g.
   `website@thetabletx.org`) with SPF and DKIM alongside the existing Workspace records.
   *Unverified — the audit predates the SMTP switch.*
-- **`/ask` is unfinished feature work.** Built, working locally, failing in production,
-  and deliberately hidden (`noindex` plus no nav entry) until it is finished. Needs a
-  composition backend, a precomputed embedding cache, and an error body that does not
-  leak internals. Written up in
+- **Media ingestion is unfinished feature work.** The transcript pipeline that feeds
+  `/ask` runs weekly and works. The pipeline that writes sermon entries to the site is
+  fenced shut in four deliberate places and scoped to a pilot window that closed in
+  October 2025. Wanted, not urgent. Written up in
+  [`docs/media-ingestion-remaining-work.md`](docs/media-ingestion-remaining-work.md).
+- **`/ask` is unfinished feature work.** Retrieval and citations work; there is no LLM
+  behind composition in production, so answers degrade to a list of source matches. It
+  is deliberately hidden (`noindex` plus no nav entry) until finished. Needs a
+  composition backend and a precomputed embedding cache. Written up in
   [`docs/ask-remaining-work.md`](docs/ask-remaining-work.md).
 - **Rate limiter may key every visitor to one bucket behind Render's proxy.**
   `checkRateLimit` prefers `clientAddress`, falling back to `cf-connecting-ip` /
