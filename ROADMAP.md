@@ -50,6 +50,15 @@ Three roles, no content-management system. The repository is the database.
 Podcasts stay as links. The feed is hosted on Anchor; this site does not generate one
 and is not planned to.
 
+**Preview:** a static build deploys to <https://bigminer.github.io/thetable2026/> for
+visual QA — run the *Deploy preview to GitHub Pages* workflow by hand from any branch.
+Every page route is prerendered, so the preview's markup matches production; only the
+three API endpoints are missing, meaning forms render but do not submit and `/ask`
+returns no answer. It is `Disallow: /` so it never competes with the real site in
+search. Render preview environments would give a fully functional per-PR deploy, but
+they bill per open PR and inherit production SMTP credentials — worth revisiting only
+when a preview needs working forms.
+
 ## Open: documentation and pipeline accuracy
 
 The current work queue, taken one item at a time.
