@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Describe how content on this site is edited now that the Obsidian + Vault CMS layer has been removed. There is no CMS, no admin UI, and no database. Everything is files in this repository.
+Describe how content on this site is edited. There is no CMS, no admin UI, and no database. Everything is files in this repository.
 
 ## Where Content Lives
 
