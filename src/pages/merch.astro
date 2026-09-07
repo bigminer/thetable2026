@@ -2,10 +2,10 @@
 export const prerender = true;
 /* Hallmark · macrostructure: Long Document · design-system: design.md · designed-as-app
  *
- * Photographic hero rather than the shared ContentPage figure, because the
- * wordmark sits inside the open doorway of the photograph. The source is a
- * 1200x1600 portrait; the banner crops to the torso band so both tees read at
- * size, and scales past `cover` for the zoom.
+ * Photographic hero rather than the shared ContentPage figure. The source is
+ * a 1200x1600 portrait, so the desktop hero uses a photo/slate split instead
+ * of forcing the photograph into a panoramic crop. Both people stay prominent
+ * and the headline gets its own poster-like field.
  *
  * The photo replaces the slate masthead the other pages open with, so the lede
  * gets its own slate band underneath it. Without that the page ran cream from
@@ -34,16 +34,19 @@ const steps = [
 >
 	<article class="merch">
 		<header class="merch-hero band band-deep">
-			<img
-				class="merch-hero-img"
-				src={heroImage}
-				alt="Two people in The Table t-shirts holding open the doors of the church"
-				width="1200"
-				height="1600"
-				fetchpriority="high"
-			/>
-			<div class="merch-hero-scrim" aria-hidden="true"></div>
-			<h1 class="merch-hero-title">Shop<br />the Table</h1>
+			<div class="merch-hero-media">
+				<img
+					class="merch-hero-img"
+					src={heroImage}
+					alt="Two people in The Table t-shirts holding open the doors of the church"
+					width="1200"
+					height="1600"
+					fetchpriority="high"
+				/>
+			</div>
+			<div class="merch-hero-panel">
+				<h1 class="merch-hero-title">Shop<br />the Table</h1>
+			</div>
 		</header>
 
 		<div class="merch-lede-band band band-slate">
@@ -75,52 +78,37 @@ const steps = [
 
 <style>
 	.merch-hero {
-		position: relative;
-		isolation: isolate;
-		overflow: hidden;
+		display: grid;
+		grid-template-columns: minmax(0, 3fr) minmax(18rem, 2fr);
+		width: 100%;
+		height: clamp(30rem, 42vw, 42rem);
 		padding-inline: 0;
-		aspect-ratio: 2 / 1;
-		max-height: 66vh;
+	}
+
+	.merch-hero-media {
+		min-width: 0;
+		overflow: hidden;
 	}
 
 	.merch-hero-img {
-		position: absolute;
-		inset: 0;
-		z-index: 0;
+		display: block;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		/* No transform. `cover` on a 1200x1600 portrait in a wide band already
-		   scales to the full width, so the crop is vertical only — the whole scene
-		   spans the page and just the ceiling and pavement are trimmed. A scale()
-		   here would crop the sides and cut the two of them out of frame. */
-		object-position: 50% 38%;
+		object-position: 50% 48%;
 	}
 
-	.merch-hero-scrim {
-		position: absolute;
-		inset: 0;
-		z-index: 1;
-		/* Legibility scrim, not decoration: an ellipse over the doorway only, so the
-		   wordmark holds contrast while both tees keep their colour. */
-		background: radial-gradient(
-			ellipse 30% 60% at 57% 52%,
-			var(--scrim-band) 0%,
-			var(--scrim-band-soft) 55%,
-			transparent 100%
-		);
+	.merch-hero-panel {
+		display: flex;
+		align-items: flex-end;
+		padding: var(--space-2xl) var(--page-gutter);
+		border-left: var(--rule-hair) solid var(--color-rule-on-band);
 	}
 
-	/* Sits in the open doorway between the two of them. */
 	.merch-hero-title {
-		position: absolute;
-		z-index: 2;
-		left: 57%;
-		top: 52%;
-		transform: translate(-50%, -50%);
 		margin: 0;
-		text-align: center;
-		font-size: clamp(1.75rem, 4.2vw, 3.75rem);
+		max-width: 7ch;
+		font-size: var(--text-display);
 		font-weight: 800;
 		line-height: 1.02;
 		color: var(--color-ink-on-band);
@@ -196,7 +184,18 @@ const steps = [
 
 	@media (max-width: 60rem) {
 		.merch-hero {
-			aspect-ratio: 16 / 10;
+			grid-template-columns: minmax(0, 1fr);
+			height: auto;
+		}
+
+		.merch-hero-media {
+			aspect-ratio: 4 / 3;
+		}
+
+		.merch-hero-panel {
+			padding-block: var(--space-xl);
+			border-top: var(--rule-hair) solid var(--color-rule-on-band);
+			border-left: 0;
 		}
 
 		.merch-lede-band {
@@ -205,8 +204,12 @@ const steps = [
 	}
 
 	@media (max-width: 40rem) {
-		.merch-hero {
-			aspect-ratio: 4 / 3;
+		.merch-hero-media {
+			aspect-ratio: 1 / 1;
+		}
+
+		.merch-hero-title {
+			font-size: var(--text-display-s);
 		}
 
 		.merch-lede {
