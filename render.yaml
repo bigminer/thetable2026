@@ -36,6 +36,12 @@ services:
         sync: false
       - key: CONTACT_FROM_EMAIL
         sync: false
+      - key: PUBLIC_TURNSTILE_SITEKEY
+        sync: false
+      - key: TURNSTILE_SECRET
+        sync: false
+      - key: TURNSTILE_HOSTNAMES
+        value: thetabletx.org
       # Optional analytics. GTM preferred; GA4 is the fallback when GTM is unset.
       - key: PUBLIC_GTM_ID
         sync: false

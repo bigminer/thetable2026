@@ -4,12 +4,15 @@ import ContentSidebar from '../components/ContentSidebar.astro';
 import Layout from '../layouts/Layout.astro';
 import '../styles/content-page.css';
 
+const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
+
 ---
 
 <Layout
 	title="Contact Us | The Table Church"
 	description="Get in touch with someone from The Table Church in Sachse, TX."
 >
+	{turnstileSitekey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 	<article class="content-page">
 		<header class="page-hero band band-slate">
 			<h1>Contact Us</h1>
@@ -52,6 +55,8 @@ import '../styles/content-page.css';
 						<textarea id="message" name="message" rows="5"></textarea>
 					</div>
 
+					{turnstileSitekey && <div class="cf-turnstile" data-sitekey={turnstileSitekey} data-action="contact"></div>}
+
 					<div class="form-footer">
 						<button type="submit" class="submit-btn">Submit</button>
 						<p class="form-status" aria-live="polite"></p>
@@ -69,6 +74,10 @@ const form = document.getElementById('contact-form') as HTMLFormElement;
 const status = form?.querySelector('.form-status') as HTMLParagraphElement;
 const btn = form?.querySelector('.submit-btn') as HTMLButtonElement;
 
+function resetTurnstile() {
+	(window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();
+}
+
 form?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	btn.disabled = true;
@@ -83,6 +92,7 @@ form?.addEventListener('submit', async (e) => {
 		email: (form.querySelector('[name="email"]') as HTMLInputElement).value,
 		phone: (form.querySelector('[name="phone"]') as HTMLInputElement).value,
 		message: (form.querySelector('[name="message"]') as HTMLTextAreaElement).value,
+		'cf-turnstile-response': (form.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement | null)?.value ?? '',
 	};
 
 	try {
@@ -98,12 +108,14 @@ form?.addEventListener('submit', async (e) => {
 		} else {
 			status.textContent = json.error ?? 'Something went wrong. Please try again.';
 			status.classList.add('is-error');
+			resetTurnstile();
 			btn.disabled = false;
 			btn.textContent = 'Submit';
 		}
 	} catch {
 		status.textContent = 'Something went wrong. Please try again.';
 		status.classList.add('is-error');
+		resetTurnstile();
 		btn.disabled = false;
 		btn.textContent = 'Submit';
 	}
