@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { isMailConfigured, sendMail } from '../../lib/mailer';
 import { checkRateLimit } from '../../lib/rate-limit';
+import { verifyTurnstile } from '../../lib/turnstile';
 
 function esc(s: string) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -54,6 +55,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   if (!isMailConfigured()) {
     console.error('[/api/newsletter] SMTP_USER, SMTP_PASSWORD or CONTACT_TO_EMAIL not configured');
     return json({ error: 'Form is not configured. Please call or text (469) 222-3617.' }, 500);
+  }
+
+  const verified = await verifyTurnstile({ request, clientAddress, token: body['cf-turnstile-response'], action: 'newsletter' });
+  if (!verified) {
+    return json({ error: 'Verification failed. Please try again.' }, 403);
   }
 
   const { error } = await sendMail({
