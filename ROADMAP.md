@@ -135,6 +135,12 @@ confirming against current code before work starts.
   the smoke test proves the endpoints are wired, never that mail leaves the building.
   A production health check that actually posts is the only thing that would have
   caught it, and is worth building before cutover.
+- **Turnstile hostname must track the serving host.** `TURNSTILE_HOSTNAMES` is a literal
+  value in `render.yaml`, and `verifyTurnstile` rejects any hostname not listed. It was
+  set to `thetabletx.org` while production serves from `thetabletx.onrender.com`, so
+  every submission returned HTTP 403 until both hosts were listed. **At cutover, drop
+  the onrender host** — and remember that adding a new serving host means adding it
+  here too.
 - **Mail authentication — mostly resolved 2026-09-07.** The audit called for "a verified
   sender with SPF and DKIM" without checking which were missing. Measured:
 

@@ -32,8 +32,13 @@ Two probes per endpoint, neither of which sends mail:
 - malformed JSON → expects **400**, rejected at parse
 - `{ "hp_name": "bot" }` → expects **200**, the honeypot returns early
 
+As of 2026-09-08 a Cloudflare Turnstile check also sits in front of both handlers, and
+neither probe reaches it — malformed JSON is rejected at parse, and the honeypot returns
+before verification. So these checks no longer prove a real submission would succeed,
+only that the route is reachable.
+
 This proves the routes exist and their handlers run. **It cannot prove SMTP is
-configured.** Reaching `isMailConfigured()` requires a valid submission, which would
+configured, and it cannot prove Turnstile accepts a real submission.** Reaching `isMailConfigured()` requires a valid submission, which would
 send real email to the church, so that check belongs to a production health check rather
 than CI. A misconfigured mailer still ships green.
 
