@@ -7,7 +7,7 @@ export const prerender = true;
  */
 import { getCollection } from 'astro:content';
 import { fallbackSlug, resolveAsset, safeGetCollection } from '../../lib/content';
-import { getMessagesForSeries, sortSeriesEntries } from '../../lib/podcast';
+import { formatSeriesRange, getMessagesForSeries, sortSeriesEntries } from '../../lib/podcast';
 import Layout from '../../layouts/Layout.astro';
 import { site } from '../../config/site';
 
@@ -44,6 +44,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 				{entries.map((entry, index) => {
 					const seriesSlug = fallbackSlug(entry.data.slug, entry.id);
 					const messageCount = getMessagesForSeries(messages, seriesSlug).length;
+					const range = formatSeriesRange(messages, seriesSlug);
 					const href = `${base}/series/${seriesSlug}/`;
 
 					return (
@@ -60,6 +61,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 								<p class="series-desc">{entry.data.description}</p>
 								{messageCount > 0 && (
 									<p class="series-count">
+										{range && <span class="series-range">{range}</span>}
 										{messageCount} message{messageCount === 1 ? '' : 's'}
 									</p>
 								)}
@@ -236,6 +238,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		text-transform: uppercase;
 		font-variant-numeric: tabular-nums;
 		color: var(--color-muted);
+	}
+
+	/* The span reads first because it is what makes the newest-first order
+	   legible; the count follows it behind a hairline divider. */
+	.series-range::after {
+		content: '';
+		display: inline-block;
+		width: var(--rule-hair);
+		height: 0.75em;
+		margin: 0 var(--space-xs);
+		vertical-align: -0.05em;
+		background: var(--color-rule);
 	}
 
 	.empty-state {

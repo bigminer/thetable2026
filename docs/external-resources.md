@@ -87,9 +87,14 @@ and should not try to.
 
 ## Podcast — Anchor / Spotify
 
-The feed is hosted on Anchor and syndicated to Spotify, Apple and Google. **This site
-does not generate a podcast feed and is not planned to** — it links out only. Links live
-in `src/config/site.ts`. Ignore any older document implying a feed route exists.
+The feed originated on Anchor, which Spotify absorbed. **This site does not generate a
+podcast feed and is not planned to** — it links out only, to Spotify and Apple Podcasts.
+Links live in `src/config/site.ts`. Ignore any older document implying a feed route
+exists.
+
+Two links were removed on 2026-09-08. Google Podcasts shut down and its URL now lands on
+a YouTube Music notice. Anchor FM is the same service as the Spotify link, since
+anchor.fm redirects into Spotify for Podcasters.
 
 ## Merch — Printful
 
