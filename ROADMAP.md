@@ -120,10 +120,30 @@ confirming against current code before work starts.
   Before cutover, exercise both forms end to end against the deployed instance and
   confirm delivery — either by hand, or with a production health check posting to a
   throwaway `CONTACT_TO_EMAIL`. See [`docs/smoke-coverage.md`](docs/smoke-coverage.md).
-- **Mail needs a verified sending domain.** Delivery now goes through Google Workspace
-  SMTP rather than Resend, so re-verify: production needs a verified sender (e.g.
-  `website@thetabletx.org`) with SPF and DKIM alongside the existing Workspace records.
-  *Unverified — the audit predates the SMTP switch.*
+- **Mail authentication — mostly resolved 2026-09-07.** The audit called for "a verified
+  sender with SPF and DKIM" without checking which were missing. Measured:
+
+  | | `thetabletx.org` | `thetabletx.com` |
+  |---|---|---|
+  | SPF | already correct — `v=spf1 include:_spf.google.com ~all` | none |
+  | DKIM | **published and signing** — 2048-bit at the `google` selector | none |
+  | DMARC | pending | none |
+  | MX | Google | Google |
+
+  SPF was never the gap. DKIM was: nothing existed at any standard selector, so mail
+  had one of three authentication pillars. A key was generated in the Workspace admin
+  console, published in GoDaddy, verified as a complete 410-character record across two
+  DNS chunks, and authentication was started.
+
+  Remaining: a DMARC record at `_dmarc.thetabletx.org`, starting permissive
+  (`v=DMARC1; p=none; rua=...`) and tightened once reports read clean. `thetabletx.com`
+  has no SPF, DKIM or DMARC — worth adding before cutover, since it will redirect but
+  may still be spoofed.
+
+  Delivery itself is still unproven; see the form-delivery item above. Confirming it
+  means reading `Authentication-Results` on a real submission at `info@thetabletx.org`,
+  which neither agent can do — this session has no church mailbox and `table-bot` has no
+  Gmail scope.
 - **Media ingestion is unfinished feature work.** The transcript pipeline that feeds
   `/ask` runs weekly and works. The pipeline that writes sermon entries to the site is
   fenced shut in four deliberate places and scoped to a pilot window that closed in

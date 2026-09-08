@@ -94,9 +94,14 @@ source of truth. It holds **no** authenticated access to church systems and shou
 acquire any.
 
 **Operations agent — `table-bot`** — a Hermes agent on the Linux host `bob1-1`. Holds
-the authenticated integrations: Google Workspace and Drive, Planning Center, and
-whatever else lives in its profile. Reads external systems on request and returns
-results or stages files.
+the authenticated integrations. Reads external systems on request and returns results
+or stages files.
+
+Its access is narrower than the profile suggests. Asked directly on 2026-09-07 it
+reported: authenticated as `gary@thetabletx.org`, **Drive scope only — no Gmail scope
+and no Workspace administrator access**. So it cannot read mailboxes, cannot inspect
+message headers, and cannot see the admin console. Confirm what it can actually reach
+before assuming; asking it is cheap and it answers honestly about gaps.
 
 **The maintainer approves.** Pull request review is the gate for everything.
 
@@ -149,6 +154,10 @@ copied into project-owned tracked assets, never hotlinked.**
 
 So when Workspace content is needed and a search comes back empty, ask `table-bot`
 rather than concluding the material does not exist.
+
+The reverse also holds. Mailbox contents and message headers are readable by **neither**
+agent — this session lacks the church account, `table-bot` lacks Gmail scope. Anything
+requiring a mailbox is the maintainer's to check.
 
 ## What an agent session may do
 
