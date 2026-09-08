@@ -83,6 +83,82 @@ hands off with a single chip. No inventory, orders or fulfilment touch this site
 
 ---
 
+## Agents and roles
+
+Two agents work on this project, with different access and different jobs. The split
+was agreed 2026-09-07.
+
+**Development agent** — a Claude Code session on the maintainer's workstation. Owns the
+repository: reads, edits, builds, tests, commits, opens pull requests. GitHub is its
+source of truth. It holds **no** authenticated access to church systems and should not
+acquire any.
+
+**Operations agent — `table-bot`** — a Hermes agent on the Linux host `bob1-1`. Holds
+the authenticated integrations. Reads external systems on request and returns results
+or stages files.
+
+Its access is narrower than the profile suggests. Asked directly on 2026-09-07 it
+reported: authenticated as `gary@thetabletx.org`, **Drive scope only — no Gmail scope
+and no Workspace administrator access**. So it cannot read mailboxes, cannot inspect
+message headers, and cannot see the admin console. Confirm what it can actually reach
+before assuming; asking it is cheap and it answers honestly about gaps.
+
+**The maintainer approves.** Pull request review is the gate for everything.
+
+### Invariants
+
+1. **No shared working tree.** Each agent works in its own checkout. Conflicts come from
+   two agents editing the same files, not from two agents contributing to one repo.
+2. **Nobody pushes directly to `main` or `release`.** Every change arrives as a pull
+   request.
+3. **Human approval is the control.** Which actor clicks merge is mechanical.
+
+Both agents may author pull requests. A backlog card (`t_805813f3` on the `the-table`
+board) covers the intended end state, where staff request content changes through
+GroupMe and `table-bot` opens the pull request.
+
+### Reaching table-bot
+
+Over SSH, using the Tailscale FQDN — `known_hosts` trusts that name, not the short one:
+
+```bash
+ssh bigminer@bob1-1.tail55ce6a.ts.net
+export HERMES_HOME=/home/bigminer/.hermes/profiles/table-bot
+HERMES=/home/bigminer/.hermes/hermes-agent/venv/bin/hermes
+
+$HERMES -z "..." --safe-mode   # one-shot request, text only
+$HERMES kanban list            # the-table board
+$HERMES kanban show <task_id>
+$HERMES sessions list
+```
+
+An MCP server named `table-hermes` is configured for the same host, but it exposes
+**only the messaging bridge** — Telegram, Discord, Slack and so on. `conversations_list`
+and `channels_list` return zero because no messaging platform is connected to this
+profile; the project history lives in `desktop` and `kanban` sessions, which that bridge
+does not surface. **There is no Kanban tool over MCP** — board access is CLI-only.
+
+On Windows, prefix SSH commands with `MSYS_NO_PATHCONV=1`, or Git Bash rewrites
+`HERMES_HOME=/home/...` into a `C:/Program Files/Git/...` path.
+
+### table-bot sees Workspace content this session cannot
+
+Its profile holds its own Google credentials, authorized against the church account. It
+knows of a Drive folder — **"The Table Photo Gallery 8-2026"**, favouring the
+**"\*Favorites\* Edited"** subfolder — that returns nothing when searched through the
+connectors described above, because those are bound to the maintainer's personal
+account.
+
+Its standing rule for that folder, which this project keeps: **selected photos are
+copied into project-owned tracked assets, never hotlinked.**
+
+So when Workspace content is needed and a search comes back empty, ask `table-bot`
+rather than concluding the material does not exist.
+
+The reverse also holds. Mailbox contents and message headers are readable by **neither**
+agent — this session lacks the church account, `table-bot` lacks Gmail scope. Anything
+requiring a mailbox is the maintainer's to check.
+
 ## What an agent session may do
 
 - **Read** Drive and Gmail to find assets or answer a question about church material.
