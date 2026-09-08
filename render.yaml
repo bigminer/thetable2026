@@ -40,8 +40,13 @@ services:
         sync: false
       - key: TURNSTILE_SECRET
         sync: false
+      # Turnstile reports the hostname the widget rendered on, and verification
+      # rejects anything not listed here. The site is served from
+      # thetabletx.onrender.com until the domain cutover, so both must be
+      # allowed or every submission fails with 403. Drop the onrender host once
+      # thetabletx.org serves production.
       - key: TURNSTILE_HOSTNAMES
-        value: thetabletx.org
+        value: thetabletx.org,thetabletx.onrender.com
       # Optional analytics. GTM preferred; GA4 is the fallback when GTM is unset.
       - key: PUBLIC_GTM_ID
         sync: false
