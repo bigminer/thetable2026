@@ -79,6 +79,9 @@ const seriesArt = entry.data.featuredImage ? resolveAsset(entry.data.featuredIma
 								<div class="episode-copy">
 									<h3>{message.data.title}</h3>
 									{message.data.speaker && <p class="episode-speaker">{message.data.speaker}</p>}
+									{message.data.description && (
+										<p class="episode-desc">{message.data.description}</p>
+									)}
 								</div>
 								<div class="episode-actions">
 									{message.data.sourceUrl ? (
@@ -276,6 +279,16 @@ const seriesArt = entry.data.featuredImage ? resolveAsset(entry.data.featuredIma
 		margin: var(--space-2xs) 0 0;
 		font-size: var(--text-base);
 		color: var(--color-muted);
+	}
+
+	/* Summary sits under the title at a narrower measure than the row, so the
+	   ledger keeps its date-left rhythm instead of reading as a wall of prose. */
+	.episode-desc {
+		margin: var(--space-xs) 0 0;
+		max-width: 54ch;
+		font-size: var(--text-base);
+		line-height: 1.5;
+		color: var(--color-ink-2);
 	}
 
 	.episode-actions {

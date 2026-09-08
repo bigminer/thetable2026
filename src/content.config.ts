@@ -49,6 +49,7 @@ const messages = defineCollection({
 	schema: z
 		.object({
 			title: z.string(),
+			description: z.string().optional(),
 			series: optionalSeriesReference,
 			date: z.coerce.date(),
 			speaker: z.string().optional(),
