@@ -36,7 +36,7 @@ src/styles/             tokens.css (design tokens), global.css, content-page.css
 public/                 Static files served as-is
 scripts/                Node/tsx tooling: transcript ingest, media automation, server start, smoke test
 data/transcripts/       Sermon transcripts (VTT + generated markdown) used by /ask
-docs/                   Reference docs
+docs/                   Reference docs, including external-resources.md
 ```
 
 ## Content Model
@@ -86,6 +86,11 @@ A green build only proves the site compiles. After content, route, or layout cha
 Render, using `render.yaml`: `npm ci && npm run build`, then `HOST=0.0.0.0 npm start`. Secrets (SMTP, LLM keys, analytics IDs) are set in the Render dashboard, not committed. Render is the only deployment target.
 
 ## External Dependencies
+
+The church's own material also lives outside this repository — Google Workspace, the
+YouTube channel, Church Center. What is where, which account the connectors can
+actually reach, and what a session may do with it is in
+[`docs/external-resources.md`](docs/external-resources.md).
 
 These destinations are intentionally external. Do not convert them into broken local routes:
 
