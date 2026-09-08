@@ -24,14 +24,6 @@ export const site = {
 		{
 			"label": "Apple Podcasts",
 			"url": "https://podcasts.apple.com/us/podcast/the-table-tx/id1489269613"
-		},
-		{
-			"label": "Anchor FM",
-			"url": "https://anchor.fm/thetabletx/"
-		},
-		{
-			"label": "Google Podcasts",
-			"url": "https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy8xMDY3YzI0OC9wb2RjYXN0L3Jzcw"
 		}
 	],
 	"socialLinks": [
