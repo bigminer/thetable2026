@@ -31,3 +31,7 @@ public/attachments/scrapbook/
 
 # Raw transcript downloads (pipeline input; generated markdown in content/ is tracked)
 data/transcripts/raw/
+
+# Hermes agent working state. table-bot recreates this in any checkout it
+# operates in, and it holds session transcripts. This repository is public.
+.hermes/
