@@ -36,8 +36,23 @@ uses).
 ### Mail
 
 Contact and newsletter form delivery goes out through Google Workspace SMTP as
-`webadmin.agent@thetabletx.org`, authenticating with an App Password. Credentials are
-set in the Render dashboard, never committed. See `src/lib/mailer.ts`.
+`webadmin.agent@thetabletx.org`, authenticating with an App Password, and arrives at
+**`gary@thetabletx.org`**. Credentials are set in the Render dashboard, never
+committed. See `src/lib/mailer.ts`.
+
+Do not infer the destination from `.env.example`, which shows `info@thetabletx.org`.
+The live `CONTACT_TO_EMAIL` is a `sync: false` Render secret and differs; the real value
+was only visible in a delivered message.
+
+The sending account needs 2-Step Verification enabled before an App Password can exist
+at all — without one, Google rejects basic SMTP auth and every submission returns HTTP
+500. Note also that changing that account's password invalidates its App Passwords, so a
+password reset silently breaks form delivery until `SMTP_PASSWORD` is reissued in
+Render.
+
+Authentication as of 2026-09-07: SPF, DKIM and DMARC are all published for
+`thetabletx.org`; delivered mail shows `SPF: PASS` and `DKIM: PASS`. `thetabletx.com`
+has none of the three.
 
 ### Connector access
 
