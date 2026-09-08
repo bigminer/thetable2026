@@ -89,10 +89,9 @@ The current work queue, taken one item at a time.
    `content_end` in `hh:mm:ss`. Check every instruction against the scripts before
    editing.
 
-3. **Reassess smoke coverage.**
-   `scripts/verify-site.mjs` passes 26 checks and now covers `/giving/`. It samples one
-   series-detail route and asserts HTTP and HTML behavior, not layout. Propose only
-   coverage that would catch a real regression.
+3. ~~**Reassess smoke coverage.**~~ Done. Form-endpoint wiring and internal-link
+   integrity added; what is covered, what is deliberately not, and the known weaknesses
+   are recorded in [`docs/smoke-coverage.md`](docs/smoke-coverage.md).
 
 4. **Reconcile `design.md` with the accepted merch exceptions.**
    It says Long Document pages are typography-only and that Giving is the sole
@@ -115,6 +114,12 @@ confirming against current code before work starts.
 - **No legacy URL redirect map.** Nothing translates old WordPress permalinks (dated
   sermon URLs, `/?p=`, category and tag archives, `/wp-content/uploads/*`) to new
   routes. Inbound links and search rankings drop at cutover.
+- **Forms are not proven to actually send.** The smoke test confirms
+  `/api/contact` and `/api/newsletter` are wired, but cannot reach the
+  `isMailConfigured()` check without a valid submission that would send real email.
+  Before cutover, exercise both forms end to end against the deployed instance and
+  confirm delivery — either by hand, or with a production health check posting to a
+  throwaway `CONTACT_TO_EMAIL`. See [`docs/smoke-coverage.md`](docs/smoke-coverage.md).
 - **Mail needs a verified sending domain.** Delivery now goes through Google Workspace
   SMTP rather than Resend, so re-verify: production needs a verified sender (e.g.
   `website@thetabletx.org`) with SPF and DKIM alongside the existing Workspace records.
