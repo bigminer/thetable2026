@@ -5,6 +5,7 @@
 import "dotenv/config";
 import type { APIRoute } from "astro";
 import OpenAI from "openai";
+import { checkRateLimit } from "../../lib/rate-limit.ts";
 import { compose } from "../../lib/sermon-chatbot/composition.ts";
 import { getOrLoadCorpus, getOrLoadRawCorpus } from "../../lib/sermon-chatbot/corpus.ts";
 import {
@@ -44,7 +45,7 @@ function asksForSermonContext(query: string): boolean {
   );
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
   const openaiKey = process.env.OPENAI_API_KEY;
 
   let body: { query?: unknown };
@@ -62,6 +63,24 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ error: "Missing or empty 'query'" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  if (query.length > 2000) {
+    return new Response(JSON.stringify({ error: "Query is too long." }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  const rateLimit = checkRateLimit({ request, clientAddress, key: "ask" });
+  if (!rateLimit.ok) {
+    return new Response(JSON.stringify({ error: rateLimit.error }), {
+      status: rateLimit.status,
+      headers: {
+        "Content-Type": "application/json",
+        "Retry-After": String(rateLimit.retryAfterSeconds),
+      },
     });
   }
 
