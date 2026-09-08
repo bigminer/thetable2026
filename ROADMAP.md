@@ -114,12 +114,27 @@ confirming against current code before work starts.
 - **No legacy URL redirect map.** Nothing translates old WordPress permalinks (dated
   sermon URLs, `/?p=`, category and tag archives, `/wp-content/uploads/*`) to new
   routes. Inbound links and search rankings drop at cutover.
-- **Forms are not proven to actually send.** The smoke test confirms
-  `/api/contact` and `/api/newsletter` are wired, but cannot reach the
-  `isMailConfigured()` check without a valid submission that would send real email.
-  Before cutover, exercise both forms end to end against the deployed instance and
-  confirm delivery — either by hand, or with a production health check posting to a
-  throwaway `CONTACT_TO_EMAIL`. See [`docs/smoke-coverage.md`](docs/smoke-coverage.md).
+- **Forms deliver — fixed 2026-09-07. They had never worked.**
+
+  Recorded here because the cause was not what any prior document predicted. The forms
+  were not merely *unproven*; every submission returned HTTP 500 and a phone number.
+  `SMTP_USER` and `SMTP_PASSWORD` are declared `sync: false` in `render.yaml`, so the
+  Blueprint created the slots and a human was expected to fill them. Nobody had.
+  `SMTP_HOST` and `SMTP_PORT` were present only because they carry literal values in the
+  YAML, which made the configuration look complete.
+
+  The account also had to be usable: `webadmin.agent@thetabletx.org` had never been
+  signed into, so it had no 2-Step Verification and therefore no App Password to give.
+  Google rejects basic SMTP auth without one.
+
+  Verified end to end on 2026-09-07: `POST /api/contact` and `POST /api/newsletter` both
+  return `{"ok":true}`, and the message arrives in one second.
+
+  **Nothing caught this.** 45 unit tests, a clean build and 62 smoke checks all passed
+  throughout, exactly as [`docs/smoke-coverage.md`](docs/smoke-coverage.md) predicted:
+  the smoke test proves the endpoints are wired, never that mail leaves the building.
+  A production health check that actually posts is the only thing that would have
+  caught it, and is worth building before cutover.
 - **Mail authentication — mostly resolved 2026-09-07.** The audit called for "a verified
   sender with SPF and DKIM" without checking which were missing. Measured:
 
@@ -135,15 +150,19 @@ confirming against current code before work starts.
   console, published in GoDaddy, verified as a complete 410-character record across two
   DNS chunks, and authentication was started.
 
-  Remaining: a DMARC record at `_dmarc.thetabletx.org`, starting permissive
-  (`v=DMARC1; p=none; rua=...`) and tightened once reports read clean. `thetabletx.com`
-  has no SPF, DKIM or DMARC — worth adding before cutover, since it will redirect but
-  may still be spoofed.
+  DMARC was published the same evening at `_dmarc.thetabletx.org` as
+  `v=DMARC1; p=none; rua=mailto:gary@thetabletx.org`, and resolves on both Google and
+  Cloudflare. It is deliberately permissive — `p=none` reports without blocking. Tighten
+  to `quarantine` once aggregate reports read clean.
 
-  Delivery itself is still unproven; see the form-delivery item above. Confirming it
-  means reading `Authentication-Results` on a real submission at `info@thetabletx.org`,
-  which neither agent can do — this session has no church mailbox and `table-bot` has no
-  Gmail scope.
+  Confirmed by header inspection on a delivered message: **`SPF: PASS`** (IP
+  209.85.220.65) and **`DKIM: PASS`** with domain `thetabletx.org`. DMARC read `FAIL`
+  before the record existed, which is what a missing policy looks like rather than a
+  misconfiguration; alignment was already correct, since the `From:` domain and the DKIM
+  signing domain both match.
+
+  Still open: `thetabletx.com` has no SPF, DKIM or DMARC. Worth adding before cutover —
+  it will only redirect, but an unprotected domain can still be spoofed.
 - **Media ingestion is unfinished feature work.** The transcript pipeline that feeds
   `/ask` runs weekly and works. The pipeline that writes sermon entries to the site is
   fenced shut in four deliberate places and scoped to a pilot window that closed in

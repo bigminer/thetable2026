@@ -55,7 +55,7 @@ passing.
 | Header and nav actually rendered | Asserting specific markup is brittle against ordinary design edits. The GitHub Pages preview covers this visually |
 | Visual and layout correctness | Out of scope by design — this is what the preview at <https://bigminer.github.io/thetable2026/> is for |
 | `/api/ask` POST | The feature is hidden and unfinished. See [`ask-remaining-work.md`](ask-remaining-work.md) |
-| SMTP actually configured | Cannot be tested without sending real email. Needs a production health check |
+| SMTP actually configured | Cannot be tested without sending real email. Needs a production health check — **and this gap bit: on 2026-09-07 both forms were found returning HTTP 500 to every visitor while all 62 checks passed. `SMTP_USER` and `SMTP_PASSWORD` had never been set.** |
 | Sitemap contents — right routes, right host | Worth adding at domain cutover, when the host matters. Not before |
 | Canonical 301 (`thetabletx.com` → `.org`) | Requires Host-header spoofing against the built server. `canonicalRedirect` is already unit-tested directly |
 | Every series detail page | Cost grows with the archive for little added signal. One sample catches template breakage |
