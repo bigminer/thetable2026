@@ -1,6 +1,6 @@
 # Design — The Table Church
 
-A locked design system for thetabletx.org. Every page redesign reads this file before
+The design system for thetabletx.org. Every page redesign reads this file before
 emitting code. Do not regenerate per page — extend or amend this file when the system
 needs to grow.
 
@@ -8,6 +8,25 @@ The system is derived from The Table's own printed and social graphics — the w
 logo mark, the cream/slate event posters, the Instagram declaration posters, and the
 values tee. It is a **print-poster system**, not a web-app system. Cards, pills, drop
 shadows, and rounded corners are foreign to it.
+
+## How to use this file
+
+**The site wins.** Where a built page differs from what is written here, the page is
+correct and this file is out of date — amend the file. Never remove or alter working
+content to make a page conform, and never refuse a direction because it is not
+described here. Design decisions are the maintainer's; this file records them so they
+do not have to be re-made from scratch each time.
+
+Two parts of this document behave differently:
+
+- **The style is binding, including in undocumented territory.** The palette tokens,
+  the two typefaces, the accent budget, the hairline rules, and the absence of cards,
+  pills, drop shadows and rounded corners apply to anything built for this site,
+  whether or not that kind of page is described below. New territory is not a licence
+  to reach for web-app defaults.
+- **The macrostructure families are descriptive.** They catalogue the page shapes that
+  exist today. Building something that does not fit one is expected — add the new
+  family and say what it is for. A page is never wrong for failing to match a family.
 
 ## Genre
 
@@ -25,11 +44,11 @@ editorial
   shape would have meant rewriting copy the church asked to keep. They ship as Long
   Document instead.
 
-- **Long Document pages** — every prose route: `/new-here/`, `/our-story/`,
-  `/our-vision/`, `/leadership/`, `/service-times-locations/`, `/kids-youth/`,
-  `/meetups/`, `/get-involved/`, `/community-meal/`, `/merch/`,
-  `/plan-your-visit/`, `/what-sundays-are-like/`, `/contact-us/`,
-  `/sign-up-for-our-newsletter/`, `/privacy-policy/`, `/404/`.
+- **Long Document pages** — every prose route that is not a Storefront or a Roster.
+  Currently `/new-here/`, `/our-story/`, `/our-vision/`,
+  `/service-times-locations/`, `/kids-youth/`, `/meetups/`, `/get-involved/`,
+  `/community-meal/`, `/welcome-to-the-table-class/`, `/what-sundays-are-like/`,
+  `/contact-us/`, `/sign-up-for-our-newsletter/`, `/privacy-policy/`, `/404/`.
   Slate masthead band → optional full-bleed figure → cream body. Continuous prose at
   one measure, hairline-ruled section heads, no cards. Varies on: whether a sidebar
   or a photo column is present.
@@ -42,6 +61,20 @@ editorial
   The row pattern from the church's own "Upcoming Events" graphic: a fixed key
   column on the left, a hairline rule per row, the label on the right. On the index
   the key is the series artwork; on a series page it is the message date.
+
+- **Storefront pages** — `/merch/`, and `/giving/` in spirit.
+  A page that exists to complete a transaction rather than to be read. Photographic
+  hero across the page → slate lede band stating the offer → cream body with the
+  practical steps → a single bordered chip (C1) carrying the action out to the
+  external store or form. Leads with the image because the product is the argument.
+  The chip is permitted here for the same reason it is on Giving: a transaction is
+  not a reading action.
+
+- **Roster pages** — `/leadership/`.
+  A repeating list of people: portrait, name, role, pronouns. Structurally a Ledger
+  whose key column is a face, so it keeps the hairline-per-row rhythm and the fixed
+  key measure. `.staff-card` is a row, not a card in the web-app sense — no border,
+  no shadow, no rounded corner.
 
 ## Theme
 
@@ -154,8 +187,9 @@ prevents the ground from following the palette.
 - **Primary**: C3 typographic link — the verb, an arrow, and a rule that thickens and
   turns accent on hover. No box, no fill, no pill.
 - **Secondary**: the same, at body size and muted colour.
-- **Giving** is the one exception: it may take a bordered chip (C1) because it is a
-  transaction, not a reading action. Border, not fill.
+- **Transactions** may take a bordered chip (C1) — giving, buying, anything that hands
+  the visitor off to complete something rather than to read on. Border, not fill. This
+  is why Giving and the Storefront pages carry one and prose links do not.
 
 ## Forms
 
@@ -248,7 +282,14 @@ must stay `:global()` or it silently loses its height.
 
 - Manifesto pages MAY use a full-bleed video or photograph as a hero ground, always
   behind a slate scrim at ≥ 0.55 alpha so display type clears contrast.
-- Long Document pages: typography only. No enrichment.
+- Long Document pages MAY carry photography that is part of the content — a figure in
+  the prose, a map, a video poster, an optional full-bleed figure under the masthead.
+  What they do not take is decorative enrichment: no ornament, no texture, no imagery
+  that is not itself information.
+- Storefront pages lead with a photograph. That image is the offer, so it is not
+  subject to the scrim rule that governs display type over Manifesto heroes; keep type
+  off it, or scrim only the panel the type sits in.
+- Roster pages: portraits at native colour, hairline rules between rows, nothing else.
 - Ledger pages: hairline rules only. No enrichment.
 
 ## What pages MUST share
