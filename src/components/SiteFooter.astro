@@ -10,6 +10,7 @@ const footerAddressLines = site.addressLines;
 const footerServiceTime = site.serviceTime;
 const footerSocialLinks = site.socialLinks;
 const footerCopyrightYear = new Date().getFullYear();
+const buildVersion = import.meta.env.PUBLIC_BUILD_VERSION;
 ---
 
 <footer class="site-footer band band-deep" aria-labelledby="site-footer-statement">
@@ -44,7 +45,10 @@ const footerCopyrightYear = new Date().getFullYear();
 
 	<div class="footer-meta">
 		<span class="footer-logo" role="img" aria-label={siteName} style={`--footer-logo-src: url('${brandLogoSrc}')`}></span>
-		<p>Copyright {footerCopyrightYear} {siteName}</p>
+		<div class="footer-credit">
+			<p>Copyright {footerCopyrightYear} {siteName}</p>
+			{buildVersion && <p class="footer-version">Version {buildVersion}</p>}
+		</div>
 		<a href={privacyHref}>Privacy</a>
 	</div>
 </footer>
@@ -66,5 +70,19 @@ const footerCopyrightYear = new Date().getFullYear();
 		mask-repeat: no-repeat;
 		-webkit-mask-position: left center;
 		mask-position: left center;
+	}
+
+	.footer-credit {
+		display: grid;
+		gap: var(--space-3xs);
+	}
+
+	.footer-credit p {
+		margin: 0;
+	}
+
+	.footer-version {
+		color: var(--color-muted-on-band);
+		font-size: var(--text-xs);
 	}
 </style>

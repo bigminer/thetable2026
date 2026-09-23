@@ -1,29 +1,28 @@
 name: Deploy preview to GitHub Pages
 
-# Visual QA only: a static build at https://bigminer.github.io/thetable2026/ so
-# content changes can be looked at before they merge. Production is Render.
-#
-# Run it by hand from any branch (Actions → this workflow → Run workflow) to
-# preview that branch; main redeploys on push. There is one Pages site, so the
-# most recent run wins.
+# Publish the one active content PR to the shared Pages URL for review.
+# Render remains production hosting and deploys from release, not main.
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+    inputs:
+      pr_number:
+        description: Open pull request number for this preview
+        required: true
+        type: number
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  queue: max
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      preview_head_sha: ${{ steps.verify.outputs.head_sha }}
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@v4
 
@@ -34,11 +33,42 @@ jobs:
 
       - run: npm ci
 
+      - id: verify
+        name: Verify the selected PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
+            echo "pr_number must be a positive integer" >&2
+            exit 1
+          fi
+          if [[ "$GITHUB_REF_NAME" == "main" ]]; then
+            echo "Select the active PR branch, not main" >&2
+            exit 1
+          fi
+
+          pr=$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}")
+          jq -e --arg branch "$GITHUB_REF_NAME" --arg repository "$GITHUB_REPOSITORY" --arg sha "$GITHUB_SHA" \
+            '.state == "open" and .base.ref == "main" and .head.ref == $branch and .head.repo.full_name == $repository and .head.sha == $sha' \
+            <<<"$pr" >/dev/null
+
+          echo "head_sha=$(jq -r '.head.sha' <<<"$pr")" >> "$GITHUB_OUTPUT"
+
+          open_prs=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --limit 2 --json number)
+          jq -e --argjson number "$PR_NUMBER" \
+            'length == 1 and .[0].number == $number' <<<"$open_prs" >/dev/null
+
+      - name: Set preview version
+        env:
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: echo "PUBLIC_BUILD_VERSION=$(date -u +%Y.%m.%d).pr-${PR_NUMBER}" >> "$GITHUB_ENV"
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # A static build cannot serve these. Forms still render; they just do not
-      # submit, and /ask returns no answer.
+      # GitHub Pages is static; server-backed APIs and forms do not work here.
       - name: Remove server-only routes
         run: rm -rf src/pages/api
 
@@ -52,9 +82,25 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      pull-requests: read
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Verify the PR still matches this preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          PREVIEW_HEAD_SHA: ${{ needs.build.outputs.preview_head_sha }}
+        run: |
+          set -euo pipefail
+          pr=$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}")
+          jq -e --arg branch "$GITHUB_REF_NAME" --arg repository "$GITHUB_REPOSITORY" --arg sha "$PREVIEW_HEAD_SHA" \
+            '.state == "open" and .base.ref == "main" and .head.ref == $branch and .head.repo.full_name == $repository and .head.sha == $sha' \
+            <<<"$pr" >/dev/null
+
       - id: deployment
         uses: actions/deploy-pages@v4
