@@ -1,16 +1,15 @@
 name: Deploy preview to GitHub Pages
 
-# Visual QA only: a static build at https://bigminer.github.io/thetable2026/ so
-# content changes can be looked at before they merge. Production is Render.
-#
-# Run it by hand from any branch (Actions → this workflow → Run workflow) to
-# preview that branch; main redeploys on push. There is one Pages site, so the
-# most recent run wins.
+# Visual QA only: manually publish a reviewed PR branch to the shared Pages URL.
+# Production is Render. Publishing is deliberately not triggered by pushes to main.
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Open pull request number for this preview
+        required: true
+        type: number
 
 permissions:
   contents: read
@@ -19,7 +18,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  queue: max
 
 jobs:
   build:
@@ -33,6 +32,16 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - name: Set preview version
+        env:
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          if [[ ! "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "pr_number must be a number" >&2
+            exit 1
+          fi
+          echo "PUBLIC_BUILD_VERSION=$(date -u +%Y.%m.%d).pr-${PR_NUMBER}" >> "$GITHUB_ENV"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
