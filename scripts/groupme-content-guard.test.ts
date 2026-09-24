@@ -8,8 +8,9 @@ import { execFileSync, spawnSync } from 'node:child_process';
 const guard = join(process.cwd(), 'scripts/check-groupme-content.mjs');
 const repos: string[] = [];
 const basePage = `---\nexport const prerender = true;\n---\n<main><h1>The Table</h1><p>“Almost affirming” wasn’t enough.</p></main>\n<style>p { color: red }</style>\n`;
+const dataPage = `---\nconst values = [\n  { name: 'Thoughtful', body: 'We mean — even when it is harder.' },\n];\nconst ways = [\n  { label: 'Our Story', href: '/our-story/' },\n];\n---\n<main><h1>{values[0].name}</h1><p>{values[0].body}</p><a href={ways[0].href}>{ways[0].label}</a></main>\n`;
 
-function repo() {
+function repo(page = basePage) {
   const dir = mkdtempSync(join(tmpdir(), 'groupme-content-guard-'));
   repos.push(dir);
   execFileSync('git', ['init', '-q', '-b', 'main'], { cwd: dir });
@@ -17,7 +18,7 @@ function repo() {
   execFileSync('git', ['config', 'user.email', 'test@example.invalid'], { cwd: dir });
   mkdirSync(join(dir, 'src/pages'), { recursive: true });
   mkdirSync(join(dir, 'src/content/messages'), { recursive: true });
-  writeFileSync(join(dir, 'src/pages/index.astro'), basePage);
+  writeFileSync(join(dir, 'src/pages/index.astro'), page);
   writeFileSync(join(dir, 'src/pages/ask.astro'), '<h1>Ask</h1>\n');
   writeFileSync(join(dir, 'src/content/messages/example.md'), '---\ntitle: Example\n---\nBody.\n');
   execFileSync('git', ['add', '.'], { cwd: dir });
@@ -39,6 +40,31 @@ test('allows visible text-only changes on an existing page', () => {
   const { dir, base } = repo();
   commitChange(dir, 'src/pages/index.astro', basePage.replace('“Almost affirming” wasn’t enough.', 'Almost affirming wasn’t enough.'));
   assert.equal(run(dir, base).status, 0);
+});
+
+test('allows plain-string visible copy edits in the homepage values and ways arrays', () => {
+  const { dir, base } = repo(dataPage);
+  commitChange(dir, 'src/pages/index.astro', dataPage
+    .replace('Thoughtful', 'Thoughtful and kind')
+    .replace('We mean — even when it is harder.', 'We mean, even when it is harder.')
+    .replace('Our Story', 'Our Story at The Table'));
+  assert.equal(run(dir, base).status, 0);
+});
+
+test('rejects functional or structural changes beside homepage copy fields', () => {
+  const edits = [
+    dataPage.replace("href: '/our-story/'", "href: '/giving/'"),
+    dataPage.replace("{ name: 'Thoughtful', body:", "{ name: 'Thoughtful', disabled: true, body:"),
+    dataPage.replace('const values = [', "const note = 'old copy';\nconst values = [")
+      .replace("const ways = [", "const note = 'new copy';\nconst ways = ["),
+    dataPage.replace('const values = [', 'const values = getValues(['),
+    dataPage.replace("export const prerender = true;", "export const prerender = false;").replace('const values', 'export const values'),
+  ];
+  for (const edited of edits) {
+    const { dir, base } = repo(dataPage);
+    commitChange(dir, 'src/pages/index.astro', edited);
+    assert.notEqual(run(dir, base).status, 0);
+  }
 });
 
 test('allows markdown content updates', () => {
