@@ -33,15 +33,46 @@ function changedFiles(base) {
   return changes;
 }
 
-function canonicalAst(node, inCode = false) {
-  if (Array.isArray(node)) return node.map((child) => canonicalAst(child, inCode));
+const JS_STRING = String.raw`'(?:\\.|[^'\\])*'`;
+
+// Astro retains frontmatter as raw source. Normalize only string values in the
+// existing arrays that render homepage copy; every delimiter and neighboring
+// expression stays protected by the exact comparison below.
+function maskArrayField(source, variable, pattern, replacement) {
+  const declaration = new RegExp(`(^[\\t ]*const ${variable} = \\[)([\\s\\S]*?)(^[\\t ]*\\];)`, 'gm');
+  let count = 0;
+  const normalized = source.replace(declaration, (_whole, start, rows, end) => {
+    count += 1;
+    return start + rows.replace(pattern, replacement) + end;
+  });
+  return count === 1 ? normalized : source;
+}
+
+function canonicalHomepageFrontmatter(source) {
+  let normalized = source;
+  const valuesPattern = new RegExp(
+    `(\\{\\s*name:\\s*)(${JS_STRING})(\\s*,\\s*body:\\s*)(${JS_STRING})(\\s*\\})`, 'g',
+  );
+  const waysPattern = new RegExp(
+    `(\\{\\s*label:\\s*)(${JS_STRING})(\\s*,\\s*href:\\s*${JS_STRING})(\\s*\\})`, 'g',
+  );
+  normalized = maskArrayField(normalized, 'values', valuesPattern, '$1<CONTENT>$3<CONTENT>$5');
+  normalized = maskArrayField(normalized, 'ways', waysPattern, '$1<CONTENT>$3$4');
+  return normalized;
+}
+
+function canonicalAst(node, inCode = false, sourcePath = '') {
+  if (Array.isArray(node)) return node.map((child) => canonicalAst(child, inCode, sourcePath));
   if (!node || typeof node !== 'object') return node;
   const code = inCode || (node.type === 'element' && ['script', 'style'].includes(node.name?.toLowerCase()));
   const result = {};
   for (const key of Object.keys(node).sort()) {
     if (key === 'position') continue;
     if (key === 'value' && node.type === 'text' && !code) result[key] = '<CONTENT>';
-    else result[key] = canonicalAst(node[key], code);
+    else if (key === 'value' && node.type === 'frontmatter' && sourcePath === 'src/pages/index.astro') {
+      result[key] = canonicalHomepageFrontmatter(node.value);
+    }
+    else result[key] = canonicalAst(node[key], code, sourcePath);
   }
   return result;
 }
@@ -51,7 +82,7 @@ async function checkAstTextOnly(path, base) {
   const newSource = readFileSync(path, 'utf8');
   const [oldParsed, newParsed] = await Promise.all([parse(oldSource), parse(newSource)]);
   if (oldParsed.diagnostics.length || newParsed.diagnostics.length) fail(`${path}: Astro parse errors are not allowed`);
-  if (JSON.stringify(canonicalAst(oldParsed.ast)) !== JSON.stringify(canonicalAst(newParsed.ast))) {
+  if (JSON.stringify(canonicalAst(oldParsed.ast, false, path)) !== JSON.stringify(canonicalAst(newParsed.ast, false, path))) {
     fail(`${path}: only existing visible text may change; markup, attributes, frontmatter, expressions, scripts, and styles are protected`);
   }
 }
