@@ -34,6 +34,10 @@ function changedFiles(base) {
 }
 
 const JS_STRING = String.raw`'(?:\\.|[^'\\])*'`;
+const SAFE_CONTENT_TAGS = new Set([
+  'p', 'span', 'small', 'strong', 'em', 'b', 'i',
+  'ul', 'ol', 'li', 'blockquote', 'h2', 'h3', 'h4', 'h5', 'h6',
+]);
 
 // Astro retains frontmatter as raw source. Normalize only string values in the
 // existing arrays that render homepage copy; every delimiter and neighboring
@@ -61,20 +65,99 @@ function canonicalHomepageFrontmatter(source) {
   return normalized;
 }
 
-function canonicalAst(node, inCode = false, sourcePath = '') {
-  if (Array.isArray(node)) return node.map((child) => canonicalAst(child, inCode, sourcePath));
-  if (!node || typeof node !== 'object') return node;
-  const code = inCode || (node.type === 'element' && ['script', 'style'].includes(node.name?.toLowerCase()));
-  const result = {};
-  for (const key of Object.keys(node).sort()) {
-    if (key === 'position') continue;
-    if (key === 'value' && node.type === 'text' && !code) result[key] = '<CONTENT>';
-    else if (key === 'value' && node.type === 'frontmatter' && sourcePath === 'src/pages/index.astro') {
-      result[key] = canonicalHomepageFrontmatter(node.value);
+function collectExistingClasses(node, classes = new Set()) {
+  if (Array.isArray(node)) {
+    for (const child of node) collectExistingClasses(child, classes);
+  } else if (node && typeof node === 'object') {
+    if (node.type === 'element') {
+      for (const attribute of node.attributes ?? []) {
+        if (attribute.type === 'attribute' && attribute.kind === 'quoted' &&
+            attribute.name === 'class' && typeof attribute.value === 'string') {
+          for (const token of attribute.value.split(/\s+/).filter(Boolean)) {
+            classes.add(`${node.name.toLowerCase()} ${token}`);
+          }
+        }
+      }
     }
-    else result[key] = canonicalAst(node[key], code, sourcePath);
+    for (const value of Object.values(node)) collectExistingClasses(value, classes);
   }
-  return result;
+  return classes;
+}
+
+function isSafeContentAddition(node, existingClasses) {
+  if (!node || typeof node !== 'object') return false;
+  if (Array.isArray(node)) return false;
+  if (node.type === 'text') return true;
+  if (node.type !== 'element' || !SAFE_CONTENT_TAGS.has(node.name?.toLowerCase())) return false;
+
+  for (const attribute of node.attributes ?? []) {
+    if (attribute.type !== 'attribute' || attribute.kind !== 'quoted' ||
+        attribute.name !== 'class' || typeof attribute.value !== 'string') return false;
+    const tokens = attribute.value.split(/\s+/).filter(Boolean);
+    if (tokens.length === 0 || tokens.some((token) => !existingClasses.has(`${node.name.toLowerCase()} ${token}`))) return false;
+  }
+
+  let hasVisibleText = false;
+  for (const child of node.children ?? []) {
+    if (!isSafeContentAddition(child, existingClasses)) return false;
+    if (child.type === 'text' && child.value.trim()) hasVisibleText = true;
+    if (child.type === 'element' && containsVisibleText(child)) hasVisibleText = true;
+  }
+  return hasVisibleText;
+}
+
+function containsVisibleText(node) {
+  if (!node || typeof node !== 'object') return false;
+  if (Array.isArray(node)) return node.some(containsVisibleText);
+  if (node.type === 'text') return Boolean(node.value.trim());
+  return (node.children ?? []).some(containsVisibleText);
+}
+
+function childrenWithSafeAdditions(oldChildren, newChildren, existingClasses, sourcePath) {
+  let next = 0;
+  for (const oldChild of oldChildren) {
+    let matched = false;
+    while (next < newChildren.length) {
+      if (sameWithSafeAdditions(oldChild, newChildren[next], existingClasses, sourcePath)) {
+        next += 1;
+        matched = true;
+        break;
+      }
+      if (!isSafeContentAddition(newChildren[next], existingClasses)) return false;
+      next += 1;
+    }
+    if (!matched) return false;
+  }
+  return newChildren.slice(next).every((node) => isSafeContentAddition(node, existingClasses));
+}
+
+function sameWithSafeAdditions(oldNode, newNode, existingClasses, sourcePath = '', inCode = false) {
+  if (Array.isArray(oldNode) || Array.isArray(newNode)) {
+    return Array.isArray(oldNode) && Array.isArray(newNode) && oldNode.length === newNode.length &&
+      oldNode.every((child, index) => sameWithSafeAdditions(child, newNode[index], existingClasses, sourcePath, inCode));
+  }
+  if (oldNode === newNode) return true;
+  if (!oldNode || !newNode || typeof oldNode !== 'object' || typeof newNode !== 'object' ||
+      Array.isArray(oldNode) || Array.isArray(newNode)) return false;
+
+  const oldKeys = Object.keys(oldNode).filter((key) => key !== 'position').sort();
+  const newKeys = Object.keys(newNode).filter((key) => key !== 'position').sort();
+  if (JSON.stringify(oldKeys) !== JSON.stringify(newKeys)) return false;
+  const code = inCode || (oldNode.type === 'element' && ['script', 'style'].includes(oldNode.name?.toLowerCase()));
+  for (const key of oldKeys) {
+    if (key === 'children') {
+      if (code) {
+        if (oldNode[key].length !== newNode[key].length ||
+            !oldNode[key].every((child, index) => sameWithSafeAdditions(child, newNode[key][index], existingClasses, sourcePath, true))) return false;
+      } else if (!childrenWithSafeAdditions(oldNode[key], newNode[key], existingClasses, sourcePath)) return false;
+    } else if (key === 'value' && oldNode.type === 'text' && newNode.type === 'text') {
+      if (code && oldNode.value !== newNode.value) return false;
+    } else if (key === 'value' && oldNode.type === 'frontmatter' && newNode.type === 'frontmatter' &&
+               sourcePath === 'src/pages/index.astro') {
+      if (canonicalHomepageFrontmatter(oldNode.value) !== canonicalHomepageFrontmatter(newNode.value)) return false;
+    } else if (!sameWithSafeAdditions(oldNode[key], newNode[key], existingClasses, sourcePath)) return false;
+  }
+  return true;
 }
 
 async function checkAstTextOnly(path, base) {
@@ -82,8 +165,9 @@ async function checkAstTextOnly(path, base) {
   const newSource = readFileSync(path, 'utf8');
   const [oldParsed, newParsed] = await Promise.all([parse(oldSource), parse(newSource)]);
   if (oldParsed.diagnostics.length || newParsed.diagnostics.length) fail(`${path}: Astro parse errors are not allowed`);
-  if (JSON.stringify(canonicalAst(oldParsed.ast, false, path)) !== JSON.stringify(canonicalAst(newParsed.ast, false, path))) {
-    fail(`${path}: only existing visible text may change; markup, attributes, frontmatter, expressions, scripts, and styles are protected`);
+  const existingClasses = collectExistingClasses(oldParsed.ast);
+  if (!sameWithSafeAdditions(oldParsed.ast, newParsed.ast, existingClasses, path)) {
+    fail(`${path}: only visible text and new plain content elements may change; functional markup, attributes, frontmatter, expressions, scripts, and styles are protected`);
   }
 }
 
