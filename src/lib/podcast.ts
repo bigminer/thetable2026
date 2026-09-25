@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { fallbackSlug, safeGetCollection } from './content';
+import { formatDateRange } from './date-range';
 
 type SeriesEntry = CollectionEntry<'series'>;
 type MessageEntry = CollectionEntry<'messages'>;
@@ -82,6 +83,18 @@ export function sortMessages(messages: MessageEntry[]) {
 			return a.index - b.index;
 		})
 		.map(({ message }) => message);
+}
+
+/**
+ * The span a series ran. The index sorts newest first but shows no dates, so
+ * without this the ordering reads as arbitrary.
+ */
+export function formatSeriesRange(messages: MessageEntry[], seriesSlug: string) {
+	return formatDateRange(
+		messages
+			.filter((message) => getMessageSeriesSlug(message) === seriesSlug)
+			.map((message) => message.data.date),
+	);
 }
 
 export function getMessagesForSeries(messages: MessageEntry[], seriesSlug: string) {

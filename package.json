@@ -23,8 +23,9 @@
     "youtube:dry-run": "node --import tsx scripts/youtube-discovery.ts",
     "automation:ingest-one-series": "node --import tsx scripts/ingest-new-media.ts",
     "start": "node scripts/start.mjs",
-    "test": "node --import tsx --test scripts/**/*.test.ts src/**/*.test.ts",
-    "test:smoke": "node scripts/verify-site.mjs"
+    "test": "node --import tsx --test scripts/**/*.test.ts src/**/*.test.ts scripts/groupme-content-guard.test.ts",
+    "test:smoke": "node scripts/verify-site.mjs",
+    "content:check": "node scripts/check-groupme-content.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
@@ -34,10 +35,17 @@
     "dotenv": "^17.4.2",
     "nodemailer": "^10.0.0",
     "openai": "^6.34.0",
-    "sanitize-html": "^2.17.3"
+    "sanitize-html": "^2.17.3",
+    "sharp": "^0.35.4"
   },
   "devDependencies": {
+    "@astrojs/compiler": "^3.0.1",
     "@types/nodemailer": "^8.0.1",
     "tsx": "^4.21.0"
+  },
+  "overrides": {
+    "astro": {
+      "sharp": "$sharp"
+    }
   }
 }

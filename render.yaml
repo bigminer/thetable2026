@@ -9,7 +9,7 @@ services:
     # reconciles the service against this file, and a branch set only in the
     # dashboard is reset to the Blueprint's own branch on the next sync.
     branch: release
-    buildCommand: npm ci && npm run build
+    buildCommand: npm ci && PUBLIC_BUILD_VERSION="$(node scripts/build-version.mjs)" npm run build
     startCommand: HOST=0.0.0.0 npm start
     healthCheckPath: /
     envVars:
