@@ -95,12 +95,26 @@ test('rejects changes to /ask', () => {
   assert.notEqual(run(dir, base).status, 0);
 });
 
-test('rejects markup, frontmatter, style, and script changes', () => {
+test('allows additive plain content markup, including an existing presentation class', () => {
+  const page = `---\nexport const prerender = true;\n---\n<main><h1>The Table</h1><article><h2>Christian</h2><p class="staff-pronouns">he/him</p></article><article><h2>Another person</h2><p class="staff-pronouns">she/her</p></article></main>\n<style>p { color: red }</style>\n`;
+  const { dir, base } = repo(page);
+  commitChange(dir, 'src/pages/index.astro', page.replace(
+    '<h2>Christian</h2>', '<h2>Christian</h2><p class="staff-pronouns">He/Him</p>',
+  ));
+  assert.equal(run(dir, base).status, 0);
+});
+
+test('rejects structural replacements, attributes, frontmatter, style, and script changes', () => {
   for (const [before, after] of [
     [basePage, basePage.replace('<h1>', '<h2>')],
+    [basePage, basePage.replace('<p>', '<p class="staff-pronouns">')],
     [basePage, basePage.replace('prerender = true', 'prerender = false')],
     [basePage, basePage.replace('color: red', 'color: blue')],
     [basePage, `${basePage}<script>window.x = 1</script>`],
+    [basePage, basePage.replace('</main>', '<a href="https://example.com">Link</a></main>')],
+    [basePage, basePage.replace('</main>', '<img src="/image.jpg" alt="Photo" /></main>')],
+    [basePage, basePage.replace('</main>', '<p class="unknown-class">Copy</p></main>')],
+    [basePage, basePage.replace('</main>', '<p onclick="alert(1)">Copy</p></main>')],
   ]) {
     const { dir, base } = repo();
     commitChange(dir, 'src/pages/index.astro', after);
