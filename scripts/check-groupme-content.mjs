@@ -35,7 +35,7 @@ function changedFiles(base) {
 
 const JS_STRING = String.raw`'(?:\\.|[^'\\])*'`;
 const SAFE_CONTENT_TAGS = new Set([
-  'p', 'span', 'small', 'strong', 'em', 'b', 'i', 'br',
+  'p', 'span', 'small', 'strong', 'em', 'b', 'i',
   'ul', 'ol', 'li', 'blockquote', 'h2', 'h3', 'h4', 'h5', 'h6',
 ]);
 
