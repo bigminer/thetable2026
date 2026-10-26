@@ -19,6 +19,8 @@
 
 html {
 	overflow-x: clip;
+	/* Leave section and sermon links visible below the sticky masthead. */
+	scroll-padding-top: calc(var(--space-3xl) + var(--space-xl));
 	background: var(--color-paper);
 	color: var(--color-ink);
 	font-family: var(--font-body);

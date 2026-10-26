@@ -19,7 +19,7 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
   canonicalPath="/ask/"
   noindex={true}
 >
-  <main class="chat-page">
+  <div class="chat-page">
     <header class="intro">
       <h1>Ask The Table</h1>
       <p class="subhead">
@@ -65,7 +65,7 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
               data-content-type={s.content_type}
             >
               <div class="card-meta">
-                <span class="date">{s.date}</span>
+                <span class="date">Video published <time datetime={s.date}>{s.date}</time></span>
                 <span class={`badge badge-${s.content_type}`}>
                   {s.content_type === "table_talk" ? "Table Talk" : "Sermon"}
                 </span>
@@ -95,7 +95,7 @@ const talkCount = feed.filter((s) => s.content_type === "table_talk").length;
         }
       </ul>
     </section>
-  </main>
+  </div>
 
   <script>
     type ApiChunk = {

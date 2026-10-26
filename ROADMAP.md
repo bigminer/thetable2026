@@ -8,6 +8,33 @@ and its state claims predated the flatten refactor (`f21644b`) and the redesign
 
 ---
 
+## Discoverability review — 2026-10-26
+
+Reviewed against `main` at `084344a`; implementation explicitly requested by Anna.
+Implemented on the review branch (not yet deployed):
+
+- Connect the existing visitor pages, add section anchors, correct heading levels,
+  and remove the nested main region on `/ask/`.
+- Keep the church's structured description independent of page descriptions and
+  describe worship as a recurring service, not building opening hours.
+- Give existing message rows permanent links. Reconcile published message dates by
+  exact YouTube ID with the recorded `upload_date` in `data/transcripts/content/`;
+  label these as video publication dates, not service dates.
+- `/ask/` stays hidden and noindex: its missing navigation link is intentional.
+  Public transcript pages and launching Ask remain separate feature work below.
+
+Validation: 61 unit/data tests, production build and 158 smoke checks passed.
+Browser checks covered the visitor links, affirmation destination, heading hierarchy,
+and sermon permalink placement below the sticky masthead. Fixed the content guard's
+CLI entry-point detection for checkout paths containing spaces; its rejection tests
+now execute in this checkout as well.
+
+**Content still needs confirmation:** step-free entrance, accessible restrooms and
+other building accommodations; next dates and exceptions for monthly MeetUps,
+community meals and welcome classes. Publish confirmed details from church staff /
+Church Center rather than deriving dates from recurring prose or inventing facilities.
+Existing contact paths remain available in the meantime.
+
 ## Planned: domain cutover
 
 The site runs on Render at `https://thetabletx.onrender.com`. `thetabletx.org` still

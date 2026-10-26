@@ -181,6 +181,9 @@ prevents the ground from following the palette.
 - Open disclosure arrows rotate upward to communicate that the section can be
   collapsed. The arrows and mobile menu icon use the same short state transition;
   no other decorative navigation motion is added.
+- Section and sermon fragment links leave space below the sticky masthead. Message
+  titles are permanent text links within the existing ledger; their date column
+  identifies video publication dates rather than implying service dates.
 
 ## CTA voice
 

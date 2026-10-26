@@ -65,6 +65,15 @@ Rules the schema enforces:
 
 Slugs come from the filename unless a `slug` field overrides it. Prefer the filename.
 
+Message `date` means **publication date**, not the date the sermon was preached.
+For a message with a YouTube source, use that video's upload date. The transcript
+ingest records it as `upload_date` in `data/transcripts/content/`; match the exact
+`youtube_id`, not a similar title. Podcast-only entries use the podcast publication
+date, as the ingest scripts already do. Series rows label the date and expose a
+permanent `#message-<slug>` link through the title. Keep existing slugs stable when
+editing titles so saved links continue to work. `/ask/` labels its source dates as
+video publication dates too.
+
 Some of these files are produced by the ingest scripts (see below) as drafts; the editorial step is reviewing the generated title, description, and series link, then flipping `draft` to `false`.
 
 ## Media

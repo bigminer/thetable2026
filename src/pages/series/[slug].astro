@@ -6,7 +6,7 @@ export const prerender = true;
  */
 import { getCollection, render } from 'astro:content';
 import { fallbackSlug, resolveAsset, safeGetCollection } from '../../lib/content';
-import { formatMessageDate, getMessagesForSeries } from '../../lib/podcast';
+import { formatMessageDate, getMessageSlug, getMessagesForSeries } from '../../lib/podcast';
 import Layout from '../../layouts/Layout.astro';
 import { site } from '../../config/site';
 
@@ -74,10 +74,13 @@ const seriesArt = entry.data.featuredImage ? resolveAsset(entry.data.featuredIma
 					<h2 id="episodes-title">Messages in this series</h2>
 					<ol class="episode-ledger">
 						{messages.map((message) => (
-							<li class="episode-row">
-								<p class="episode-date">{formatMessageDate(message.data.date)}</p>
+							<li class="episode-row" id={`message-${getMessageSlug(message)}`}>
+								<p class="episode-date">
+									<span class="episode-date-label">{message.data.sourceUrl ? 'Video published' : 'Published'}</span>
+									<time datetime={message.data.date.toISOString().slice(0, 10)}>{formatMessageDate(message.data.date)}</time>
+								</p>
 								<div class="episode-copy">
-									<h3>{message.data.title}</h3>
+									<h3><a class="episode-permalink" href={`#message-${getMessageSlug(message)}`}>{message.data.title}</a></h3>
 									{message.data.speaker && <p class="episode-speaker">{message.data.speaker}</p>}
 									{message.data.description && (
 										<p class="episode-desc">{message.data.description}</p>
@@ -273,6 +276,25 @@ const seriesArt = entry.data.featuredImage ? resolveAsset(entry.data.featuredIma
 		font-size: var(--text-lg);
 		line-height: 1.06;
 		color: var(--color-ink);
+	}
+
+	.episode-date-label {
+		display: block;
+		font-size: var(--text-sm);
+		font-weight: 400;
+		color: var(--color-muted);
+	}
+
+	.episode-permalink {
+		text-decoration: underline;
+		text-decoration-thickness: var(--rule-hair);
+		text-underline-offset: 2px;
+	}
+
+	.episode-permalink:hover,
+	.episode-permalink:focus-visible {
+		text-decoration-color: var(--color-accent-deep);
+		text-decoration-thickness: 2px;
 	}
 
 	.episode-speaker {

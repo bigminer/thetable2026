@@ -1,5 +1,16 @@
 import { canonicalOrigin } from './domains.mjs';
 
+// One weekly service schedule for both visible text and structured data.
+const serviceSchedule = {
+	day: 'Sunday',
+	startTime: '17:00:00',
+	timeZone: 'America/Chicago',
+};
+// Format the local clock time without applying the build machine's timezone.
+const serviceClockTime = new Intl.DateTimeFormat('en-US', {
+	hour: 'numeric', minute: '2-digit', timeZone: 'UTC',
+}).format(new Date(`2000-01-01T${serviceSchedule.startTime}Z`)).toLowerCase();
+
 // Shared site information. Edit page-specific copy in src/pages.
 export const site = {
 	"title": "The Table Church",
@@ -11,7 +22,8 @@ export const site = {
 		"Sachse, TX 75048",
 		"phone (469) 222-3617"
 	],
-	"serviceTime": "Sundays at 5:00 pm",
+	"serviceTime": `${serviceSchedule.day}s at ${serviceClockTime}`,
+	serviceSchedule,
 	// Church Center giving. /giving/ embeds this inline and also links to it as a
 	// fallback, so keep it a plain URL with no modal parameter.
 	"givingUrl": "https://thetabletx.churchcenter.com/giving",

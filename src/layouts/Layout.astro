@@ -16,7 +16,6 @@ const { title, description, canonicalPath, image, noindex = false } = Astro.prop
 const siteName = site.title;
 const metaDescription = description ?? site.description;
 const footerAddressLines = site.addressLines;
-const footerServiceTime = site.serviceTime;
 const footerSocialLinks = site.socialLinks;
 const googleTagManagerId = import.meta.env.PUBLIC_GTM_ID?.trim();
 const googleAnalyticsId = import.meta.env.PUBLIC_GA4_ID?.trim();
@@ -45,13 +44,14 @@ const socialImagePath = image
 		: withBase(image)
 	: brandLogoSrc;
 const socialImageUrl = absoluteUrl(socialImagePath);
+const organizationId = absoluteUrl(base + '/#church');
 const organizationJsonLd = {
-	'@context': 'https://schema.org',
 	'@type': ['Organization', 'Church'],
+	'@id': organizationId,
 	name: siteName,
 	url: absoluteUrl(base + '/'),
 	logo: absoluteUrl(brandLogoSrc),
-	description: metaDescription,
+	description: site.description,
 	address: {
 		'@type': 'PostalAddress',
 		streetAddress: footerAddressLines[0],
@@ -60,8 +60,32 @@ const organizationJsonLd = {
 		postalCode: '75048',
 		addressCountry: 'US',
 	},
-	openingHours: footerServiceTime,
+	event: {
+		'@type': 'Event',
+		name: 'Sunday worship at The Table',
+		url: absoluteUrl(withBase('/service-times-locations/')),
+		location: { '@id': organizationId },
+		eventSchedule: {
+			'@type': 'Schedule',
+			repeatFrequency: 'P1W',
+			byDay: `https://schema.org/${site.serviceSchedule.day}`,
+			startTime: site.serviceSchedule.startTime,
+			scheduleTimezone: site.serviceSchedule.timeZone,
+		},
+	},
 	sameAs: footerSocialLinks.map((link) => link.url),
+};
+const pageJsonLd = {
+	'@type': 'WebPage',
+	'@id': canonicalUrl,
+	url: canonicalUrl,
+	name: title,
+	description: metaDescription,
+	publisher: { '@id': organizationId },
+};
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@graph': [organizationJsonLd, pageJsonLd],
 };
 
 ---
@@ -98,7 +122,7 @@ const organizationJsonLd = {
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={metaDescription} />
 		<meta name="twitter:image" content={socialImageUrl} />
-		<script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
 		{googleTagManagerId && (
 			<script
 				is:inline

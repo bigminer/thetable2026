@@ -22,23 +22,28 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		<div class="longform band band-cream">
 			<div class="longform-inner">
 				<section>
-					<h2>Getting there</h2>
+					<h2 id="getting-there">Getting there</h2>
 					<p>The Table meets inside First United Methodist Church of Sachse, at 1520 Blackburn Rd. Service is at 5:00 pm.</p>
 					<p>Enter the parking lot through the main entrance — there&rsquo;s a sign. The building entrance is on the same side as the lot, so you won&rsquo;t have to walk around looking for it.</p>
 				</section>
 
 				<section>
-					<h2>What it looks like inside</h2>
+					<h2 id="accessibility">Accessibility</h2>
+					<p>For questions about step-free access, seating, or other accommodations, <a href={base + '/contact-us/'}>contact us before your visit</a>.</p>
+				</section>
+
+				<section>
+					<h2 id="what-it-looks-like-inside">What it looks like inside</h2>
 					<p>No dress code. People come in jeans, t-shirts, whatever&rsquo;s comfortable. Some dress up. No one&rsquo;s looking.</p>
 				</section>
 
 				<section>
-					<h2>The service</h2>
+					<h2 id="the-service">The service</h2>
 					<p>Service is about an hour. There&rsquo;s music, a talk, and communion. You can sit anywhere. You don&rsquo;t have to stand up, introduce yourself, or sing if you don&rsquo;t want to.</p>
 				</section>
 
 				<section>
-					<h2>Communion</h2>
+					<h2 id="communion">Communion</h2>
 					<p>Most Sundays, toward the end of the service, there&rsquo;s communion. People go up by rows, front first. At the front there&rsquo;s bread, then juice or wine (you pick one). Some take both the bread and a drink. Some take only the bread. Some just go up for a quiet moment. None of it is unusual.</p>
 
 					<p>Before the bread and cup are offered, the pastor reads this invitation:</p>
@@ -68,27 +73,29 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 				</section>
 
 				<section>
-					<h2>Kids and noise</h2>
+					<h2 id="kids-and-noise">Kids and noise</h2>
 					<p>Kids are here. They make noise. No one turns around.</p>
+					<p><a href={base + '/kids-youth/'}>Learn about the Kid&rsquo;s Table and our teen MeetUp</a>.</p>
 				</section>
 
 				<section>
-					<h2>People</h2>
+					<h2 id="people">People</h2>
 					<p>No one will follow up unless you want them to. You can come in, sit in the back, and leave. That&rsquo;s a complete visit.</p>
 				</section>
 
 				<section>
-					<h2>If you need to leave</h2>
+					<h2 id="if-you-need-to-leave">If you need to leave</h2>
 					<p>You can leave at any point. No one will notice, and if they do, they won&rsquo;t say anything.</p>
 				</section>
 
 				<section>
-					<h2>If you&rsquo;re LGBTQ</h2>
+					<h2 id="if-youre-lgbtq">If you&rsquo;re LGBTQ</h2>
 					<p>Full affirmation isn&rsquo;t a program here. It&rsquo;s the baseline. Nobody will make a thing of it. You&rsquo;ll just be here.</p>
+					<p><a href={base + '/our-vision/#lgbtqi-and-one-level-of-membership'}>Read our commitments on LGBTQI+ membership, leadership, and marriage</a>.</p>
 				</section>
 
 				<section>
-					<h2>The Location</h2>
+					<h2 id="the-location">The Location</h2>
 					<p><a class="link" href={base + '/service-times-locations/'}>Service Time &amp; Location</a></p>
 				</section>
 			</div>

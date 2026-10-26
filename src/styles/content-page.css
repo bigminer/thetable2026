@@ -88,7 +88,8 @@
 	color: var(--color-ink);
 }
 
-.content-page .body h4 {
+.content-page .body h4,
+.content-page .body h3.value-heading {
 	margin: var(--space-lg) 0 var(--space-2xs);
 	font-size: var(--text-base);
 	letter-spacing: var(--track-label);

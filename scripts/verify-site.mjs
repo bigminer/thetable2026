@@ -74,16 +74,44 @@ try {
 	}
 	checks += routes.length;
 
-	// At least one series detail page must render.
+	// Crawl every published series, including its individual message anchors.
 	const seriesIndex = await (await fetch(`${base}/series/`)).text();
-	const seriesLink = seriesIndex.match(/href="(\/series\/[^"/]+\/)"/)?.[1];
-	if (!seriesLink) {
+	const seriesLinks = new Set([...seriesIndex.matchAll(/href="(\/series\/[^"/]+\/)"/g)].map((match) => match[1]));
+	if (seriesLinks.size === 0) {
 		failures.push('no series detail links on /series/');
-	} else {
+	}
+	for (const seriesLink of seriesLinks) {
 		const detail = await fetch(base + seriesLink);
 		if (!detail.ok) failures.push(`${detail.status} ${seriesLink}`);
+		else pageHtml.set(seriesLink, await detail.text());
 	}
-	checks += 2;
+	checks += 1 + seriesLinks.size;
+
+	// Search tools must see one stable church identity, separate page descriptions,
+	// and a service schedule rather than misleading building opening hours.
+	let churchDescription;
+	for (const [route, html] of pageHtml) {
+		if ([...html.matchAll(/<main\b/g)].length !== 1) failures.push(`expected one main region on ${route}`);
+		try {
+			const json = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)?.[1];
+			const graph = JSON.parse(json)['@graph'];
+			const church = graph.find((entry) => entry['@type']?.includes('Church'));
+			const page = graph.find((entry) => entry['@type'] === 'WebPage');
+			churchDescription ??= church.description;
+			if (!church.description || church.description !== churchDescription) failures.push(`church identity changes on ${route}`);
+			if ('openingHours' in church || church.event?.eventSchedule?.['@type'] !== 'Schedule') failures.push(`invalid service schedule on ${route}`);
+			if (!page?.description || page.publisher?.['@id'] !== church['@id']) failures.push(`missing page identity on ${route}`);
+		} catch {
+			failures.push(`invalid structured data on ${route}`);
+		}
+		checks += 2;
+	}
+
+	// Ask is unfinished: discoverability changes must not accidentally launch it.
+	if (!/<meta name="robots" content="noindex, nofollow"/.test(pageHtml.get('/ask/') ?? '')) {
+		failures.push('/ask/ must remain noindex until launch');
+	}
+	checks += 1;
 
 	const missing = await fetch(`${base}/definitely-not-a-page/`);
 	if (missing.status !== 404) failures.push(`expected 404, got ${missing.status} /definitely-not-a-page/`);
@@ -130,6 +158,22 @@ try {
 		if (!response.ok) failures.push(`${response.status} ${target} (linked from ${from})`);
 	}
 	checks += links.size;
+
+	// Check section and message destinations as well as the page itself.
+	for (const [route, html] of pageHtml) {
+		for (const match of html.matchAll(/href="([^"\s]*#[^"\s]+)"/g)) {
+			const target = new URL(match[1], base + route);
+			if (target.origin !== base) continue;
+			let targetHtml = pageHtml.get(target.pathname);
+			if (!targetHtml) {
+				const response = await fetch(target);
+				targetHtml = response.ok ? await response.text() : '';
+			}
+			const ids = new Set([...targetHtml.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]));
+			if (!ids.has(decodeURIComponent(target.hash.slice(1)))) failures.push(`missing anchor ${match[1]} (linked from ${route})`);
+			checks += 1;
+		}
+	}
 } finally {
 	server.kill();
 	await once(server, 'exit').catch(() => {});
