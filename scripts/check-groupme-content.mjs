@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import { parse } from '@astrojs/compiler';
 
 const repo = process.cwd();
@@ -199,7 +200,7 @@ export async function validate(base) {
   return `Validated ${changes.length} content-only file change(s).`;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try { console.log(await validate(process.argv[2])); }
   catch (error) { console.error(`Content change rejected: ${error.message}`); process.exitCode = 1; }
 }
