@@ -52,3 +52,7 @@ services:
         sync: false
       - key: PUBLIC_GA4_ID
         sync: false
+      - key: PUBLIC_GOOGLE_ADS_ID
+        sync: false
+      - key: PUBLIC_GOOGLE_ADS_CONTACT_SEND_TO
+        sync: false
