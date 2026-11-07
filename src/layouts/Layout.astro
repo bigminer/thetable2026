@@ -21,6 +21,11 @@ const footerSocialLinks = site.socialLinks;
 const googleTagManagerId = import.meta.env.PUBLIC_GTM_ID?.trim();
 const googleAnalyticsId = import.meta.env.PUBLIC_GA4_ID?.trim();
 const directGoogleAnalyticsId = googleTagManagerId ? undefined : googleAnalyticsId;
+const configuredAdsId = import.meta.env.PUBLIC_GOOGLE_ADS_ID?.trim();
+const googleAdsId = /^AW-\d+$/.test(configuredAdsId ?? '') ? configuredAdsId : undefined;
+// GTM owns tag installation when configured. Otherwise share one gtag.js loader.
+const directGoogleAdsId = googleTagManagerId ? undefined : googleAdsId;
+const directGoogleTagId = directGoogleAnalyticsId ?? directGoogleAdsId;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteUrl = Astro.site ?? new URL(site.url);
 const brandLogoSrc = `${base}/attachments/branding/the-table-written-logo.png`;
@@ -99,18 +104,21 @@ const organizationJsonLd = {
 		<meta name="twitter:description" content={metaDescription} />
 		<meta name="twitter:image" content={socialImageUrl} />
 		<script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+		{(googleTagManagerId || directGoogleTagId) && (
+			<script is:inline set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_user_data':'denied','ad_personalization':'denied'});gtag('set','allow_ad_personalization_signals',false);gtag('set','allow_google_signals',false);`} />
+		)}
 		{googleTagManagerId && (
 			<script
 				is:inline
 				set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',${JSON.stringify(googleTagManagerId)});`}
 			/>
 		)}
-		{directGoogleAnalyticsId && (
+		{directGoogleTagId && (
 			<>
-				<script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(directGoogleAnalyticsId)}`} />
+				<script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(directGoogleTagId)}`} />
 				<script
 					is:inline
-					set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config',${JSON.stringify(directGoogleAnalyticsId)});`}
+					set:html={`gtag('js',new Date());${[directGoogleAnalyticsId, directGoogleAdsId].filter(Boolean).map(id => `gtag('config',${JSON.stringify(id)});`).join('')}`}
 				/>
 			</>
 		)}
