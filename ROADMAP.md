@@ -33,6 +33,22 @@ Sequence the mail work (below) with this — both touch DNS.
 
 ---
 
+## In progress: restore Google Ads contact measurement (2026-11-07)
+
+Approved after the post-migration audit. Reuse the existing Ads tag and Submit lead
+form conversion; no new Ads account or GA4 property. Add optional build-time Ads
+settings and count a successful contact API response once, excluding honeypots and
+failed requests. Keep form contents out of events and disable advertising
+personalization/user-provided advertising data. GTM, if configured, owns tags and
+receives `contact_form_success` instead of a second direct conversion event.
+
+Implementation is prepared on `codex/google-ads-tracking`; production activation
+requires review, release promotion, Render settings/rebuild, and real form/tag
+verification. Existing GA4 and Business Profile links were found in Ads Data Manager;
+recover direct ownership separately rather than creating duplicate properties.
+See [docs/google-ads-measurement.md](docs/google-ads-measurement.md) for the staged
+Render settings, saved Google tag privacy change, and acceptance checks.
+
 ## Direction
 
 Three roles, no content-management system. The repository is the database.
