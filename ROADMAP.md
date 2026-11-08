@@ -8,6 +8,13 @@ and its state claims predated the flatten refactor (`f21644b`) and the redesign
 
 ---
 
+## Prepared: Get Involved invitation copy (2026-11-07)
+
+Explicitly requested by the maintainer. Replace the two old body headings and
+their paragraphs with the supplied community, gifts, and practical-love sections,
+followed by the revised next-step invitation. Keep the phone and external MeetUp
+form links working and use the existing prose-page typography and layout.
+
 ## Completed: use The Table logo for the browser tab icon (2026-11-07)
 
 Explicitly requested by the maintainer. Replace Astro's starter favicons with the
