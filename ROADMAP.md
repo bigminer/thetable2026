@@ -8,6 +8,16 @@ and its state claims predated the flatten refactor (`f21644b`) and the redesign
 
 ---
 
+## Completed: use The Table logo for the browser tab icon (2026-11-07)
+
+Explicitly requested by the maintainer. Replace Astro's starter favicons with the
+red script/woodgrain logo supplied from Drive, `TableLogo_Transparent Red.png`
+([source](https://drive.google.com/file/d/1asLtRbjqqsGpsHSJ8qSGj_kYmqnJ4jnw/view)).
+The web-sized asset removes empty transparent margins and preserves the artwork;
+the SVG centers it on cream and the ICO supplies standard square sizes. Version
+the icon URLs so existing browsers fetch the new branding. Prepared for PR review;
+production activation follows merge and promotion to release.
+
 ## Planned: domain cutover
 
 The site runs on Render at `https://thetabletx.onrender.com`. `thetabletx.org` still
