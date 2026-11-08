@@ -14,9 +14,12 @@ Explicitly requested by the maintainer. Replace Astro's starter favicons with th
 red script/woodgrain logo supplied from Drive, `TableLogo_Transparent Red.png`
 ([source](https://drive.google.com/file/d/1asLtRbjqqsGpsHSJ8qSGj_kYmqnJ4jnw/view)).
 The web-sized asset removes empty transparent margins and preserves the artwork;
-the SVG centers it on cream and the ICO supplies standard square sizes. Version
-the icon URLs so existing browsers fetch the new branding. Prepared for PR review;
-production activation follows merge and promotion to release.
+the SVG centers it on cream and the ICO supplies standard pixel sizes. The
+maintainer requested a circular cream ground with transparent outer corners after
+the initial square version shipped; the full artwork fits inside the circle.
+Version the icon URLs so existing browsers fetch the new branding. The original
+version shipped in PR #45; the circular follow-up is prepared for review and
+activation through main and release.
 
 The same PR also includes the maintainer's requested Get Involved copy cleanup:
 remove the interest-form restoration preface and begin the paragraph “Call or text”.

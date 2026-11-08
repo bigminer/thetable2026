@@ -116,7 +116,8 @@ as a filled dot or a rule, never as type.
   a near-miss beside the real logo reads worse than no script at all.
 - **Browser tab icon**: use `the-table-woodgrain-logo-red.png`, the red script and
   woodgrain logo supplied by the maintainer. Preserve the artwork and center it on
-  a square cream ground for light and dark browser tabs. `public/favicon.svg`
+  a circular cream ground with transparent outer corners for light and dark browser
+  tabs. Fit the whole artwork inside the circle. `public/favicon.svg`
   embeds the web-sized PNG; `public/favicon.ico` contains raster fallbacks.
   Regenerate both from that asset when the logo changes. The header/footer continue
   to use their existing script wordmark.
