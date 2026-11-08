@@ -18,6 +18,9 @@ the SVG centers it on cream and the ICO supplies standard square sizes. Version
 the icon URLs so existing browsers fetch the new branding. Prepared for PR review;
 production activation follows merge and promotion to release.
 
+The same PR also includes the maintainer's requested Get Involved copy cleanup:
+remove the interest-form restoration preface and begin the paragraph “Call or text”.
+
 ## Planned: domain cutover
 
 The site runs on Render at `https://thetabletx.onrender.com`. `thetabletx.org` still
