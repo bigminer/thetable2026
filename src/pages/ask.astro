@@ -17,7 +17,7 @@ const ready = source && isApproved(source);
       <form id="ask-form" class="site-form">
         <label for="question">Your question</label>
         <input id="question" name="query" type="text" required maxlength="2000" placeholder="Why do I blame myself for everything?" disabled={!ready} aria-describedby="ask-privacy" />
-        <p id="ask-privacy">When search is available, your question and matching sermon passages are sent to OpenAI to find relevant excerpts. Avoid including private details. This is a sermon search, not personal counseling.</p>
+        <p id="ask-privacy">There’s room for your questions here. We share your question and relevant sermon passages with OpenAI to help you explore what’s been shared at The Table. Please leave out names or details you’d rather keep private. And if you’d like a conversation with someone, <a href="/contact-us/">we’d love to hear from you</a>.</p>
         <button type="submit" disabled={!ready}>Ask</button>
       </form>
       <div id="answer" role="status" aria-live="polite"></div>
