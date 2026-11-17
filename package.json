@@ -23,7 +23,7 @@
     "youtube:dry-run": "node --import tsx scripts/youtube-discovery.ts",
     "automation:ingest-one-series": "node --import tsx scripts/ingest-new-media.ts",
     "start": "node scripts/start.mjs",
-    "test": "node --import tsx --test scripts/**/*.test.ts src/**/*.test.ts src/lib/sermon-chatbot/*.test.ts scripts/groupme-content-guard.test.ts",
+    "test": "node --import tsx --test scripts/**/*.test.ts src/**/*.test.ts src/lib/sermon-chatbot/*.test.ts scripts/groupme-content-guard.test.ts scripts/ask-pilot.test.ts",
     "test:smoke": "node scripts/verify-site.mjs",
     "content:check": "node scripts/check-groupme-content.mjs",
     "ask:pilot": "node --env-file-if-exists=.env --import tsx scripts/ask-pilot.ts"

@@ -52,6 +52,8 @@ a rebuild; revoke and deploy together to remove its title/link as well.
 The user authorized promotional API credits with **no paid overage**, using a separate
 API organization. Its creation currently requires OpenAI support. Do not use the
 existing paid organization, a legacy key, purchased credits, or auto recharge.
+The request was sent and escalated to a specialist on 2026-11-17; support says
+the response will arrive by email in the coming days. The organization is not yet created.
 
 Before making ANY embedding or answer call, verify the isolated organization has an
 active promotional grant and no paid balance/payment arrangement/auto recharge. Make

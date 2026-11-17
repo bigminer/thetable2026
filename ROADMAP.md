@@ -18,6 +18,17 @@ API activation/evaluation and release verification remain outstanding. See
 claims below and in `docs/ask-remaining-work.md` and
 `docs/media-ingestion-remaining-work.md`. Work these milestones in order.
 
+**Milestone 1 progress (2026-11-17):** [implementation draft #55](https://github.com/bigminer/thetable2026/pull/55)
+prepares saved semantic indexing, exact-quotation validation, review/consent gates,
+and isolated credit configuration. GitHub Actions successfully created
+[transcript review draft #56](https://github.com/bigminer/thetable2026/pull/56), confirming
+Gary's PR-permission fix. Direct YouTube acquisition on the runner failed because
+its saved cookies expired; the recovery run imported locally acquired bounded
+captions instead, without a paid transcription fallback. The candidate covers
+21:20–53:30.24 through the closing Amen and remains unapproved. OpenAI support has
+received and escalated the separate credits-only organization request. No API calls,
+approval, merge or deployment have occurred; real retrieval evaluation is pending.
+
 **Verified baseline:** 333 metadata records; 273 pass the current eligibility
 filter, but there are zero tracked raw transcripts and a clean checkout builds zero
 searchable sermon chunks. Production returns composition fallback text and zero

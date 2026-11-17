@@ -29,6 +29,16 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: Preserve an existing transcript review
+        run: |
+          if [ ! -f data/ask/self-blame.json ]; then
+            existing=$(git ls-remote --heads origin refs/heads/ask/self-blame-review)
+            if [ -n "$existing" ]; then
+              git fetch origin refs/heads/ask/self-blame-review
+              mkdir -p data/ask
+              git show FETCH_HEAD:data/ask/self-blame.json > data/ask/self-blame.json
+            fi
+          fi
       - run: pipx install yt-dlp
       - uses: denoland/setup-deno@v2
         with:
