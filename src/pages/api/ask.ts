@@ -1,161 +1,47 @@
-// Load .env into process.env before anything else so the API keys are
-// available in dev. In production (Cloudflare Pages / Node hosting),
-// env vars come from the platform and dotenv finds no file, which is
-// fine — it's a no-op.
-import "dotenv/config";
-import type { APIRoute } from "astro";
-import OpenAI from "openai";
-import { checkRateLimit } from "../../lib/rate-limit.ts";
-import { compose } from "../../lib/sermon-chatbot/composition.ts";
-import { getOrLoadCorpus, getOrLoadRawCorpus } from "../../lib/sermon-chatbot/corpus.ts";
-import {
-  classifyShape,
-  classifyTier,
-  retrieveTopK,
-  retrieveTopKLexical,
-} from "../../lib/sermon-chatbot/retrieval.ts";
-import {
-  getOrLoadSiteContexts,
-  retrieveTopSiteContexts,
-} from "../../lib/sermon-chatbot/site-content.ts";
-import type { AskResponse } from "../../lib/sermon-chatbot/types.ts";
-import { youtubeLink } from "../../lib/sermon-chatbot/vtt.ts";
-
+import 'dotenv/config';
+import type { APIRoute } from 'astro';
+import { checkRateLimit } from '../../lib/rate-limit.ts';
+import { loadSource, isApproved, loadIndex, createClient, answerQuestion } from '../../lib/sermon-chatbot/pilot.ts';
 export const prerender = false;
-
-export const GET: APIRoute = async () => {
-  return new Response(
-    JSON.stringify({
-      error: "Send a POST request with a query to ask a question.",
-    }),
-    {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    },
-  );
-};
-
-const LOCAL_LLM_BASE_URL = process.env.ASK_LLM_BASE_URL ?? "http://127.0.0.1:8080/v1";
-const LOCAL_LLM_MODEL = process.env.ASK_LLM_MODEL ?? "Qwen3-8B-Q4_K_M.gguf";
-const LOCAL_LLM_API_KEY = process.env.ASK_LLM_API_KEY;
-
-function asksForSermonContext(query: string): boolean {
-  return /\b(brett|sermon|sermons|preach|preached|preaches|taught|teach|teaches|said|says|quote|table talk)\b/i.test(
-    query,
-  );
-}
-
+const json = (data: unknown, status = 200, headers = {}) => new Response(JSON.stringify(data), {
+  status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...headers },
+});
+export const GET: APIRoute = () => json({ error: 'You’re welcome to ask a question using the form on Ask The Table.' }, 405, { Allow: 'POST' });
 export const POST: APIRoute = async ({ request, clientAddress }) => {
-  const openaiKey = process.env.OPENAI_API_KEY;
-
-  let body: { query?: unknown };
+  // Bound bytes before JSON parsing, including requests without Content-Length.
+  const reader = request.body?.getReader();
+  if (!reader) return json({ error: 'Add a question in your own words, and we’ll look through the sermon with you.' }, 400);
+  let size = 0;
+  const parts: Uint8Array[] = [];
   try {
-    body = await request.json();
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > 12000) { await reader.cancel(); return json({ error: 'Please shorten your question to 2,000 characters or fewer, then try again.' }, 413); }
+      parts.push(value);
+    }
+  } catch { return json({ error: 'We couldn’t read your question. Please try sending it again.' }, 400); }
+  let body: unknown;
+  try { body = JSON.parse(Buffer.concat(parts).toString('utf8')); }
+  catch { return json({ error: 'We couldn’t read your question. Please try sending it again.' }, 400); }
+  const query = body && typeof body === 'object' && 'query' in body && typeof body.query === 'string' ? body.query.trim() : '';
+  if (!query) return json({ error: 'Add a question in your own words, and we’ll look through the sermon with you.' }, 400);
+  if (query.length > 2000) return json({ error: 'Please shorten your question to 2,000 characters or fewer, then try again.' }, 400);
+  const limit = checkRateLimit({ request, clientAddress, key: 'ask', limit: 10 });
+  if (!limit.ok) {
+    const minutes = Math.max(1, Math.ceil(limit.retryAfterSeconds / 60));
+    return json({ error: `Please wait about ${minutes} ${minutes === 1 ? 'minute' : 'minutes'} before asking another question. Thanks for your patience.` }, limit.status, { 'Retry-After': String(limit.retryAfterSeconds) });
+  }
+  try {
+    const source = await loadSource();
+    if (!source || !isApproved(source)) return json({ error: 'We’re giving this sermon’s transcript a careful read before opening it up for your questions. Please check back with us.', status: 'review_pending' }, 503);
+    // Load from disk only. There is deliberately no index generation in this route.
+    const index = await loadIndex(source);
+    const answer = await answerQuestion(query, source, index, createClient());
+    return json(answer);
   } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-
-  const query = typeof body.query === "string" ? body.query.trim() : "";
-  if (!query) {
-    return new Response(JSON.stringify({ error: "Missing or empty 'query'" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-
-  if (query.length > 2000) {
-    return new Response(JSON.stringify({ error: "Query is too long." }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-
-  const rateLimit = checkRateLimit({ request, clientAddress, key: "ask" });
-  if (!rateLimit.ok) {
-    return new Response(JSON.stringify({ error: rateLimit.error }), {
-      status: rateLimit.status,
-      headers: {
-        "Content-Type": "application/json",
-        "Retry-After": String(rateLimit.retryAfterSeconds),
-      },
-    });
-  }
-
-  try {
-    const top = openaiKey
-      ? await (async () => {
-          const openai = new OpenAI({ apiKey: openaiKey });
-          const { corpus } = await getOrLoadCorpus(openai);
-          return retrieveTopK(openai, corpus, query, 5);
-        })()
-      : await (async () => {
-          const { corpus } = await getOrLoadRawCorpus();
-          return retrieveTopKLexical(corpus, query, 5);
-        })();
-    const topScore = top[0]?.score ?? 0;
-    const tier = classifyTier(topScore);
-    const shape = classifyShape(top);
-    const siteContexts = retrieveTopSiteContexts(await getOrLoadSiteContexts(), query, 3);
-    const compositionChunks = siteContexts.length > 0 && !asksForSermonContext(query) ? [] : top;
-    const compositionTier = compositionChunks.length > 0 ? tier : "low";
-    const compositionShape = compositionChunks.length > 0 ? shape : "single";
-    const composed = await compose(
-      {
-        baseURL: LOCAL_LLM_BASE_URL,
-        apiKey: LOCAL_LLM_API_KEY,
-        model: LOCAL_LLM_MODEL,
-      },
-      query,
-      compositionChunks,
-      compositionTier,
-      compositionShape,
-      siteContexts,
-    );
-
-    const response: AskResponse = {
-      tier,
-      shape,
-      top_score: topScore,
-      top3_gap: top.length >= 3 ? top[0].score - top[2].score : 0,
-      distinct_content_ids_in_top10: new Set(top.map((c) => c.content_id)).size,
-      chunks: top.map((c) => ({
-        content_id: c.content_id,
-        source_title: c.source_title,
-        source_date: c.source_date,
-        source_type: c.source_type,
-        series: c.series,
-        start_seconds: c.start_seconds,
-        end_seconds: c.end_seconds,
-        score: c.score,
-        text: c.text,
-        youtube_deep_link: youtubeLink(c.youtube_id, c.start_seconds),
-      })),
-      site_contexts: siteContexts.map((c) => ({
-        id: c.id,
-        collection: c.collection,
-        title: c.title,
-        path: c.path,
-        score: c.score,
-        text: c.text,
-      })),
-      composed_response: composed,
-    };
-
-    return new Response(JSON.stringify(response), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (err) {
-    // Log the detail, return none of it. Composition failures are handled inside
-    // compose(); what reaches here is corpus, retrieval or embedding failure, whose
-    // messages carry filesystem paths and provider request detail.
-    console.error("[/api/ask]", err instanceof Error ? err.stack ?? err.message : String(err));
-    return new Response(JSON.stringify({ error: "Something went wrong. Please try again." }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.warn('[ask] semantic_search_unavailable');
+    return json({ error: 'We’re having trouble searching right now. Please try again in a little while.', status: 'unavailable' }, 503);
   }
 };

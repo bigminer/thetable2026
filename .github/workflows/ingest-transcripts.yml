@@ -1,123 +1,104 @@
 name: Ingest sermon transcripts
 
-# Downloads new auto-captioned transcripts from The Table's YouTube channel,
-# generates markdown stubs for any new downloads, and opens a PR for human
-# review. Stubs carry null fields that must be filled in before merge.
-
+# One-sermon pilot. Weekly backlog ingestion stays paused until milestone 3.
+# No API credentials or paid transcription fallback are used by this workflow.
 on:
-  schedule:
-    # Mondays at 10:00 UTC — Sunday night / Monday morning in US.
-    - cron: "0 10 * * 1"
   workflow_dispatch:
+    inputs:
+      prepared_source_commit:
+        description: 'Optional full commit SHA containing locally acquired data/ask/self-blame.json'
+        required: false
+        type: string
 
 permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: ask-self-blame-ingestion
+  cancel-in-progress: false
+
 jobs:
   ingest:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install yt-dlp
-        run: pipx install yt-dlp
-
-      - name: Install Deno (JS runtime for yt-dlp's n-challenge solver)
-        uses: denoland/setup-deno@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Preserve an existing transcript review
+        run: |
+          if [ ! -f data/ask/self-blame.json ]; then
+            existing=$(git ls-remote --heads origin refs/heads/ask/self-blame-review)
+            if [ -n "$existing" ]; then
+              git fetch origin refs/heads/ask/self-blame-review
+              mkdir -p data/ask
+              git show FETCH_HEAD:data/ask/self-blame.json > data/ask/self-blame.json
+            fi
+          fi
+      - run: pipx install yt-dlp
+      - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm"
-          cache-dependency-path: package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Write YouTube cookies for yt-dlp
+      - name: Prepare optional YouTube authentication
         env:
           YT_COOKIES: ${{ secrets.YOUTUBE_COOKIES }}
-        run: printf '%s' "$YT_COOKIES" > /tmp/yt-cookies.txt
-
-      - name: Download new transcripts
-        # yt-dlp exits 101 when --break-on-existing stops the run — that's
-        # expected (it just means we caught up to the archive), not failure.
         run: |
-          set +e
-          npm run fetch -- --cookies /tmp/yt-cookies.txt "${{ vars.YOUTUBE_CHANNEL_URL }}"
-          code=$?
-          if [ $code -eq 0 ] || [ $code -eq 101 ]; then exit 0; fi
-          exit $code
-
-      - name: Whisper fallback for videos without auto-captions
+          if [ -n "$YT_COOKIES" ]; then
+            umask 077
+            printf '%s' "$YT_COOKIES" > "$RUNNER_TEMP/yt-cookies.txt"
+            echo "YOUTUBE_COOKIES_FILE=$RUNNER_TEMP/yt-cookies.txt" >> "$GITHUB_ENV"
+          fi
+      - name: Acquire only the self-blame sermon
+        if: inputs.prepared_source_commit == ''
+        run: npm run ask:pilot -- ingest
+      - name: Recover locally acquired bounded captions
+        if: inputs.prepared_source_commit != ''
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: npm run transcribe
-
-      - name: Generate stubs for new downloads
-        run: npm run make-stubs
-
-      - name: Enrich titles and detect series
-        run: npm run enrich-titles
-
-      - name: Auto-detect sermon bounds via Brett's consistent phrasings
-        run: npm run detect-bounds
-
-      - name: Generate AI descriptions for new stubs
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: npm run make-descriptions
-
-      - name: Open pull request
+          SOURCE_COMMIT: ${{ inputs.prepared_source_commit }}
+        run: |
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || { echo 'Supply a full commit SHA'; exit 1; }
+          git fetch origin "$SOURCE_COMMIT"
+          git show "$SOURCE_COMMIT:data/ask/self-blame.json" > "$RUNNER_TEMP/ask-source.json"
+          npm run ask:pilot -- import "$RUNNER_TEMP/ask-source.json"
+      - name: Validate the review gate
+        run: npm run ask:pilot -- check
+      - name: Open transcript review PR
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: transcripts/ingest
-          delete-branch: true
-          commit-message: "Ingest new sermon transcripts"
-          title: "Review: new sermon transcripts"
+          base: ${{ github.ref_name }}
+          branch: ask/self-blame-review
+          title: 'Ask The Table: review the self-blame transcript (depends on #55)'
+          commit-message: 'Stage bounded self-blame transcript for human review'
+          draft: true
           body: |
-            Auto-ingested new sermon transcripts from YouTube.
+            This adds only the self-blame sermon transcript for the first Ask The Table
+            pilot. It does not publish the sermon listing or enable live search.
 
-            Most fields arrive filled in: this workflow runs title enrichment, series
-            detection, sermon-bound detection and description generation before opening
-            the PR. **Your job is to check the guesses and fill the gaps, not to type
-            everything in.**
+            Review order: #57 regular listing, #55 search implementation, then this
+            transcript PR. This PR targets the selected implementation branch
+            (`${{ github.ref_name }}`), not main; its code dependency is #55.
 
-            **Check these in each stub under `data/transcripts/content/`:**
+            Gary Miner must review this PR before any merge. Anna Barnes separately
+            approves the transcript wording, metadata, bounds and consent. After those
+            reviews, the transcript can be incorporated into #55; Gary reviews the final
+            combined implementation before it merges to main. No automatic merge.
 
-            - `title` — auto-filled from the YouTube title. Tidy it for display.
-            - `content_start` / `content_end` — **format `"hh:mm:ss"`, quoted** (e.g. `"00:28:15"`).
-              Auto-detected from Brett's "grace and peace" opener and the "open table"
-              communion transition. Guest speakers and special services usually fail
-              detection and arrive `null` — fill those in by watching the video.
-            - `speaker` — defaults to `brett_tilford`. Use `guest:first-last` for a guest
-              teacher.
-            - `content_type` — defaults to `sermon`. One of: `sermon` | `table_talk` |
-              `guest_sermon` | `worship` | `story_sunday` | `panel_discussion` | `announcements`
-            - `series` — auto-detected where possible; `null` means not part of a series.
-            - `content_description` — auto-generated summary. Read it for accuracy.
+            Review `data/ask/self-blame.json` against https://www.youtube.com/watch?v=u7Q-WVrNLfc
+            starting at 21:20 and ending at 53:30.24. These bounds remain candidates.
+            April 19 is the verified sermon date; reconcile any provisional April 20
+            upload date in the source before approval and indexing.
 
-            **Two fields decide whether `/ask` can quote a talk.** The chatbot is
-            default-deny: it skips anything that does not pass every check.
+            Check speaker, consent, date, bounds and caption accuracy. The source is
+            pending and cannot be served or embedded until Anna explicitly approves
+            the exact content hash. See docs/ask-pilot.md for review and indexing.
 
-            - `consent_status` defaults to `granted`. Set it to anything else to keep a
-              talk out of the chatbot while leaving the transcript in the repo.
-            - `speaker` must be exactly `brett_tilford`. Marking a talk `guest:...`
-              correctly excludes it — guest teachers have not consented to being quoted.
-
-            A stub with `content_start` or `content_end` left `null`, or with the wrong
-            time format, is skipped silently. It will not error; the talk simply never
-            appears in `/ask`.
-
-            Merge once each stub has been checked and no required field is `null`.
-          labels: |
-            transcripts
-            needs-review
-          add-paths: |
-            data/transcripts/raw/
-            data/transcripts/content/
-            data/transcripts/archive.txt
+            This workflow makes no model API calls and does not update the legacy
+            download archive. Missing captions fail the run and remain retryable.
+          add-paths: data/ask/self-blame.json
+      - name: Remove temporary cookies
+        if: always()
+        run: rm -f "$RUNNER_TEMP/yt-cookies.txt"

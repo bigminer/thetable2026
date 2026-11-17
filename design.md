@@ -280,9 +280,9 @@ must stay `:global()` or it silently loses its height.
 
 ## Known gaps
 
-- `/ask/` (the sermon search tool) was left on its own palette-agnostic CSS. It uses
-  `currentColor`, `inherit`, and neutral greys, so it inherits the new type and
-  grounds automatically. It is not linked from the nav. Convert it when it ships.
+- `/ask/` uses the Long Document masthead and shared form, with plain transcript
+  quotations and source links. It remains outside navigation during the one-sermon
+  pilot; pending material is excluded from its source list.
 - `.staff-card` portraits are shown at their native colour. The source set is
   inconsistently lit; a uniform treatment would help, but that is a decision about
   the church's own photographs, not a design-system default.
