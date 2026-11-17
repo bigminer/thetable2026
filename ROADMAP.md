@@ -8,6 +8,127 @@ and its state claims predated the flatten refactor (`f21644b`) and the redesign
 
 ---
 
+## Priority: Ask The Table — one sermon through the whole workflow (2026-11-17)
+
+Milestone 1 implementation authorized 2026-11-17: self-blame sermon, Anna as
+reviewer, OpenAI promotional credits with no paid overage, and a separate
+credits-only API organization. Implementation is in progress; transcript approval,
+API activation/evaluation and release verification remain outstanding. See
+[the pilot runbook](docs/ask-pilot.md). This queue supersedes the older `/ask` and transcript-pipeline status
+claims below and in `docs/ask-remaining-work.md` and
+`docs/media-ingestion-remaining-work.md`. Work these milestones in order.
+
+**Verified baseline:** 333 metadata records; 273 pass the current eligibility
+filter, but there are zero tracked raw transcripts and a clean checkout builds zero
+searchable sermon chunks. Production returns composition fallback text and zero
+sermon matches. The newest listed source is 2026-04-20. Some eligible records are
+guest, panel, or Story Sunday material mislabeled as Brett sermons. The
+[2026-11-16 ingestion run](https://github.com/bigminer/thetable2026/actions/runs/43944172472)
+transcribed 0 of 26 videos, marked the failed videos as processed, pushed an
+archive-only branch, then failed to open a PR because Actions PR creation is
+disabled. Existing tests/build/smoke pass without testing a real `/ask` answer.
+
+**Required direction:** semantic search is part of the first milestone. Generate
+document embeddings before serving visitors, persist them with the approved source
+text, and reuse them across requests, restarts, and deployments. At question time,
+embed only the question, search the existing index, then compose from selected
+evidence. Never rebuild the corpus in a visitor request. Keywords may complement
+semantic ranking for exact titles, names, and Bible references; they are not the
+primary acceptance criterion. Keep the file-based Astro architecture.
+
+### 1. Prove one reviewed sermon end to end
+
+- **Select one source and reviewer.** Candidate: “Trauma Self Blame,” YouTube
+  `u7Q-WVrNLfc` (upload 2026-04-20), because it exercises the page's example
+  question. Confirm Brett is the speaker, consent, actual sermon date, transcript
+  accuracy, and segment bounds against the video; existing auto-detected values
+  are suggestions. Only this explicitly approved sermon enters the pilot corpus.
+- **Repair acquisition and PR delivery for that source.** Allow a single-video
+  run, recover captions or audio through an authorized source, pass authentication
+  consistently to fallback downloads, and report failures. Archive only successful
+  acquisitions and preserve enough state to retry failures. Do not merge the
+  existing archive-only branch unchanged. A repository admin must enable Actions
+  PR creation; verify the bot PR's checks can run and retain human merge approval.
+- **Make the reviewed text deployable.** Persist the bounded transcript, provenance,
+  timestamps, and explicit review/consent state. Full-service raw transcripts and
+  personal-story material must not be swept into this public repository. Missing
+  approved text must fail validation rather than silently produce an empty index.
+- **Precompute semantic retrieval.** Build a versioned index outside request handling
+  from approved content. Record content hashes, chunking version, embedding provider,
+  model, and dimensions. Reuse unchanged vectors; invalidate on source or configuration
+  changes. Deploy the index and matching text atomically; validate their manifest on
+  build/startup. A clean deploy must load the persisted index without embedding it.
+- **Produce a grounded answer.** Configure the hosted answer model, remove the
+  keyword-based routing that drops sermon evidence, and enforce source-backed
+  excerpts. Validate quoted text against approved transcript spans; construct titles,
+  dates, timestamps, and allowed links in code. Fix unsafe Markdown/HTML rendering
+  before enabling generated output. On model failure, show usable source links and
+  an explicit degraded state; on missing evidence, abstain. Restrict diagnostic
+  logging to operational metadata by default, not raw visitor questions.
+- **Exercise the release path.** Open/review the content PR, merge to `main`, promote
+  through a reviewed PR to `release`, and verify on Render. Static GitHub Pages
+  preview cannot exercise `/api/ask`. Keep `/ask` out of navigation and noindexed;
+  that is discoverability control, not access control. Quarantine unreviewed legacy
+  entries from the source feed as well as retrieval when enabling the pilot.
+
+**Acceptance:** one source completes acquisition → PR → human review → persisted
+text/index → release → semantic question → supported answer with a working YouTube
+timestamp. A small reviewed evaluation set includes differently worded questions,
+the self-blame example, and unrelated questions that must abstain. Verify a clean
+deploy/restart makes zero document-embedding calls, a repeated unchanged ingestion
+makes no duplicate content or embedding calls, and a failed acquisition remains
+retryable. Verify revoked/unreviewed content is excluded, fabricated quotations are
+rejected, hostile output renders safely, and provider failure is visible. Record
+actual processing cost, query cost, and latency before expanding. A one-sermon test
+proves the workflow, not archive-wide ranking quality.
+
+### 2. Establish search quality across a small reviewed collection
+
+Add a handful of contrasting sermons and current website facts. Test semantic
+paraphrases, exact references, ambiguous questions, multiple sources, and absent
+topics. Compare semantic and hybrid ranking against human-selected passages;
+calibrate abstention thresholds using this evidence, not inherited similarity
+constants. Keep service time/location grounded in shared site facts. Verify
+transcript corrections and consent revocation invalidate every published index and
+cached answer. Choose broader quality/latency/cost targets from pilot measurements.
+
+### 3. Recover the backlog and make weekly ingestion dependable
+
+Audit the 333 existing records before admitting them; correct speaker, type, consent,
+and boundaries. Recover missing text in reviewable batches, with incremental indexing
+and per-run limits. Make weekly discovery produce actionable PRs, retry failed items,
+avoid concurrent duplicate runs, and alert on failure or stale source dates. Reconcile
+the old ingestion and editorial docs with the proven workflow. Keep separate automation
+for publishing `/series/` message entries outside this Ask milestone unless explicitly
+added to scope.
+
+### 4. Prepare public launch
+
+Finalize Brett's quotation/editorial policy and a named review owner. Explain archive
+coverage, AI processing, and retention to visitors; provide useful feedback, source
+links, and outage behavior. Replace debug scores with meaningful explanations and
+set usable request/spending limits. Add ongoing semantic/quotation regression checks
+and freshness/availability monitoring. Unhide only after reviewed launch acceptance.
+
+### Decisions before implementation
+
+| Decision | Proposed default / unresolved dependency |
+| --- | --- |
+| Pilot source and review owner | Selected: the self-blame sermon; Anna reviews the exact transcript, metadata, bounds and consent before activation. |
+| API provider, ownership, and spending | Approved: OpenAI promotional credits only, no paid overage, in a separate organization. Confirm activation, receiving organization, current grant/expiry, and model access; use a dedicated project/key. Stop on exhaustion; paid usage is prohibited. A second organization currently requires an OpenAI support request. Confirm who owns ongoing church operation. Personal billing details and keys stay out of the repo. |
+| Durable storage and indexing | Prefer approved bounded text plus a compact versioned index shipped with the app. Measure size before choosing tracked generated files versus a durable versioned artifact. Store reusable vectors outside disposable runner/Render filesystems; avoid adding a database until scale requires one. |
+| Editorial contract | Source-backed transcript excerpts and explicit attribution; AI may supply brief connecting prose but may not invent or freely paraphrase Brett's position. Reviewer confirms transcript corrections and the acceptable quotation policy. |
+| Publication scope | One approved sermon in `/ask`, no navigation launch and no `/series/` automation. Confirm that a direct-URL public pilot is acceptable; use authenticated staging if it must be private. |
+
+The embedding and answer models may differ. Select exact versions/dimensions during
+the first implementation proposal against current API availability and the evaluation
+set; document the selection in the index manifest. API credits are a funding option,
+not evidence of activation or a permanent operating budget. Semantic embeddings are
+required now; a hosted vector database, reranker, conversation memory, full backlog,
+and autonomous publishing are not prerequisites for the one-sermon milestone.
+
+---
+
 ## Prepared: Get Involved invitation copy (2026-11-07)
 
 Explicitly requested by the maintainer. Replace the two old body headings and
@@ -123,11 +244,9 @@ The current work queue, taken one item at a time.
    *(Superseded scope: this began as a straight correction of the command
    descriptions.)*
 
-2. **Correct the transcript-ingestion PR instructions.**
-   `.github/workflows/ingest-transcripts.yml` asks reviewers for `sermon_start_seconds`
-   and `sermon_end_seconds`; the generator and corpus reader use `content_start` and
-   `content_end` in `hh:mm:ss`. Check every instruction against the scripts before
-   editing.
+2. ~~**Correct the transcript-ingestion PR instructions.**~~ Done in PR #20;
+   verified 2026-11-17. The workflow now requests `content_start` and `content_end`
+   in `hh:mm:ss`. Stronger review/consent validation is part of the Ask plan above.
 
 3. ~~**Reassess smoke coverage.**~~ Done. Form-endpoint wiring and internal-link
    integrity added; what is covered, what is deliberately not, and the known weaknesses
@@ -209,16 +328,16 @@ confirming against current code before work starts.
 
   Still open: `thetabletx.com` has no SPF, DKIM or DMARC. Worth adding before cutover —
   it will only redirect, but an unprotected domain can still be spoofed.
-- **Media ingestion is unfinished feature work.** The transcript pipeline that feeds
-  `/ask` runs weekly and works. The pipeline that writes sermon entries to the site is
-  fenced shut in four deliberate places and scoped to a pilot window that closed in
-  October 2025. Wanted, not urgent. Written up in
-  [`docs/media-ingestion-remaining-work.md`](docs/media-ingestion-remaining-work.md).
-- **`/ask` is unfinished feature work.** Retrieval and citations work; there is no LLM
-  behind composition in production, so answers degrade to a list of source matches. It
-  is deliberately hidden (`noindex` plus no nav entry) until finished. Needs a
-  composition backend and a precomputed embedding cache. Written up in
-  [`docs/ask-remaining-work.md`](docs/ask-remaining-work.md).
+- **Media ingestion is unfinished feature work.** The separate pipeline that writes
+  sermon entries to the site remains fenced shut and scoped to a closed pilot window.
+  The transcript pipeline feeding `/ask` is also failing, contrary to the earlier
+  status here. See the prioritized Ask plan above; the older
+  [`media-ingestion notes`](docs/media-ingestion-remaining-work.md) need reconciliation.
+- **`/ask` is blocked by missing source text, unsafe classifications, ingestion/PR
+  failures, and unavailable composition.** The 2026-11-17 review supersedes the old
+  claim that retrieval and citations work. Follow the prioritized plan above;
+  [`docs/ask-remaining-work.md`](docs/ask-remaining-work.md) is historical context,
+  not the current acceptance checklist. Keep the route hidden until launch review.
 - **Rate limiter may key every visitor to one bucket behind Render's proxy.**
   `checkRateLimit` prefers `clientAddress`, falling back to `cf-connecting-ip` /
   `x-real-ip`. If the adapter reports Render's internal proxy IP, all visitors share a

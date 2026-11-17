@@ -15,13 +15,17 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: ASK_LLM_BASE_URL
+      # Enable only after transcript approval, a persisted index, and verified
+      # promotional-only billing. Never reuse the legacy OPENAI_API_KEY.
+      - key: ASK_OPENAI_API_KEY
         sync: false
-      - key: ASK_LLM_MODEL
+      - key: ASK_OPENAI_ORGANIZATION
         sync: false
-      - key: ASK_LLM_API_KEY
+      - key: ASK_OPENAI_PROJECT
         sync: false
-      - key: OPENAI_API_KEY
+      - key: ASK_CREDITS_ONLY_CONFIRMED
+        sync: false
+      - key: ASK_CREDITS_EXPIRE_AT
         sync: false
       # Contact and newsletter form delivery via Google Workspace SMTP.
       - key: SMTP_HOST

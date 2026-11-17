@@ -8,12 +8,12 @@
   "scripts": {
     "dev": "astro dev",
     "dev:tailscale": "bash scripts/dev-tailscale.sh",
-    "build": "astro build",
+    "build": "npm run ask:pilot -- check && astro build",
     "build:gh-pages": "astro build --config astro.config.gh-pages.mjs",
     "preview": "node scripts/start.mjs",
     "astro": "astro",
     "ask": "node --env-file-if-exists=.env --import tsx scripts/ask.ts",
-    "fetch": "yt-dlp --write-auto-subs --sub-lang en --skip-download --write-info-json --download-archive data/transcripts/archive.txt --break-on-existing --match-filters \"title !*= 📱\" --output 'data/transcripts/raw/%(upload_date>%Y-%m-%d)s-%(id)s.%(ext)s' --convert-subs vtt --ignore-no-formats-error",
+    "fetch": "yt-dlp --write-auto-subs --sub-lang en --skip-download --write-info-json --download-archive data/transcripts/archive.txt --break-on-existing --match-filters \"title !*= \ud83d\udcf1\" --output 'data/transcripts/raw/%(upload_date>%Y-%m-%d)s-%(id)s.%(ext)s' --convert-subs vtt --ignore-no-formats-error",
     "transcribe": "node --env-file-if-exists=.env --import tsx scripts/transcribe-missing.ts",
     "make-stubs": "node --import tsx scripts/make-stubs.ts",
     "enrich-titles": "node --import tsx scripts/enrich-titles.ts",
@@ -23,9 +23,10 @@
     "youtube:dry-run": "node --import tsx scripts/youtube-discovery.ts",
     "automation:ingest-one-series": "node --import tsx scripts/ingest-new-media.ts",
     "start": "node scripts/start.mjs",
-    "test": "node --import tsx --test scripts/**/*.test.ts src/**/*.test.ts scripts/groupme-content-guard.test.ts",
+    "test": "node --import tsx --test scripts/**/*.test.ts src/**/*.test.ts src/lib/sermon-chatbot/*.test.ts scripts/groupme-content-guard.test.ts",
     "test:smoke": "node scripts/verify-site.mjs",
-    "content:check": "node scripts/check-groupme-content.mjs"
+    "content:check": "node scripts/check-groupme-content.mjs",
+    "ask:pilot": "node --env-file-if-exists=.env --import tsx scripts/ask-pilot.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
