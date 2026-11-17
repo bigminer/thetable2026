@@ -18,6 +18,13 @@ API activation/evaluation and release verification remain outstanding. See
 claims below and in `docs/ask-remaining-work.md` and
 `docs/media-ingestion-remaining-work.md`. Work these milestones in order.
 
+**Review gate:** Gary Miner reviews every PR before any merge, including transcript
+changes into the implementation branch and promotion to `release`. Anna separately
+approves the transcript and consent. Review order: #57 regular listing, #55 search
+implementation, #56 transcript (based on #55). Listing changes live only in #57;
+the final combined #55 needs Gary's review after the content and remaining gates
+are complete. See the pilot runbook for dependencies. No automatic merges.
+
 **Milestone 1 progress (2026-11-17):** [implementation draft #55](https://github.com/bigminer/thetable2026/pull/55)
 prepares saved semantic indexing, exact-quotation validation, review/consent gates,
 and isolated credit configuration. GitHub Actions successfully created

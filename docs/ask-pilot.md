@@ -4,6 +4,34 @@ Status: implementation prepared; transcript approval, credits-only API activatio
 real semantic evaluation, and release verification are separate gates. Anna reviews
 “Trauma Self Blame” (`u7Q-WVrNLfc`). Nothing here constitutes that review.
 
+## PR review and merge gates
+
+Gary Miner (`bigminer`) reviews every PR before any GitHub PR merge, including
+merging the transcript into the implementation branch and any later release PR.
+Anna's transcript/content approval is an additional gate, not a substitute for
+Gary's review. No automatic merges are authorized.
+
+Review the work in this order:
+
+1. [#57 — Regular sermon listing](https://github.com/bigminer/thetable2026/pull/57):
+   the existing message, its Holy Resilience series, and the church's artwork.
+   Independent of the API work; targets `main`. Check public copy, date, placement
+   and playback. Publishing still needs a reviewed promotion to `release`.
+2. [#55 — Search implementation](https://github.com/bigminer/thetable2026/pull/55):
+   the one-sermon search, offline embeddings, funding/review gates, workflow and
+   welcoming page copy. Targets `main`; excludes #57's listing/artwork changes.
+   Code review can happen now. Hold the final merge until transcript approval,
+   credits-only activation, indexing, real question tests and listing workflow
+   integration have been completed and Gary has reviewed the final changes.
+3. [#56 — Transcript content](https://github.com/bigminer/thetable2026/pull/56):
+   only the bounded transcript JSON; targets #55's implementation branch, not
+   `main`. Anna reviews wording, date, bounds and consent; Gary reviews the content
+   change and its inclusion. After both reviews, incorporate it into #55 and have
+   Gary review #55's final combined changes before merging to `main`.
+
+Keep each PR description current with its scope, prerequisites, checks and next
+review step. A green check or “ready for review” status does not authorize a merge.
+
 ## Content and review
 
 `npm run ask:pilot -- ingest` downloads only this video's English captions, clips the

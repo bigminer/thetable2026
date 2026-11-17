@@ -71,15 +71,26 @@ jobs:
         with:
           base: ${{ github.ref_name }}
           branch: ask/self-blame-review
-          title: 'Review self-blame sermon transcript for Ask The Table'
+          title: 'Ask The Table: review the self-blame transcript (depends on #55)'
           commit-message: 'Stage bounded self-blame transcript for human review'
           draft: true
           body: |
-            One-source Ask pilot. Reviewer: Anna Barnes.
+            This adds only the self-blame sermon transcript for the first Ask The Table
+            pilot. It does not publish the sermon listing or enable live search.
+
+            Review order: #57 regular listing, #55 search implementation, then this
+            transcript PR. This PR targets the selected implementation branch
+            (`${{ github.ref_name }}`), not main; its code dependency is #55.
+
+            Gary Miner must review this PR before any merge. Anna Barnes separately
+            approves the transcript wording, metadata, bounds and consent. After those
+            reviews, the transcript can be incorporated into #55; Gary reviews the final
+            combined implementation before it merges to main. No automatic merge.
 
             Review `data/ask/self-blame.json` against https://www.youtube.com/watch?v=u7Q-WVrNLfc
-            starting at 21:20 and ending at 53:30.24. Those bounds and the upload date
-            are candidates, not confirmed sermon metadata.
+            starting at 21:20 and ending at 53:30.24. These bounds remain candidates.
+            April 19 is the verified sermon date; reconcile any provisional April 20
+            upload date in the source before approval and indexing.
 
             Check speaker, consent, date, bounds and caption accuracy. The source is
             pending and cannot be served or embedded until Anna explicitly approves
