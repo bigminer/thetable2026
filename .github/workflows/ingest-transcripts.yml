@@ -4,6 +4,11 @@ name: Ingest sermon transcripts
 # No API credentials or paid transcription fallback are used by this workflow.
 on:
   workflow_dispatch:
+    inputs:
+      prepared_source_commit:
+        description: 'Optional full commit SHA containing locally acquired data/ask/self-blame.json'
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -38,7 +43,17 @@ jobs:
             echo "YOUTUBE_COOKIES_FILE=$RUNNER_TEMP/yt-cookies.txt" >> "$GITHUB_ENV"
           fi
       - name: Acquire only the self-blame sermon
+        if: inputs.prepared_source_commit == ''
         run: npm run ask:pilot -- ingest
+      - name: Recover locally acquired bounded captions
+        if: inputs.prepared_source_commit != ''
+        env:
+          SOURCE_COMMIT: ${{ inputs.prepared_source_commit }}
+        run: |
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || { echo 'Supply a full commit SHA'; exit 1; }
+          git fetch origin "$SOURCE_COMMIT"
+          git show "$SOURCE_COMMIT:data/ask/self-blame.json" > "$RUNNER_TEMP/ask-source.json"
+          npm run ask:pilot -- import "$RUNNER_TEMP/ask-source.json"
       - name: Validate the review gate
         run: npm run ask:pilot -- check
       - name: Open transcript review PR

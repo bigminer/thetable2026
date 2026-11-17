@@ -55,6 +55,20 @@ async function ingest(path?: string): Promise<void> {
 async function main(): Promise<void> {
   const [command, argument] = process.argv.slice(2);
   if (command === 'ingest') { await ingest(argument); return; }
+  if (command === 'import') {
+    if (!argument) throw new Error('Supply the locally acquired source JSON');
+    const candidate = await loadSource(argument);
+    if (!candidate) throw new Error('Missing prepared source');
+    // An acquisition artifact never grants editorial approval.
+    candidate.review = { status: 'pending', reviewer: null, reviewedAt: null, consent: 'pending', contentHash: null };
+    const existing = await loadSource();
+    if (existing) {
+      if (sourceHash(existing) === sourceHash(candidate)) { console.log('Source unchanged; preserving review.'); return; }
+      throw new Error('Prepared source differs from existing text; review before replacing it');
+    }
+    await atomicJson(SOURCE_FILE, candidate);
+    console.log(`Imported ${candidate.cues.length} bounded cues. Status: pending review.`); return;
+  }
   const source = await loadSource();
   if (command === 'check') {
     if (!source || !isApproved(source)) {
@@ -84,7 +98,7 @@ async function main(): Promise<void> {
     console.log(`Saved ${index.passages.length} passages. Source hash: ${index.sourceHash}`); return;
   }
   if (command === 'hash') { console.log(sourceHash(source)); return; }
-  throw new Error('Usage: ask-pilot.ts ingest [vtt-path] | check | hash | approve <reviewed-hash> | index');
+  throw new Error('Usage: ask-pilot.ts ingest [vtt-path] | import <source-json> | check | hash | approve <reviewed-hash> | index');
 }
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   main().catch(error => { console.error(error.message); process.exitCode = 1; });

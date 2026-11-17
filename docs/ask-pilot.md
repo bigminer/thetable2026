@@ -13,6 +13,15 @@ If YouTube cannot provide captions, the job fails; there is no paid transcriptio
 fallback and no archive mark hiding the failure. An authorized local caption file can
 be passed as `npm run ask:pilot -- ingest /absolute/path/to/captions.vtt`.
 
+If YouTube blocks the GitHub runner, acquire locally and commit only the bounded
+pending `data/ask/self-blame.json` on a staging branch. Dispatch the workflow with
+that full commit SHA in `prepared_source_commit`. It fetches that one file, validates
+it, clears any imported approval, and opens the same review PR. It never runs code
+from the source commit. Identical existing content preserves its review; different
+content requires a deliberate replacement. Do not commit full-service captions or
+cookies. The 2026-11-17 direct runner attempt failed because its saved YouTube cookies
+were expired; that failure did not mark the sermon processed.
+
 The manual **Ingest sermon transcripts** workflow opens a draft PR for that file.
 Its base is the branch selected when dispatching it. Weekly ingestion is paused for
 the pilot; the obsolete archive-only branch must not be merged. The source file is
