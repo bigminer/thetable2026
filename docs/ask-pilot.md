@@ -137,8 +137,21 @@ description and recording link; match by recording identity to avoid duplicate e
 and preserve existing editorial edits. Check `/series/` and the appropriate series page
 in preview and production, including playback. Repeat the process to verify it updates
 the same listing, and ensure a failed listing update remains visible and retryable even
-when transcript acquisition succeeds. This listing work was added to milestone 1 on
-2026-11-17 and is not yet implemented or verified by the transcript-only workflow.
+when transcript acquisition succeeds. The listing itself is prepared in independent
+[PR #57](https://github.com/bigminer/thetable2026/pull/57), with local archive/detail
+and playback verification. Automatic listing maintenance and retry behavior are still
+outstanding in the transcript-only workflow; production publication is also pending.
+
+Listing evidence checked 2026-11-17: the YouTube release timestamp is April 19, 2026,
+at 4:58 p.m. America/Chicago, while the upload date is April 20. The podcast player
+also displays April 19. The [current RSS feed](https://anchor.fm/s/1067c248/podcast/rss)
+supplies episode `Trauma--Self-Blame-e3i8vae` and the Holy Resilience artwork used in
+the listing. The artwork is copied locally at 1200px; it is not hotlinked. YouTube's
+description identifies the sermon as week two of Holy Resilience.
+
+Before approving/indexing the pending Ask transcript, reconcile its provisional
+April 20 upload-date metadata to the verified April 19 sermon date and generate a
+fresh review hash. The listing correction does not approve the transcript's words.
 
 Milestone 1 is complete only after both the working Ask answer and correct regular
 sermon listing are observed in production, not when tests turn green.

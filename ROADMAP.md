@@ -29,6 +29,14 @@ captions instead, without a paid transcription fallback. The candidate covers
 received and escalated the separate credits-only organization request. No API calls,
 approval, merge or deployment have occurred; real retrieval evaluation is pending.
 
+[Listing draft #57](https://github.com/bigminer/thetable2026/pull/57) independently
+prepares the existing self-blame message for the regular archive, adds its Holy
+Resilience series and artwork, corrects the sermon date to April 19 and repairs the
+podcast link. Local archive/detail pages and both players were verified; exactly
+one message entry matches the recording. Human review, release and production checks
+remain pending. The transcript-only workflow does not yet maintain listing metadata
+automatically; that integration and retry checks remain part of milestone 1.
+
 **Verified baseline:** 333 metadata records; 273 pass the current eligibility
 filter, but there are zero tracked raw transcripts and a clean checkout builds zero
 searchable sermon chunks. Production returns composition fallback text and zero
@@ -65,8 +73,9 @@ primary acceptance criterion. Keep the file-based Astro architecture.
   personal-story material must not be swept into this public repository. Missing
   approved text must fail validation rather than silently produce an empty index.
 - **Update the regular sermon listings as part of the same process.** Added to
-  milestone 1 on 2026-11-17 at Anna's request; implementation and verification remain
-  outstanding. For the self-blame sermon, create or update its existing message entry
+  milestone 1 on 2026-11-17 at Anna's request; the listing is prepared in #57, while
+  workflow integration and production verification remain outstanding. For the
+  self-blame sermon, create or update its existing message entry
   and series association using the reviewed title, actual sermon date, speaker,
   description, and recording link. Verify it appears on the regular `/series/`
   archive and the appropriate series page after publication. Match an existing entry
