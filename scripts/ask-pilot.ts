@@ -16,8 +16,8 @@ export async function atomicJson(path: string, data: unknown): Promise<void> {
   await rename(temp, path);
 }
 export function prepareSource(vtt: string): Source {
-  // Bounds are review candidates from the legacy metadata, NOT editorial approval.
-  const start = 1280, end = 3203;
+  // Candidate ends after the closing Amen, before communion; Anna must verify against audio.
+  const start = 1280, end = 3210.24;
   const cues = parseVtt(vtt).filter(c => c.start >= start && c.end <= end);
   const source: Source = { version: 1, videoId: VIDEO_ID, title: 'Trauma Self Blame', date: '2026-04-20',
     speaker: 'brett_tilford', start, end, provenance: 'YouTube English automatic captions; date is upload date pending review',

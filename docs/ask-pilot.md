@@ -7,7 +7,7 @@ real semantic evaluation, and release verification are separate gates. Anna revi
 ## Content and review
 
 `npm run ask:pilot -- ingest` downloads only this video's English captions, clips the
-candidate sermon interval (21:20–53:23), and writes `data/ask/self-blame.json` with
+candidate sermon interval (21:20–53:30.24), and writes `data/ask/self-blame.json` with
 pending review and consent. Full-service captions remain temporary and are deleted.
 If YouTube cannot provide captions, the job fails; there is no paid transcription
 fallback and no archive mark hiding the failure. An authorized local caption file can
