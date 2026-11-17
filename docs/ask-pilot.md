@@ -28,6 +28,12 @@ the pilot; the obsolete archive-only branch must not be merged. The source file 
 its own successful acquisition record. Identical reruns preserve review state;
 changed upstream captions require an explicit review rather than overwriting edits.
 
+The workflow also restores the existing review branch's source before acquisition,
+so reruns detect and protect edits in the open PR. PRs created with GitHub's built-in
+Actions token do not automatically trigger another workflow. After it creates or
+updates the review branch, run `gh workflow run verify.yml --ref ask/self-blame-review`
+and confirm the resulting checks pass on that PR's current commit before merging.
+
 Anna checks the recording, speaker, consent, date (currently upload date), start/end
 bounds, and caption accuracy. Preserve wording; correct transcription mistakes only
 against the audio. Edit cues/metadata first, then get the exact content hash:
