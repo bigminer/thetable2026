@@ -158,7 +158,7 @@ export async function answerQuestion(query: string, source: Source, index: Index
     .sort((a,b) => b.score-a.score).slice(0,5);
   // Provisional pilot threshold: evaluate before publication, not a claim of probability.
   const candidates = ranked.filter(p => p.score >= 0.32);
-  const noMatch: Answer = { status: 'no_match', message: 'I could not find a passage in this reviewed sermon that answers that question.', quotes: [] };
+  const noMatch: Answer = { status: 'no_match', message: 'We couldn’t find a passage in this sermon that speaks to your question. You can try different words or explore the sermon below.', quotes: [] };
   if (!candidates.length) return noMatch;
   try {
     const response = await client.chat.completions.create({ model: ANSWER_MODEL, temperature: 0,
@@ -173,11 +173,11 @@ export async function answerQuestion(query: string, source: Source, index: Index
         { role: 'user', content: JSON.stringify({ question: query, passages: candidates.map(({id,text})=>({id,text})) }) }]
     });
     const quotes = verifySelection(JSON.parse(response.choices[0]?.message.content ?? 'null'), source, candidates);
-    return quotes.length ? { status: 'answered', message: 'These passages from the reviewed transcript address your question:', quotes } : noMatch;
+    return quotes.length ? { status: 'answered', message: 'These words from the sermon may help you explore your question:', quotes } : noMatch;
   } catch {
     // Operational status only; do not log questions, excerpts, keys, or provider bodies.
     console.warn('[ask] answer_selection_unavailable');
-    return { status: 'degraded', message: 'Answer selection is unavailable. These are search matches, not a verified answer:',
+    return { status: 'degraded', message: 'We found a few passages, but couldn’t check whether they speak to your question. You’re welcome to read them and follow the time links to listen in context.',
       quotes: candidates.slice(0,2).map(p => ({ text: p.text, title: source.title, date: source.date,
         seconds: Math.floor(p.start), url: `https://www.youtube.com/watch?v=${VIDEO_ID}&t=${Math.floor(p.start)}s` })) };
   }

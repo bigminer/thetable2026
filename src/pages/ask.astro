@@ -5,25 +5,25 @@ export const prerender = true;
 const source = await loadSource();
 const ready = source && isApproved(source);
 ---
-<Layout title="Ask The Table" description="Find passages in a reviewed sermon from The Table." canonicalPath="/ask/" noindex={true}>
+<Layout title="Ask The Table" description="Explore questions of faith and life through words from our sermons at The Table." canonicalPath="/ask/" noindex={true}>
   <main>
     <header class="longform-mast band band-slate">
       <div class="longform-inner"><h1>Ask The Table</h1>
-        <p>A small pilot for finding what Brett said, in his own words.</p>
+        <p>Explore questions of faith and life through words from our sermons.</p>
       </div>
     </header>
     <div class="longform band band-cream"><div class="longform-inner">
-      <p>{ready ? 'This pilot searches one reviewed sermon: Trauma Self Blame. It does not yet search the full archive.' : 'We’re preparing one sermon for review: Trauma Self Blame. Search will become available after that review.'}</p>
+      <p>{ready ? 'We’re starting with one sermon, Trauma Self Blame. Ask a question in your own words to explore it with us.' : 'We’re starting with Trauma Self Blame. We’re giving the transcript a careful read before opening it up for your questions.'}</p>
       <form id="ask-form" class="site-form">
-        <label for="question">Your question</label>
-        <input id="question" name="query" type="text" required maxlength="2000" placeholder="Why do I blame myself for everything?" disabled={!ready} aria-describedby="ask-privacy" />
+        <label for="question">What’s on your mind?</label>
+        <input id="question" name="query" type="text" required maxlength="2000" placeholder="Why do I blame myself for things I can’t control?" disabled={!ready} aria-describedby="ask-privacy" />
         <p id="ask-privacy">There’s room for your questions here. We share your question and relevant sermon passages with OpenAI to help you explore what’s been shared at The Table. Please leave out names or details you’d rather keep private. And if you’d like a conversation with someone, <a href="/contact-us/">we’d love to hear from you</a>.</p>
         <button type="submit" disabled={!ready}>Ask</button>
       </form>
       <div id="answer" role="status" aria-live="polite"></div>
-      {ready && source && <section class="sources"><h2>Reviewed source</h2>
+      {ready && source && <section class="sources"><h2>Listen to the sermon</h2>
         <p><a href={`https://www.youtube.com/watch?v=${VIDEO_ID}&t=${Math.floor(source.start)}s`} target="_blank" rel="noreferrer">{source.title}</a> · {source.date}</p>
-        <p>Excerpts preserve the reviewed transcript wording. Follow each timestamp to hear the original recording.</p>
+        <p>Each excerpt comes from a transcript we’ve checked against the recording. Follow the time beside an excerpt to hear that part of the sermon. You’re welcome to listen to the whole message, too.</p>
       </section>}
     </div></div>
   </main>
@@ -38,12 +38,15 @@ const ready = source && isApproved(source);
       const query = input.value.trim();
       if (!query) return;
       button.disabled = true; button.textContent = 'Searching…';
-      output.textContent = 'Finding relevant passages…';
+      output.textContent = 'Looking through the sermon for words that speak to your question…';
       try {
         const response = await fetch('/api/ask/', { method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({query}), signal: AbortSignal.timeout(35000) });
         const data = await response.json() as Answer & { error?: string };
-        if (!response.ok) throw new Error(data.error ?? 'Search is unavailable.');
+        if (!response.ok) {
+          output.textContent = data.error ?? 'We’re having trouble searching right now. Please try again in a little while.';
+          return;
+        }
         output.replaceChildren();
         const message = document.createElement('p'); message.textContent = data.message; output.append(message);
         for (const quote of data.quotes) {
@@ -57,7 +60,11 @@ const ready = source && isApproved(source);
           link.textContent = `${quote.title} · ${quote.date} · ${Math.floor(quote.seconds/60)}:${String(quote.seconds%60).padStart(2,'0')}`;
           citation.append(link); output.append(citation);
         }
-      } catch (error) { output.textContent = error instanceof Error ? error.message : 'Search is unavailable.'; }
+      } catch (error) {
+        output.textContent = error instanceof Error && error.name === 'TimeoutError'
+          ? 'This is taking longer than we expected. Please try your question again in a little while.'
+          : 'We’re having trouble searching right now. Please try again in a little while.';
+      }
       finally { button.disabled = false; button.textContent = 'Ask'; }
     });
   </script>

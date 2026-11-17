@@ -69,7 +69,7 @@ test('unsupported topics abstain and malformed model output is explicitly degrad
   assert.equal((await answerQuestion('When is the picnic?',s,index,c)).status,'no_match');
   c.setSelection({relevant:true,quotes:[{passage_id:'invented',text:'Here is a made-up quotation.'}]});
   const answer=await answerQuestion('A question',s,index,c);
-  assert.equal(answer.status,'degraded'); assert.match(answer.message,/not a verified answer/);
+  assert.equal(answer.status,'degraded'); assert.match(answer.message,/couldn’t check whether they speak to your question/);
   assert.equal(answer.quotes[0].text,index.passages[0].text);
 });
 test('credits-only configuration fails closed without attestation, isolation or current expiry', () => {
