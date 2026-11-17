@@ -129,11 +129,23 @@ semantic relevance or model access.
 Run `npm test`, `npm run build`, and `npm run test:smoke`. Use a local Node/Render
 preview to test `/api/ask`; the static GitHub Pages preview has no working API.
 Merge only reviewed PRs into `main`, then promote through a PR to `release`. Keep
-navigation/noindex unchanged. Verify the production answer and timestamp after deploy.
-Milestone 1 is complete only after that observed result, not when tests turn green.
+Ask navigation/noindex unchanged. Verify the production answer and timestamp after deploy.
+
+Also create or update the self-blame sermon's regular message entry and series
+association as part of this process. Use reviewed title, actual sermon date, speaker,
+description and recording link; match by recording identity to avoid duplicate entries
+and preserve existing editorial edits. Check `/series/` and the appropriate series page
+in preview and production, including playback. Repeat the process to verify it updates
+the same listing, and ensure a failed listing update remains visible and retryable even
+when transcript acquisition succeeds. This listing work was added to milestone 1 on
+2026-11-17 and is not yet implemented or verified by the transcript-only workflow.
+
+Milestone 1 is complete only after both the working Ask answer and correct regular
+sermon listing are observed in production, not when tests turn green.
 
 ## Current scope
 
 The old multi-source helpers remain historical code, but the API, CLI and page now
 use only `pilot.ts`. The older Ask/ingestion notes are superseded for this milestone.
-`/series/` publishing, the backlog, and general website Q&A remain later milestones.
+Regular sermon-listing updates are now included in milestone 1. Backlog recovery and
+general website Q&A remain later milestones.

@@ -64,6 +64,15 @@ primary acceptance criterion. Keep the file-based Astro architecture.
   timestamps, and explicit review/consent state. Full-service raw transcripts and
   personal-story material must not be swept into this public repository. Missing
   approved text must fail validation rather than silently produce an empty index.
+- **Update the regular sermon listings as part of the same process.** Added to
+  milestone 1 on 2026-11-17 at Anna's request; implementation and verification remain
+  outstanding. For the self-blame sermon, create or update its existing message entry
+  and series association using the reviewed title, actual sermon date, speaker,
+  description, and recording link. Verify it appears on the regular `/series/`
+  archive and the appropriate series page after publication. Match an existing entry
+  by recording identity before creating one, preserve editorial changes, and confirm
+  reruns neither duplicate the listing nor silently skip a failed listing update.
+  Transcript ingestion alone does not count as a completed sermon workflow.
 - **Precompute semantic retrieval.** Build a versioned index outside request handling
   from approved content. Record content hashes, chunking version, embedding provider,
   model, and dimensions. Reuse unchanged vectors; invalidate on source or configuration
@@ -84,7 +93,9 @@ primary acceptance criterion. Keep the file-based Astro architecture.
 
 **Acceptance:** one source completes acquisition → PR → human review → persisted
 text/index → release → semantic question → supported answer with a working YouTube
-timestamp. A small reviewed evaluation set includes differently worded questions,
+timestamp, with the same sermon correctly published in the regular sermon listings.
+Verify its series placement, metadata, recording link, and duplicate-free rerun in
+both preview and production. A small reviewed evaluation set includes differently worded questions,
 the self-blame example, and unrelated questions that must abstain. Verify a clean
 deploy/restart makes zero document-embedding calls, a repeated unchanged ingestion
 makes no duplicate content or embedding calls, and a failed acquisition remains
@@ -109,9 +120,9 @@ Audit the 333 existing records before admitting them; correct speaker, type, con
 and boundaries. Recover missing text in reviewable batches, with incremental indexing
 and per-run limits. Make weekly discovery produce actionable PRs, retry failed items,
 avoid concurrent duplicate runs, and alert on failure or stale source dates. Reconcile
-the old ingestion and editorial docs with the proven workflow. Keep separate automation
-for publishing `/series/` message entries outside this Ask milestone unless explicitly
-added to scope.
+the old ingestion and editorial docs with the proven workflow. Extend the pilot's
+regular sermon-listing updates to weekly ingestion too, tracking listing publication
+and transcript/index processing separately so a partial success remains retryable.
 
 ### 4. Prepare public launch
 
@@ -129,7 +140,7 @@ and freshness/availability monitoring. Unhide only after reviewed launch accepta
 | API provider, ownership, and spending | Approved: OpenAI promotional credits only, no paid overage, in a separate organization. Confirm activation, receiving organization, current grant/expiry, and model access; use a dedicated project/key. Stop on exhaustion; paid usage is prohibited. A second organization currently requires an OpenAI support request. Confirm who owns ongoing church operation. Personal billing details and keys stay out of the repo. |
 | Durable storage and indexing | Prefer approved bounded text plus a compact versioned index shipped with the app. Measure size before choosing tracked generated files versus a durable versioned artifact. Store reusable vectors outside disposable runner/Render filesystems; avoid adding a database until scale requires one. |
 | Editorial contract | Source-backed transcript excerpts and explicit attribution; AI may supply brief connecting prose but may not invent or freely paraphrase Brett's position. Reviewer confirms transcript corrections and the acceptable quotation policy. |
-| Publication scope | One approved sermon in `/ask`, no navigation launch and no `/series/` automation. Confirm that a direct-URL public pilot is acceptable; use authenticated staging if it must be private. |
+| Publication scope | One approved sermon in `/ask` plus creation/update and verification of its regular sermon listing and series placement. Listing updates are explicitly included in milestone 1 as of 2026-11-17. No Ask navigation launch. Confirm that a direct-URL public pilot is acceptable; use authenticated staging if it must be private. |
 
 The embedding and answer models may differ. Select exact versions/dimensions during
 the first implementation proposal against current API availability and the evaluation
